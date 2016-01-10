@@ -29,12 +29,8 @@ namespace UCS.PacketProcessing
             m_vCommands.Add("/setleague", typeof (SetLeagueGameOpCommand));
             m_vCommands.Add("/pm", typeof (PrivateMessageCommand));
             m_vCommands.Add("/myid", typeof (GetIdCommand));
-
-            //m_vCommands.Add("/resethome", typeof(ResetHomeGameOpCommand));
-            //m_vCommands.Add("/faq", typeof (FaqGameOpCommand));
             m_vCommands.Add("/info", typeof (InfoGameOpCommand));
             m_vCommands.Add("/team", typeof (TeamGameOpCommand));
-
             m_vCommands.Add("/help", typeof (HelpGameOpCommand));
         }
 

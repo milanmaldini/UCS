@@ -16,7 +16,7 @@ namespace UCS
 {
     internal class Program
     {
-        public static readonly int Port = 9339;
+        public static int Port = 9339;
 
         private static EventHandler _handler;
         private static bool isclosing = false;
