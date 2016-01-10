@@ -1,36 +1,38 @@
-﻿using System.IO;
-using UCS.GameFiles;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 604 = 0x25C
-    internal class CastSpellCommand : Command
+    class CastSpellCommand : Command
     {
         public CastSpellCommand(BinaryReader br)
         {
             X = br.ReadInt32WithEndian();
             Y = br.ReadInt32WithEndian();
-            Spell = (SpellData) br.ReadDataReference();
+            Spell = (SpellData)br.ReadDataReference();
             Unknown1 = br.ReadUInt32WithEndian();
         }
 
-        public SpellData Spell { get; set; }
-
-        public uint Unknown1 { get; set; }
-
         public int X { get; set; }
-
         public int Y { get; set; }
+        public SpellData Spell { get; set; }
+        public uint Unknown1 { get; set; }
 
         public override void Execute(Level level)
         {
-            var components = level.GetComponentManager().GetComponents(0);
-            for (var i = 0; i < components.Count; i++)
+            List<Component> components = level.GetComponentManager().GetComponents(0);
+            for (int i = 0; i < components.Count; i++)
             {
-                //UCS.Core.Debugger.WriteLine("Spell : " + Spell + "Unknown1 : " + Unknown1 + "X : " + X + "Y : " + Y , null, 4);
-                var c = (UnitStorageComponent) components[i];
+                UnitStorageComponent c = (UnitStorageComponent)components[i];
                 if (c.GetUnitTypeIndex(Spell) != -1)
                 {
                     var storageCount = c.GetUnitCountByData(Spell);

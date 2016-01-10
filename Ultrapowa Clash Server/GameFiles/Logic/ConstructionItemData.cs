@@ -1,10 +1,21 @@
-﻿namespace UCS.GameFiles
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
+using System.IO;
+using System.Reflection;
+using UCS.Core;
+
+namespace UCS.GameFiles
 {
-    internal class ConstructionItemData : Data
+    class ConstructionItemData : Data
     {
+
         public ConstructionItemData(CSVRow row, DataTable dt) : base(row, dt)
         {
-
         }
 
         public virtual int GetBuildCost(int level)

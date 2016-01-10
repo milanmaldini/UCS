@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
 
 namespace UCS.PacketProcessing
 {
     //Packet 24304
-    internal class JoinableAllianceListMessage : Message
-    {
+    class JoinableAllianceListMessage : Message
+     {
         private List<Alliance> m_vAlliances;
 
         public JoinableAllianceListMessage(Client client) : base(client)
@@ -17,10 +21,12 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            var pack = new List<byte>();
+            List<Byte> pack = new List<Byte>();
             pack.AddInt32(m_vAlliances.Count);
-            foreach (var alliance in m_vAlliances)
+            foreach(var alliance in m_vAlliances)
+            {
                 pack.AddRange(alliance.EncodeFullEntry());
+            }
 
             SetData(pack.ToArray());
         }

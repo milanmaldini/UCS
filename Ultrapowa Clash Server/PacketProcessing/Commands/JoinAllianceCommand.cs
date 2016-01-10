@@ -1,12 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
-using UCS.Helpers;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x001
-    internal class JoinAllianceCommand : Command
+    class JoinAllianceCommand : Command
     {
         private Alliance m_vAlliance;
 
@@ -15,7 +21,6 @@ namespace UCS.PacketProcessing
             //AvailableServerCommandMessage
         }
 
-        //00 00 00 46 00 03 46 FE
         public JoinAllianceCommand(BinaryReader br)
         {
             br.ReadInt64WithEndian();
@@ -27,24 +32,25 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
-        //00 00 00 0B
-        public override byte[] Encode()
-        {
-            var data = new List<byte>();
-            data.AddRange(m_vAlliance.EncodeHeader());
-            return data.ToArray();
-        }
-
         public void SetAlliance(Alliance alliance)
         {
             m_vAlliance = alliance;
         }
 
-        //00 00 00 01
-        //00 00 00 02
-        //00
-        //5E 00 2C 5A
-        //4C 61 20 54 65 61 6D 20 54 44 41
+        public override byte[] Encode()
+        {
+            List<Byte> data = new List<Byte>();
+            data.AddRange(m_vAlliance.EncodeHeader());
+            return data.ToArray();
+        }
+
+        //00 00 00 46 00 03 46 FE 
+        //00 00 00 0B 
+        //4C 61 20 54 65 61 6D 20 54 44 41 
+        //5E 00 2C 5A 
+        //00 
+        //00 00 00 02 
+        //00 00 00 01 
         //00 00 1C 35
     }
 }

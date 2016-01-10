@@ -1,25 +1,24 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Configuration;
+using UCS.PacketProcessing;
 using UCS.Core;
 using UCS.GameFiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
-    internal class UnitProductionComponent : Component
+    class UnitProductionComponent : Component
     {
-        private readonly List<DataSlot> m_vUnits;
-
-        private bool m_vIsDarkForge;
-
-        //a1 + 12
-        //a1 + 16
-        //a1 + 20
-        //a1 + 24
-        private bool m_vIsSpellForge;
-
-        private bool m_vIsWaitingForSpace;
-
-        private Timer m_vTimer;
+        private List<DataSlot> m_vUnits;//a1 + 12
+        private Timer m_vTimer;//a1 + 16
+        private bool m_vIsWaitingForSpace;//a1 + 20
+        private bool m_vIsSpellForge;//a1 + 24
 
         public UnitProductionComponent(GameObject go) : base(go)
         {
@@ -29,30 +28,25 @@ namespace UCS.Logic
             m_vIsWaitingForSpace = false;
         }
 
-        public override int Type
-        {
-            get { return 3; }
-        }
-
         public void AddUnitToProductionQueue(CombatItemData cd)
         {
-            if (CanAddUnitToQueue(cd))
+            if(CanAddUnitToQueue(cd))
             {
-                for (var i = 0; i < GetSlotCount(); i++)
+                for(int i=0;i<GetSlotCount();i++)
                 {
-                    if ((CombatItemData) m_vUnits[i].Data == cd)
+                    if ((CombatItemData)m_vUnits[i].Data == cd)
                     {
                         m_vUnits[i].Value++;
                         return;
                     }
                 }
-                var ds = new DataSlot(cd, 1);
+                DataSlot ds = new DataSlot(cd, 1);
                 m_vUnits.Add(ds);
-                if (m_vTimer == null)
+                if(m_vTimer == null)
                 {
-                    var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                    ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
                     m_vTimer = new Timer();
-                    var trainingTime = cd.GetTrainingTime(ca.GetUnitUpgradeLevel(cd));
+                    int trainingTime = cd.GetTrainingTime(ca.GetUnitUpgradeLevel(cd));
                     m_vTimer.StartTimer(trainingTime, GetParent().GetLevel().GetTime());
                 }
             }
@@ -63,21 +57,21 @@ namespace UCS.Logic
             //Console.WriteLine(GetMaxTrainCount());
             //Console.WriteLine(GetTotalCount());
             //Console.WriteLine(cd.GetHousingSpace());
-            return GetMaxTrainCount() >= GetTotalCount() + cd.GetHousingSpace();
+            return (GetMaxTrainCount() >= GetTotalCount() + cd.GetHousingSpace());
         }
 
         public CombatItemData GetCurrentlyTrainedUnit()
         {
             CombatItemData cd = null;
             if (m_vUnits.Count >= 1)
-                cd = (CombatItemData) m_vUnits[0].Data;
+                cd = (CombatItemData)m_vUnits[0].Data;
             return cd;
         }
 
         public int GetMaxTrainCount()
         {
-            var b = (Building) GetParent();
-            var bd = b.GetBuildingData();
+            Building b = (Building)GetParent();
+            BuildingData bd = b.GetBuildingData();
             return bd.GetUnitProduction(b.GetUpgradeLevel());
         }
 
@@ -88,53 +82,46 @@ namespace UCS.Logic
 
         public int GetTotalCount()
         {
-            var count = 0;
-            if (GetSlotCount() >= 1)
+            int count = 0;
+            if(GetSlotCount() >= 1)
             {
-                for (var i = 0; i < GetSlotCount(); i++)
+                for(int i=0;i<GetSlotCount();i++)
                 {
-                    var cnt = m_vUnits[i].Value;
-                    var housingSpace = ((CombatItemData) m_vUnits[i].Data).GetHousingSpace();
-                    count += cnt*housingSpace;
+                    int cnt = m_vUnits[i].Value;
+                    int housingSpace = ((CombatItemData)m_vUnits[i].Data).GetHousingSpace();
+                    count += cnt * housingSpace;
                 }
             }
             if (m_vIsSpellForge)
+            {
                 count += GetParent().GetLevel().GetComponentManager().GetTotalUsedHousing(true);
-            if (m_vIsDarkForge)
-                count += GetParent().GetLevel().GetComponentManager().GetTotalUsedHousing(true);
+            }
             return count;
         }
 
         public int GetTotalRemainingSeconds()
         {
-            var result = 0;
-            var firstUnit = true;
-            if (m_vUnits.Count > 0)
+            int result = 0;
+            bool firstUnit = true;
+            if(m_vUnits.Count > 0)
             {
-                foreach (var ds in m_vUnits)
+                foreach(var ds in m_vUnits)
                 {
-                    var cd = (CombatItemData) ds.Data;
-                    if (cd != null)
+                    CombatItemData cd = (CombatItemData)ds.Data;
+                    if(cd != null)
                     {
-                        var count = ds.Value;
-                        if (count >= 1)
+                        int count = ds.Value;
+                        if(count >= 1)
                         {
-                            if (firstUnit)
+                            if(firstUnit)
                             {
                                 if (m_vTimer != null)
-                                {
-                                    result += m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(),
-                                                                           ((ConstructionItem) GetParent()).IsBoosted,
-                                                                           ((ConstructionItem) GetParent())
-                                                                               .GetBoostEndTime(),
-                                                                           ((ConstructionItem) GetParent())
-                                                                               .GetBoostMultipier());
-                                }
+                                    result += m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
                                 count--;
                                 firstUnit = false;
                             }
-                            var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
-                            result += count*cd.GetTrainingTime(ca.GetUnitUpgradeLevel(cd));
+                            ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                            result += count * cd.GetTrainingTime(ca.GetUnitUpgradeLevel(cd));
                         }
                     }
                 }
@@ -149,29 +136,24 @@ namespace UCS.Logic
 
         public CombatItemData GetUnit(int index)
         {
-            return (CombatItemData) m_vUnits[index].Data;
+            return (CombatItemData)m_vUnits[index].Data;
         }
 
         public bool HasHousingSpaceForSpeedUp()
         {
-            var totalRoom = 0;
-            if (m_vUnits.Count >= 1)
+            int totalRoom = 0;
+            if(m_vUnits.Count >= 1)
             {
-                foreach (var ds in m_vUnits)
+                foreach(var ds in m_vUnits)
                 {
-                    var cd = (CombatItemData) ds.Data;
-                    totalRoom += cd.GetHousingSpace()*ds.Value;
+                    CombatItemData cd = (CombatItemData)ds.Data;
+                    totalRoom += cd.GetHousingSpace() * ds.Value;
                 }
             }
-            var cm = GetParent().GetLevel().GetComponentManager();
-            var usedHousing = cm.GetTotalUsedHousing(m_vIsSpellForge);
-            var maxHousing = cm.GetTotalMaxHousing(m_vIsSpellForge);
-            return totalRoom <= maxHousing - usedHousing;
-        }
-
-        public bool IsDarkForge()
-        {
-            return m_vIsDarkForge;
+            ComponentManager cm = GetParent().GetLevel().GetComponentManager();
+            int usedHousing = cm.GetTotalUsedHousing(m_vIsSpellForge);
+            int maxHousing = cm.GetTotalMaxHousing(m_vIsSpellForge);
+            return (totalRoom <= maxHousing - usedHousing);
         }
 
         public bool IsSpellForge()
@@ -181,65 +163,37 @@ namespace UCS.Logic
 
         public bool IsWaitingForSpace()
         {
-            var result = false;
-            if (m_vUnits.Count > 0)
+            bool result = false;
+            if(m_vUnits.Count > 0)
             {
-                if (m_vTimer != null)
+                if(m_vTimer != null)
                 {
-                    if (
-                        m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(),
-                                                     ((ConstructionItem) GetParent()).IsBoosted,
-                                                     ((ConstructionItem) GetParent()).GetBoostEndTime(),
-                                                     ((ConstructionItem) GetParent()).GetBoostMultipier()) == 0)
+                    if (m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()) == 0)
+                    {
                         result = m_vIsWaitingForSpace;
+                    }
                 }
             }
             return result;
         }
 
-        public override void Load(JObject jsonObject)
-        {
-            var unitProdObject = (JObject) jsonObject["unit_prod"];
-            m_vIsSpellForge = unitProdObject["unit_type"].ToObject<int>() == 1;
-            m_vIsDarkForge = unitProdObject["unit_type"].ToObject<int>() == 1;
-            var timeToken = unitProdObject["t"];
-            if (timeToken != null)
-            {
-                m_vTimer = new Timer();
-                var remainingTime = timeToken.ToObject<int>();
-                var time = GetParent().GetLevel().GetTime();
-                m_vTimer.StartTimer(remainingTime, GetParent().GetLevel().GetTime());
-            }
-            var unitJsonArray = (JArray) unitProdObject["slots"];
-            if (unitJsonArray != null)
-            {
-                foreach (JObject unitJsonObject in unitJsonArray)
-                {
-                    var id = unitJsonObject["id"].ToObject<int>();
-                    var cnt = unitJsonObject["cnt"].ToObject<int>();
-                    m_vUnits.Add(new DataSlot(ObjectManager.DataTables.GetDataById(id), cnt));
-                }
-            }
-        }
-
         public bool ProductionCompleted()
         {
-            var result = false;
-
+            bool result = false;
             //localiser le camp le plus proche pour envoyer l'unit
             //incrementer ce camp
-            var cf = new ComponentFilter(0);
-            var x = GetParent().X;
-            var y = GetParent().Y;
-            var cm = GetParent().GetLevel().GetComponentManager();
-            var c = cm.GetClosestComponent(x, y, cf);
+            ComponentFilter cf = new ComponentFilter(0);
+            int x = GetParent().X;
+            int y = GetParent().Y;
+            ComponentManager cm = GetParent().GetLevel().GetComponentManager();
+            Component c = cm.GetClosestComponent(x, y, cf);
 
             while (c != null)
             {
                 Data d = null;
                 if (m_vUnits.Count > 0)
                     d = m_vUnits[0].Data;
-                if (!((UnitStorageComponent) c).CanAddUnit((CombatItemData) d))
+                if (!((UnitStorageComponent)c).CanAddUnit((CombatItemData)d))
                 {
                     //Storage camp is full
                     cf.AddIgnoreObject(c.GetParent());
@@ -249,30 +203,32 @@ namespace UCS.Logic
                     break;
             }
 
-            if (c != null)
+            if(c != null)
             {
-                var cd = (CombatItemData) m_vUnits[0].Data;
-                ((UnitStorageComponent) c).AddUnit(cd);
-                StartProducingNextUnit();
+                var cd = (CombatItemData)m_vUnits[0].Data;
+                ((UnitStorageComponent)c).AddUnit(cd);
+                StartProducingNextUnit();             
                 result = true;
             }
             else
+            {
                 m_vIsWaitingForSpace = true;
+            }
             return result;
         }
 
         public void RemoveUnit(CombatItemData cd)
         {
-            var index = -1;
-            if (GetSlotCount() >= 1)
+            int index = -1;
+            if(GetSlotCount() >= 1)
             {
-                for (var i = 0; i < GetSlotCount(); i++)
+                for(int i=0;i<GetSlotCount();i++)
                 {
                     if (m_vUnits[i].Data == cd)
                         index = i;
                 }
             }
-            if (index != -1)
+            if(index != -1)
             {
                 if (m_vUnits[index].Value >= 1)
                 {
@@ -280,16 +236,39 @@ namespace UCS.Logic
                     if (m_vUnits[index].Value == 0)
                     {
                         m_vUnits.RemoveAt(index);
-                        if (GetSlotCount() >= 1)
+                        if(GetSlotCount() >= 1)
                         {
-                            var ds = m_vUnits[0];
-                            var newcd = (CombatItemData) m_vUnits[0].Data;
-                            var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                            DataSlot ds = m_vUnits[0];
+                            CombatItemData newcd = (CombatItemData)m_vUnits[0].Data;
+                            ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
                             m_vTimer = new Timer();
-                            var trainingTime = newcd.GetTrainingTime(ca.GetUnitUpgradeLevel(newcd));
+                            int trainingTime = newcd.GetTrainingTime(ca.GetUnitUpgradeLevel(newcd));
                             m_vTimer.StartTimer(trainingTime, GetParent().GetLevel().GetTime());
                         }
                     }
+                }
+            }    
+        }
+
+        public override void Load(JObject jsonObject)
+        {
+            JObject unitProdObject = (JObject)jsonObject["unit_prod"];
+            m_vIsSpellForge = (unitProdObject["unit_type"].ToObject<int>() == 1);
+            var timeToken = unitProdObject["t"];
+            if (timeToken != null)
+            {
+                m_vTimer = new Timer();
+                int remainingTime = timeToken.ToObject<int>();
+                m_vTimer.StartTimer(remainingTime, GetParent().GetLevel().GetTime());
+            }
+            JArray unitJsonArray = (JArray)unitProdObject["slots"];
+            if (unitJsonArray != null)
+            {
+                foreach (JObject unitJsonObject in unitJsonArray)
+                {
+                    int id = unitJsonObject["id"].ToObject<int>();
+                    int cnt = unitJsonObject["cnt"].ToObject<int>();
+                    m_vUnits.Add(new DataSlot(ObjectManager.DataTables.GetDataById(id),cnt));
                 }
             }
         }
@@ -297,78 +276,69 @@ namespace UCS.Logic
         public override JObject Save(JObject jsonObject)
         {
             //{"data":1000006,"lvl":3,"x":12,"y":34,"unit_prod":{"unit_type":0,"t":0,"slots":[{"id":4000000,"cnt":19}]}}
-            var unitProdObject = new JObject();
-            if (m_vIsSpellForge)
-                unitProdObject.Add("unit_type", 1);
-            else if (m_vIsDarkForge)
-                unitProdObject.Add("unit_type", 1);
+            JObject unitProdObject = new JObject();
+            if(m_vIsSpellForge)
+                unitProdObject.Add("unit_type",1);
             else
-                unitProdObject.Add("unit_type", 0);
+                unitProdObject.Add("unit_type",0);
 
-            if (GetSlotCount() >= 1)
+            if(m_vTimer != null)
             {
-                var unitJsonArray = new JArray();
-                foreach (var unit in m_vUnits)
+                unitProdObject.Add("t", m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()));
+            }
+
+            if(GetSlotCount()>=1)
+            {
+                JArray unitJsonArray = new JArray();
+                foreach(var unit in m_vUnits)
                 {
-                    var unitJsonObject = new JObject();
+                    JObject unitJsonObject = new JObject();
                     unitJsonObject.Add("id", unit.Data.GetGlobalID());
                     unitJsonObject.Add("cnt", unit.Value);
                     unitJsonArray.Add(unitJsonObject);
                 }
-                unitProdObject.Add("slots", unitJsonArray);
+                unitProdObject.Add("slots",unitJsonArray);
             }
             jsonObject.Add("unit_prod", unitProdObject);
-
-            if (m_vTimer != null)
-            {
-                var ci = (ConstructionItem) GetParent();
-                unitProdObject.Add("t",
-                                   m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(), ci.IsBoosted,
-                                                                ci.GetBoostEndTime(),
-                                                                ci.GetBoostMultipier()));
-            }
-            else
-            {
-                if (GetSlotCount() >= 1)
-                    unitProdObject.Add("t", 0);
-            }
             return jsonObject;
         }
 
         public void SetUnitType(GameObject go)
         {
-            var b = (Building) GetParent();
-            var bd = b.GetBuildingData();
+            Building b = (Building)GetParent();
+            BuildingData bd = b.GetBuildingData();
             m_vIsSpellForge = bd.IsSpellForge();
-            m_vIsDarkForge = bd.IsDarkForge();
         }
 
         public void SpeedUp()
         {
-            while (m_vUnits.Count >= 1 && ProductionCompleted()) {}
+            while(m_vUnits.Count >= 1 && ProductionCompleted())
+            { }
         }
 
         public void StartProducingNextUnit()
         {
             m_vTimer = null;
             if (GetSlotCount() >= 1)
-                RemoveUnit((CombatItemData) m_vUnits[0].Data);
+            {
+                RemoveUnit((CombatItemData)m_vUnits[0].Data);
+            }
         }
 
         public override void Tick()
         {
-            if (m_vTimer != null)
+            if(m_vTimer != null)
             {
-                var ci = (ConstructionItem) GetParent();
-                var remainingTime = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(), ci.IsBoosted,
-                                                                 ci.GetBoostEndTime(), ci.GetBoostMultipier());
-                if (remainingTime <= 0)
+                if (m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()) <= 0)
                 {
-                    if (GetParent().GetLevel().GetTime() >= ci.GetBoostEndTime())
-                        ci.IsBoosted = false;
                     ProductionCompleted();
                 }
-            }
+            }  
+        }
+
+        public override int Type
+        {
+            get { return 3; }
         }
     }
 }

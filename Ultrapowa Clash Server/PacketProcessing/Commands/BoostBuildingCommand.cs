@@ -1,42 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
-using UCS.GameFiles;
-using UCS.Helpers;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x20E
-    internal class BoostBuildingCommand : Command
+    class BoostBuildingCommand : Command
     {
         public BoostBuildingCommand(BinaryReader br)
         {
-            BuildingIds = new List<int>();
-            BoostedBuildingsCount = br.ReadInt32WithEndian();
-            for (var i = 0; i < BoostedBuildingsCount; i++)
-                BuildingIds.Add(br.ReadInt32WithEndian()); //buildingId - 0x1DCD6500;
+            BuildingId = br.ReadUInt32WithEndian(); //buildingId - 0x1DCD6500;
+            Unknown1 = br.ReadUInt32WithEndian();
         }
-
-        public int BoostedBuildingsCount { get; set; }
 
         //00 00 02 0E 1D CD 65 05 00 00 8C 52
-        public List<int> BuildingIds { get; set; }
 
-        public override void Execute(Level level)
-        {
-            var ca = level.GetPlayerAvatar();
-            foreach (var buildingId in BuildingIds)
-            {
-                var go = level.GameObjectManager.GetGameObjectByID(buildingId);
-
-                var b = (ConstructionItem) go;
-                var costs = ((BuildingData) b.GetConstructionItemData()).BoostCost[b.UpgradeLevel];
-                if (ca.HasEnoughDiamonds(costs))
-                {
-                    b.BoostBuilding();
-                    ca.SetDiamonds(ca.GetDiamonds() - costs);
-                }
-            }
-        }
+        public uint BuildingId { get; set; } 
+        public uint Unknown1 { get; set; } 
     }
 }

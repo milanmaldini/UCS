@@ -1,10 +1,18 @@
-﻿using UCS.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 using UCS.Network;
 
 namespace UCS.PacketProcessing
 {
-    internal class ShutdownServerGameOpCommand : GameOpCommand
+    class ShutdownServerGameOpCommand : GameOpCommand
     {
         private string[] m_vArgs;
 
@@ -16,7 +24,7 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            if (level.GetAccountPrivileges() >= GetRequiredAccountPrivileges())
+            if(level.GetAccountPrivileges() >= GetRequiredAccountPrivileges())
             {
                 foreach (var onlinePlayer in ResourcesManager.GetOnlinePlayers())
                 {
@@ -26,7 +34,9 @@ namespace UCS.PacketProcessing
                 }
             }
             else
+            {
                 SendCommandFailedMessage(level.GetClient());
+            }
         }
     }
 }

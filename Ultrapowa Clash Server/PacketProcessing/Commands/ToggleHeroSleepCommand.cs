@@ -1,11 +1,18 @@
-﻿using System.IO;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x0211
-    internal class ToggleHeroSleepCommand : Command
+    class ToggleHeroSleepCommand : Command
     {
         public ToggleHeroSleepCommand(BinaryReader br)
         {
@@ -14,13 +21,10 @@ namespace UCS.PacketProcessing
             Unknown1 = br.ReadUInt32WithEndian();
         }
 
-        public uint BuildingId { get; set; }
-
-        public byte FlagSleep { get; set; }
-
-        public uint Unknown1 { get; set; }
-
         //00 00 02 11 1D CD 65 06 00 00 01 04 CA
-        public override void Execute(Level level) {}
+
+        public uint BuildingId { get; set; }
+        public byte FlagSleep { get; set; } 
+        public uint Unknown1 { get; set; } 
     }
 }

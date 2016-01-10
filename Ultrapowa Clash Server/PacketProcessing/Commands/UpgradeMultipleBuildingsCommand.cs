@@ -1,44 +1,51 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
-using UCS.GameFiles;
-using UCS.Helpers;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x225
-    internal class UpgradeMultipleBuildingsCommand : Command
+    class UpgradeMultipleBuildingsCommand : Command
     {
-        private readonly List<int> m_vBuildingIdList;
-
-        private readonly byte m_vIsAltResource;
+        private List<int> m_vBuildingIdList;
+        private byte m_vIsAltResource;
 
         public UpgradeMultipleBuildingsCommand(BinaryReader br)
         {
             m_vIsAltResource = br.ReadByte();
             m_vBuildingIdList = new List<int>();
-            var buildingCount = br.ReadInt32WithEndian();
-            for (var i = 0; i < buildingCount; i++)
+            int buildingCount = br.ReadInt32WithEndian();
+            for (int i = 0; i < buildingCount; i++)
             {
-                var buildingId = br.ReadInt32WithEndian(); //= buildingId - 0x1DCD6500;
+                int buildingId = br.ReadInt32WithEndian();//= buildingId - 0x1DCD6500;
                 m_vBuildingIdList.Add(buildingId);
             }
             br.ReadInt32WithEndian();
         }
 
+        //00 00 02 25 00 00 00 00 07 1D CD 65 0A 1D CD 65 09 1D CD 65 0B 1D CD 65 08 1D CD 65 0C 1D CD 65 07 1D CD 65 06 00 00 1B 07
+        //public uint Unknown1 { get; set; } //00 00 2D 7F some client tick
+
         public override void Execute(Level level)
         {
-            var ca = level.GetPlayerAvatar();
+            ClientAvatar ca = level.GetPlayerAvatar();
 
-            foreach (var buildingId in m_vBuildingIdList)
+            foreach(var buildingId in m_vBuildingIdList)
             {
-                var b = (Building) level.GameObjectManager.GetGameObjectByID(buildingId);
+                Building b = (Building)level.GameObjectManager.GetGameObjectByID(buildingId);
                 if (b.CanUpgrade())
                 {
-                    var bd = b.GetBuildingData();
-                    var cost = bd.GetBuildCost(b.GetUpgradeLevel() + 1);
+                    BuildingData bd = b.GetBuildingData();
+                    int cost = bd.GetBuildCost(b.GetUpgradeLevel() + 1);
                     ResourceData rd;
-                    if (m_vIsAltResource == 0)
+                    if(m_vIsAltResource == 0)
                         rd = bd.GetBuildResource(b.GetUpgradeLevel() + 1);
                     else
                         rd = bd.GetAltBuildResource(b.GetUpgradeLevel() + 1);
@@ -53,8 +60,5 @@ namespace UCS.PacketProcessing
                 }
             }
         }
-
-        //public uint Unknown1 { get; set; } //00 00 2D 7F some client tick
-        //00 00 02 25 00 00 00 00 07 1D CD 65 0A 1D CD 65 09 1D CD 65 0B 1D CD 65 08 1D CD 65 0C 1D CD 65 07 1D CD 65 06 00 00 1B 07
     }
 }

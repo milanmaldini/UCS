@@ -1,13 +1,20 @@
 ﻿using System;
-using UCS.Core;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 using UCS.Network;
 
 namespace UCS.PacketProcessing
 {
-    internal class AttackGameOpCommand : GameOpCommand
+    class AttackGameOpCommand : GameOpCommand
     {
-        private readonly string[] m_vArgs;
+        private string[] m_vArgs;
 
         public AttackGameOpCommand(string[] args)
         {
@@ -17,33 +24,35 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            if (level.GetAccountPrivileges() >= GetRequiredAccountPrivileges())
+            if(level.GetAccountPrivileges() >= GetRequiredAccountPrivileges())
             {
-                if (m_vArgs.Length >= 1)
+                if(m_vArgs.Length >= 2)
                 {
                     try
                     {
-                        var id = Convert.ToInt64(m_vArgs[1]);
+                        long id = Convert.ToInt64(m_vArgs[1]);
                         var l = ResourcesManager.GetPlayer(id);
-                        if (l != null)
+                        if(l != null)
                         {
                             l.Tick();
-
-                            //var p = new EnemyHomeDataMessage(level.GetClient(), l, level);
-                            var p = new VisitedHomeDataMessage(level.GetClient(), l, level);
+                            var p = new EnemyHomeDataMessage(level.GetClient(), l, level);
                             PacketManager.ProcessOutgoingPacket(p);
                         }
                         else
+                        {
                             Debugger.WriteLine("Attack failed: id " + id + " not found");
+                        }
                     }
-                    catch (Exception ex)
+                    catch(Exception ex)
                     {
-                        Debugger.WriteLine("Attack failed with error: " + ex);
+                        Debugger.WriteLine("Attack failed with error: " + ex.ToString()); 
                     }
                 }
             }
             else
+            {
                 SendCommandFailedMessage(level.GetClient());
+            }
         }
     }
 }

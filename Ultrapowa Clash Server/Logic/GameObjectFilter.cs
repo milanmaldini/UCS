@@ -1,13 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Configuration;
+using UCS.PacketProcessing;
+using UCS.Core;
+using UCS.GameFiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
-    internal class GameObjectFilter
+    class GameObjectFilter
     {
         //a1 + 4 gameobjecttypes
         //a1 + 8
         //a1 + 12
-        private List<int> m_vIgnoredObjects;
+        private List<int> m_vIgnoredObjects;//a1 + 16
+        
+        public GameObjectFilter()
+        {
+        }
 
         public void AddIgnoreObject(GameObject go)
         {
@@ -16,7 +31,6 @@ namespace UCS.Logic
             m_vIgnoredObjects.Add(go.GlobalId);
         }
 
-        //a1 + 16
         public virtual bool IsComponentFilter()
         {
             return false;
@@ -33,9 +47,11 @@ namespace UCS.Logic
 
         public bool TestGameObject(GameObject go)
         {
-            var result = true;
+            bool result = true;
             if (m_vIgnoredObjects != null)
-                result = m_vIgnoredObjects.IndexOf(go.GlobalId) == -1;
+            {
+                result = (m_vIgnoredObjects.IndexOf(go.GlobalId) == -1);
+            }
             return result;
         }
     }
