@@ -26,9 +26,6 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
-        //00 00 02 25 00 00 00 00 07 1D CD 65 0A 1D CD 65 09 1D CD 65 0B 1D CD 65 08 1D CD 65 0C 1D CD 65 07 1D CD 65 06 00 00 1B 07
-        //public uint Unknown1 { get; set; } //00 00 2D 7F some client tick
-
         public override void Execute(Level level)
         {
             var ca = level.GetPlayerAvatar();
@@ -56,5 +53,8 @@ namespace UCS.PacketProcessing
                 }
             }
         }
+
+        //public uint Unknown1 { get; set; } //00 00 2D 7F some client tick
+        //00 00 02 25 00 00 00 00 07 1D CD 65 0A 1D CD 65 09 1D CD 65 0B 1D CD 65 08 1D CD 65 0C 1D CD 65 07 1D CD 65 06 00 00 1B 07
     }
 }

@@ -31,23 +31,17 @@ namespace UCS.GameFiles
 
                 var types = sr.ReadLine().Replace("\"", "").Split(',');
                 foreach (var type in types)
-                {
                     m_vColumnTypes.Add(type);
-                }
 
                 while (!sr.EndOfStream)
                 {
                     var values = sr.ReadLine().Replace("\"", "").Split(',');
 
                     if (values[0] != string.Empty)
-                    {
                         CreateRow();
-                    }
 
                     for (var i = 0; i < m_vColumnHeaders.Count; i++)
-                    {
                         m_vCSVColumns[i].Add(values[i]);
-                    }
                 }
             }
         }
@@ -70,9 +64,7 @@ namespace UCS.GameFiles
             var c = m_vCSVColumns[columnIndex];
             var nextOffset = 0;
             if (rowIndex + 1 >= m_vCSVRows.Count)
-            {
                 nextOffset = c.GetSize();
-            }
             else
             {
                 var nextRow = m_vCSVRows[rowIndex + 1];

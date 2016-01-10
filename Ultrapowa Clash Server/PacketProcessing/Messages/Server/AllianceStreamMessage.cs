@@ -34,9 +34,7 @@ namespace UCS.PacketProcessing
                     chatMessage.SetSenderName(name);
                 }
                 else
-                {
                     pack.AddRange(chatMessage.Encode());
-                }
             }
 
             SetData(pack.ToArray());

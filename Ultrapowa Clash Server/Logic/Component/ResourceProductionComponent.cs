@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.GameFiles;
 
@@ -36,9 +36,7 @@ namespace UCS.Logic
             var span = ci.GetLevel().GetTime() - m_vTimeSinceLastClick;
             float currentResources = 0;
             if (!ci.IsBoosted)
-            {
                 currentResources = m_vResourcesPerHour[ci.UpgradeLevel]/(60f*60f)*(float) span.TotalSeconds;
-            }
             else
             {
                 if (ci.GetBoostEndTime() >= ci.GetLevel().GetTime())
@@ -75,17 +73,16 @@ namespace UCS.Logic
                             ci.GetLevel()
                                 .GetTime()
                                 .AddSeconds(
-                                    -((currentResources - newCurrentResources)/
-                                      (m_vResourcesPerHour[ci.UpgradeLevel]/(60f*60f))));
+                                            -((currentResources - newCurrentResources)/
+                                              (m_vResourcesPerHour[ci.UpgradeLevel]/(60f*60f))));
                         currentResources = newCurrentResources;
                     }
                     else
-                    {
                         m_vTimeSinceLastClick = ci.GetLevel().GetTime();
-                    }
                     Debugger.WriteLine(
-                        string.Format("Collect {0} {1}", (int) currentResources, m_vProductionResourceData.GetName()),
-                        null, 5, ConsoleColor.Blue);
+                                       string.Format("Collect {0} {1}", (int) currentResources,
+                                                     m_vProductionResourceData.GetName()),
+                                       null, 5, ConsoleColor.Blue);
 
                     ca.CommodityCountChangeHelper(0, m_vProductionResourceData, (int) currentResources);
                 }
@@ -96,9 +93,7 @@ namespace UCS.Logic
         {
             var productionObject = (JObject) jsonObject["production"];
             if (productionObject != null)
-            {
                 m_vTimeSinceLastClick = productionObject["t_lastClick"].ToObject<DateTime>();
-            }
         }
 
         public void Reset()
@@ -118,9 +113,7 @@ namespace UCS.Logic
                 if (ci.IsBoosted)
                 {
                     if (ci.GetBoostEndTime() >= ci.GetLevel().GetTime())
-                    {
                         seconds *= ci.GetBoostMultipier();
-                    }
                     else
                     {
                         var boostedTime = seconds -
@@ -130,9 +123,10 @@ namespace UCS.Logic
                     }
                 }
                 jsonObject.Add("res_time",
-                    (int)
-                        (m_vMaxResources[ci.GetUpgradeLevel()]/(float) m_vResourcesPerHour[ci.GetUpgradeLevel()]*3600f -
-                         seconds));
+                               (int)
+                               (m_vMaxResources[ci.GetUpgradeLevel()]/(float) m_vResourcesPerHour[ci.GetUpgradeLevel()]*
+                                3600f -
+                                seconds));
             }
 
             return jsonObject;

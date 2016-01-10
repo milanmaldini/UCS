@@ -7,10 +7,8 @@ namespace UCS.Core
 {
     internal class MessageManager
     {
-        private static readonly EventWaitHandle m_vWaitHandle = new AutoResetEvent(false);
-
         private static readonly ConcurrentQueue<Message> m_vPackets = new ConcurrentQueue<Message>();
-
+        private static readonly EventWaitHandle m_vWaitHandle = new AutoResetEvent(false);
         private bool m_vIsRunning;
 
         public MessageManager()
@@ -49,8 +47,10 @@ namespace UCS.Core
                     var pl = p.Client.GetLevel();
                     var player = "";
                     if (pl != null)
+                    {
                         player += " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() +
                                   ")";
+                    }
                     try
                     {
                         Debugger.WriteLine("[R] " + p.GetMessageType() + " " + p.GetType().Name + player);
@@ -62,8 +62,9 @@ namespace UCS.Core
                     catch (Exception ex)
                     {
                         Debugger.WriteLine(
-                            "An exception occured during processing of message " + p.GetType().Name + player, ex, 4,
-                            ConsoleColor.Red);
+                                           "An exception occured during processing of message " + p.GetType().Name +
+                                           player, ex, 4,
+                                           ConsoleColor.Red);
                     }
                 }
             }

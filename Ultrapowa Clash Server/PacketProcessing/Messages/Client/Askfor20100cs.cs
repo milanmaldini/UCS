@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System;
+﻿using System;
+using System.IO;
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
@@ -9,34 +9,40 @@ namespace UCS.PacketProcessing
     internal class Askfor20100 : Message
     {
         /// <summary>
+        /// String that is probably needed for the new encryption schema.
+        /// </summary>
+        public string TheString;
+
+        /// <summary>
         /// Unknown integer 1.
         /// </summary>
         public int Unknown1;
+
         /// <summary>
         /// Unknown integer 2.
         /// </summary>
         public int Unknown2;
+
         /// <summary>
         /// Unknown integer 3.
         /// </summary>
         public int Unknown3;
+
         /// <summary>
         /// Unknown integer 4.
         /// </summary>
         public int Unknown4;
+
         /// <summary>
         /// Unknown integer 5.
         /// </summary>
         public int Unknown5;
-        /// <summary>
-        /// String that is probably needed for the new encryption
-        /// schema.
-        /// </summary>
-        public string TheString;
+
         /// <summary>
         /// Unknown integer 6.
         /// </summary>
         public int Unknown6;
+
         /// <summary>
         /// Unknown integer 7.
         /// </summary>
@@ -59,7 +65,6 @@ namespace UCS.PacketProcessing
                 Unknown6 = br.ReadInt32();
                 TheString = br.ReadScString();
                 Unknown7 = br.ReadInt32();
-
             }
         }
 

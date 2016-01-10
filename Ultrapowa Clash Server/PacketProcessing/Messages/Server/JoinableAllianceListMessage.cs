@@ -20,9 +20,7 @@ namespace UCS.PacketProcessing
             var pack = new List<byte>();
             pack.AddInt32(m_vAlliances.Count);
             foreach (var alliance in m_vAlliances)
-            {
                 pack.AddRange(alliance.EncodeFullEntry());
-            }
 
             SetData(pack.ToArray());
         }

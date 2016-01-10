@@ -11,6 +11,7 @@ namespace UCS.PacketProcessing
     {
         public ExecuteCommandsMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public byte[] NestedCommands { get; private set; }
@@ -32,13 +33,11 @@ namespace UCS.PacketProcessing
                 NumberOfCommands = br.ReadUInt32WithEndian();
 
                 if (NumberOfCommands > 0)
-                {
                     NestedCommands = br.ReadBytes(GetLength() - 12);
-                }
             }
         }
 
-        // 01 EB 30 36 some sort of server tick or checksum 
+        // 01 EB 30 36 some sort of server tick or checksum
         public override void Process(Level level)
         {
             try
@@ -56,8 +55,10 @@ namespace UCS.PacketProcessing
                             {
                                 var player = "";
                                 if (level != null)
+                                {
                                     player += " (" + level.GetPlayerAvatar().GetId() + ", " +
                                               level.GetPlayerAvatar().GetAvatarName() + ")";
+                                }
                                 Debugger.WriteLine("\t" + obj.GetType().Name + player);
                                 ((Command) obj).Execute(level);
 

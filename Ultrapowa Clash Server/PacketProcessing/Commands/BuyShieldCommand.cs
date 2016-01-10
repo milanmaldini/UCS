@@ -21,6 +21,7 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
+
         }
     }
 }

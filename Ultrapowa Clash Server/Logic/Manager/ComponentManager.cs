@@ -17,9 +17,7 @@ namespace UCS.Logic
 
             m_vComponents = new List<List<Component>>();
             for (var i = 0; i <= 10; i++)
-            {
                 m_vComponents.Add(new List<Component>());
-            }
 
             m_vLevel = l;
         }
@@ -108,11 +106,13 @@ namespace UCS.Logic
             var result = 0;
             var components = m_vComponents[0];
             if (components.Count >= 1)
+            {
                 foreach (var c in components)
                 {
                     if (((UnitStorageComponent) c).IsSpellForge == IsSpellForge)
                         result += ((UnitStorageComponent) c).GetMaxCapacity();
                 }
+            }
             return result;
         }
 
@@ -121,11 +121,13 @@ namespace UCS.Logic
             var result = 0;
             var components = m_vComponents[0];
             if (components.Count >= 1)
+            {
                 foreach (var c in components)
                 {
                     if (((UnitStorageComponent) c).IsSpellForge == IsSpellForge)
                         result += ((UnitStorageComponent) c).GetUsedCapacity();
                 }
+            }
             return result;
         }
 
@@ -144,9 +146,7 @@ namespace UCS.Logic
                         resourceCap += res.GetMax(i);
                     var resource = (ResourceData) table.GetItemAt(i);
                     if (!resource.PremiumCurrency)
-                    {
                         m_vLevel.GetPlayerAvatar().SetResourceCap(resource, resourceCap);
-                    }
                 }
             }
         }
@@ -170,6 +170,7 @@ namespace UCS.Logic
 
         public void Tick()
         {
+
         }
     }
 }

@@ -85,7 +85,7 @@ namespace UCS.PacketProcessing
                     {
                         var p = new GlobalChatLineMessage(level.GetClient());
                         p.SetChatMessage(
-                            "Wrong usage,Please use /pm userid text\nTo get your ID use /myid. Save it or tell it to your friends.");
+                                         "Wrong usage,Please use /pm userid text\nTo get your ID use /myid. Save it or tell it to your friends.");
                         p.SetPlayerId(0);
                         p.SetLeagueId(22);
                         p.SetPlayerName("System Manager");
@@ -95,7 +95,7 @@ namespace UCS.PacketProcessing
                 {
                     var p = new GlobalChatLineMessage(level.GetClient());
                     p.SetChatMessage(
-                        "Wrong usage,Please use /pm userid text\nTo get your ID use /myid. Save it or tell it to your friends.");
+                                     "Wrong usage,Please use /pm userid text\nTo get your ID use /myid. Save it or tell it to your friends.");
                     p.SetPlayerId(0);
                     p.SetLeagueId(22);
                     p.SetPlayerName("System Manager");
@@ -104,9 +104,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

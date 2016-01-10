@@ -10,10 +10,12 @@ namespace UCS.PacketProcessing
     {
         public GoHomeMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public override void Decode()
         {
+
         }
 
         public override void Process(Level level)

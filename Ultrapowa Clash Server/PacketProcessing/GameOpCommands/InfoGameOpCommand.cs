@@ -30,7 +30,7 @@ namespace UCS.PacketProcessing
                     mail.SetAllianceBadgeData(0);
                     mail.SetAllianceName("UCS System");
                     mail.SetMessage(
-                        "Here you can find general Informations about UCS:\n\nUCS is a Server Emulator that run Clash Of Clans\nYou can test our latest Server Builds at Shard.");
+                                    "Here you can find general Informations about UCS:\n\nUCS is a Server Emulator that run Clash Of Clans\nYou can test our latest Server Builds at Shard.");
                     mail.SetSenderLeagueId(22);
 
                     var p = new AvatarStreamEntryMessage(level.GetClient());
@@ -39,9 +39,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

@@ -25,7 +25,7 @@ namespace UCS.PacketProcessing
                     .SetResourceCount(ObjectManager.DataTables.GetResourceByName("Elixir"), Convert.ToInt32("800000000"));
                 level.GetPlayerAvatar()
                     .SetResourceCount(ObjectManager.DataTables.GetResourceByName("DarkElixir"),
-                        Convert.ToInt32("800000000"));
+                                      Convert.ToInt32("800000000"));
                 level.GetPlayerAvatar().SetDiamonds(775000);
                 var alliance = ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId());
 
@@ -33,9 +33,7 @@ namespace UCS.PacketProcessing
                 PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(level.GetClient(), level));
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

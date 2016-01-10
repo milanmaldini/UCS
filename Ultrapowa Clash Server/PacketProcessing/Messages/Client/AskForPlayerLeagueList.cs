@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using UCS.Logic;
 using UCS.Network;
 
@@ -10,10 +9,12 @@ namespace UCS.PacketProcessing
     {
         public AskForPlayerLeagueList(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public override void Decode()
         {
+
         }
 
         public override void Process(Level level)

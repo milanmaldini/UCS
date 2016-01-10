@@ -30,7 +30,7 @@ namespace UCS.PacketProcessing
                     mail.SetAllianceBadgeData(0);
                     mail.SetAllianceName("UCS Info Bots");
                     mail.SetMessage(
-                        "Here is the current UCS Developer Team:\n\n\nDev Leader:\nAidid\n\nDevelopers:\nBerkan,\nAbdu, \nTobiti\nAnd iSwuerfel\n\n");
+                                    "Here is the current UCS Developer Team:\n\n\nDev Leader:\nAidid\n\nDevelopers:\nBerkan,\nAbdu, \nTobiti\nAnd iSwuerfel\n\n");
                     mail.SetSenderLeagueId(22);
 
                     var p = new AvatarStreamEntryMessage(level.GetClient());
@@ -39,9 +39,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

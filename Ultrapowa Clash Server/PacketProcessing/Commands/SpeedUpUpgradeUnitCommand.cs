@@ -15,8 +15,6 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
-        //00 00 02 05 1D CD 65 13 00 00 53 8F
-
         public override void Execute(Level level)
         {
             var ca = level.GetPlayerAvatar();
@@ -30,12 +28,12 @@ namespace UCS.PacketProcessing
                     if (uuc != null)
                     {
                         if (uuc.GetCurrentlyUpgradedUnit() != null)
-                        {
                             uuc.SpeedUp();
-                        }
                     }
                 }
             }
         }
+
+        //00 00 02 05 1D CD 65 13 00 00 53 8F
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using UCS.Core;
 using UCS.GameFiles;
@@ -17,9 +18,7 @@ namespace UCS.Helpers
         {
             list.AddInt32(data.Count);
             foreach (var dataSlot in data)
-            {
                 list.AddRange(dataSlot.Encode());
-            }
         }
 
         public static void AddInt32(this List<byte> list, int data)
@@ -41,6 +40,22 @@ namespace UCS.Helpers
                 list.AddRange(BitConverter.GetBytes(Encoding.UTF8.GetByteCount(data)).Reverse());
                 list.AddRange(Encoding.UTF8.GetBytes(data));
             }
+        }
+
+        public static string GenerateApi()
+        {
+            var api = new byte[201512222];
+            new Random().NextBytes(api);
+            MD5 md5 = new MD5CryptoServiceProvider();
+            return BitConverter.ToString(md5.ComputeHash(api)).Replace("-", "");
+        }
+
+        public static string GenerateKey()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, 25)
+                                  .Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         public static int ParseConfigInt(string str)
@@ -101,9 +116,7 @@ namespace UCS.Helpers
                     result = Encoding.UTF8.GetString(astr);
                 }
                 else
-                {
                     result = string.Empty;
-                }
             }
             else
                 result = null;
@@ -130,22 +143,6 @@ namespace UCS.Helpers
         {
             TValue ignored;
             return self.TryRemove(key, out ignored);
-        }
-
-        public static string GenerateApi()
-        {
-            var api = new byte[201512222];
-            new Random().NextBytes(api);
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            return BitConverter.ToString(md5.ComputeHash(api)).Replace("-", "");
-        }
-
-        public static string GenerateKey()
-        {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            var random = new Random();
-            return new string(Enumerable.Repeat(chars, 25)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

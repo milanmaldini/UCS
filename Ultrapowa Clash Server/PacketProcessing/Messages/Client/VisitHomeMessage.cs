@@ -10,18 +10,14 @@ namespace UCS.PacketProcessing
     internal class VisitHomeMessage : Message
     {
         public VisitHomeMessage(Client client, BinaryReader br)
-            : base(client, br)
-        {
-        }
+            : base(client, br) {}
 
         public long AvatarId { get; set; }
 
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
-            {
                 AvatarId = br.ReadInt64WithEndian();
-            }
         }
 
         public override void Process(Level level)

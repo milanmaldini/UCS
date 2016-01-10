@@ -30,7 +30,7 @@ namespace UCS.PacketProcessing
             {
                 var bd = b.GetConstructionItemData();
                 if (ca.HasEnoughResources(bd.GetBuildResource(b.GetUpgradeLevel() + 1),
-                    bd.GetBuildCost(b.GetUpgradeLevel() + 1)))
+                                          bd.GetBuildCost(b.GetUpgradeLevel() + 1)))
                 {
                     if (level.HasFreeWorkers())
                     {

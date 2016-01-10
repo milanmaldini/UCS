@@ -1,18 +1,12 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using UCS.Helpers;
 
 namespace UCS.Logic
 {
     internal class DonationStreamEntry : StreamEntry
     {
-        #region Private Fields
-
         private string m_vMessage;
-
-        #endregion Private Fields
-
-        #region Public Methods
 
         public override byte[] Encode()
         {
@@ -51,7 +45,5 @@ namespace UCS.Logic
         {
             m_vMessage = message;
         }
-
-        #endregion Public Methods
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using UCS.Core;
 using UCS.GameFiles;
 
@@ -9,7 +9,6 @@ namespace UCS.Logic
     {
         private readonly List<UnitSlot> m_vUnits;
         public bool IsDarkForge;
-
         public bool IsSpellForge;
 
         //a1 + 12;
@@ -46,9 +45,7 @@ namespace UCS.Logic
                     m_vUnits.Add(us);
                 }
                 else
-                {
                     m_vUnits[unitIndex].Count++;
-                }
                 var ca = GetParent().GetLevel().GetPlayerAvatar();
                 var unitCount = ca.GetUnitCount(cd);
                 ca.SetUnitCount(cd, unitCount + 1);
@@ -61,13 +58,9 @@ namespace UCS.Logic
             if (cd != null)
             {
                 if (IsSpellForge)
-                {
                     result = GetMaxCapacity() >= GetUsedCapacity() + cd.GetHousingSpace();
-                }
                 else if (IsDarkForge)
-                {
                     result = GetMaxCapacity() >= GetUsedCapacity() + cd.GetHousingSpace();
-                }
                 else
                 {
                     var cm = GetParent().GetLevel().GetComponentManager();
@@ -201,13 +194,9 @@ namespace UCS.Logic
             {
                 var us = m_vUnits[unitIndex];
                 if (us.Count <= count)
-                {
                     m_vUnits.Remove(us);
-                }
                 else
-                {
                     us.Count -= count;
-                }
                 var ca = GetParent().GetLevel().GetPlayerAvatar();
                 var unitCount = ca.GetUnitCount(cd);
                 ca.SetUnitCount(cd, unitCount - count);

@@ -12,9 +12,7 @@ namespace UCS.PacketProcessing
             Unknown1 = br.ReadUInt32WithEndian();
             FlagHasRequestMessage = br.ReadByte();
             if (FlagHasRequestMessage == 0x01)
-            {
                 Message = br.ReadScString();
-            }
         }
 
         public byte FlagHasRequestMessage { get; set; }
@@ -27,6 +25,7 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
+
         }
 
         //00 00 01 FF 00 00 10 5D 01 00 00 00 21 4A 27 61 69 20 62 65 73 6F 69 6E 20 64 65 20 74 72 6F 75 70 65 73 20 64 65 20 72 65 6E 66 6F 72 74

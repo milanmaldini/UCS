@@ -38,9 +38,7 @@ namespace UCS.PacketProcessing
                         if (ca.HasEnoughResources(rd, cost))
                         {
                             if (level.HasFreeWorkers())
-                            {
                                 hbc.StartUpgrading();
-                            }
                         }
                     }
                 }

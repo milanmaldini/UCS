@@ -26,9 +26,7 @@ namespace UCS.PacketProcessing
                     var b = (Building) go;
                     var hbc = b.GetHeroBaseComponent();
                     if (hbc != null)
-                    {
                         hbc.CancelUpgrade();
-                    }
                 }
             }
         }

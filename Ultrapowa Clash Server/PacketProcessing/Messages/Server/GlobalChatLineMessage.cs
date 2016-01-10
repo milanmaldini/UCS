@@ -50,9 +50,7 @@ namespace UCS.PacketProcessing
             pack.AddInt64(m_vHomeId);
             pack.AddInt64(m_vCurrentHomeId);
             if (!m_vHasAlliance)
-            {
                 pack.Add(0);
-            }
             else
             {
                 pack.Add(1);

@@ -15,9 +15,7 @@ namespace UCS.Logic
             var bd = (BuildingData) ci.GetData();
 
             if (bd.AmmoCount != 0)
-            {
                 m_vAmmo = bd.AmmoCount;
-            }
         }
 
         public override int Type
@@ -41,18 +39,13 @@ namespace UCS.Logic
         public override void Load(JObject jsonObject)
         {
             if (jsonObject["ammo"] != null)
-            {
                 m_vAmmo = jsonObject["ammo"].ToObject<int>();
-            }
-
         }
 
         public override JObject Save(JObject jsonObject)
         {
             if (m_vAmmo != 0)
-            {
                 jsonObject.Add("ammo", m_vAmmo);
-            }
 
             return jsonObject;
         }

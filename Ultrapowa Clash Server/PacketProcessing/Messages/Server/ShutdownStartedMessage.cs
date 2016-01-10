@@ -25,6 +25,6 @@ namespace UCS.PacketProcessing
         public void SetCode(int code)
         {
             m_vCode = code;
-        } 
+        }
     }
 }

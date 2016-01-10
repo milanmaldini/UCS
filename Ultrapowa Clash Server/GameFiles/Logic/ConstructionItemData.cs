@@ -4,6 +4,7 @@
     {
         public ConstructionItemData(CSVRow row, DataTable dt) : base(row, dt)
         {
+
         }
 
         public virtual int GetBuildCost(int level)

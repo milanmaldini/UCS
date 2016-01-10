@@ -34,9 +34,7 @@ namespace UCS
             kServerConsole.SelectionStart = kServerConsole.Text.Length;
             kServerConsole.ScrollToCaret();
             if (EnterCmdTextBox.Text == "/clear")
-            {
                 kServerConsole.Clear();
-            }
             else if (EnterCmdTextBox.Text == "/restart")
             {
                 var mail = new AllianceMailStreamEntry();
@@ -73,18 +71,14 @@ namespace UCS
                 StatusLabel.Text = "Status : Restart";
             }
             else if (EnterCmdTextBox.Text == "/info")
-            {
                 kServerConsole.Text += Environment.NewLine + @"Created By UCS Team
                     Aidid
                     Berkan
                     Iswuefel
                     Moien007
                     Tobiti";
-            }
             else if (EnterCmdTextBox.Text == "/quit")
-            {
                 Environment.Exit(1);
-            }
             else
             {
                 kServerConsole.Text += Environment.NewLine + "unknown command = " + EnterCmdTextBox.Text +
@@ -96,6 +90,7 @@ namespace UCS
 
         private void ConfigEditor_Click(object sender, EventArgs e)
         {
+
         }
 
         private void EShutdown_Click(object sender, EventArgs e)
@@ -147,7 +142,7 @@ namespace UCS
         private void GuidePriBtn_Click(object sender, EventArgs e)
         {
             Process.Start(
-                "http://ultrapowa.com/forum/showthread.php?43-Ultrapowa-Clash-Server-Official-Documentation&p=8090&viewfull=1#post8090");
+                          "http://ultrapowa.com/forum/showthread.php?43-Ultrapowa-Clash-Server-Official-Documentation&p=8090&viewfull=1#post8090");
         }
 
         private void loadConfigFile()
@@ -210,33 +205,19 @@ namespace UCS
                 PlayerAvatarNameTextBox.Text +=
                     ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetPlayerAvatar().GetAvatarName();
                 if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountStatus() == 0)
-                {
                     SetUserStatusComboBox.Text = "Normal";
-                }
                 else if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountStatus() == 0)
-                {
                     SetUserStatusComboBox.Text = "Banned";
-                }
                 if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountPrivileges() == 0)
-                {
                     SetUserPriComboBox.Text = "Standard";
-                }
                 else if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountPrivileges() == 1)
-                {
                     SetUserPriComboBox.Text = "Moderator";
-                }
                 else if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountPrivileges() == 2)
-                {
                     SetUserPriComboBox.Text = "High Moderator";
-                }
                 else if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountPrivileges() == 4)
-                {
                     SetUserPriComboBox.Text = "Administrator";
-                }
                 else if (ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).GetAccountPrivileges() == 5)
-                {
                     SetUserPriComboBox.Text = "Server Owner";
-                }
 
                 SetUserPriComboBox.Enabled = true;
                 SetUserStatusComboBox.Enabled = true;
@@ -291,7 +272,7 @@ namespace UCS
 
         private void processConfigFile()
         {
-            // ucsconf-editor 
+            // ucsconf-editor
             var doc = new XmlDocument();
             var path = "ucsconf.config";
             doc.Load(path);
@@ -300,89 +281,47 @@ namespace UCS
             while (ie.MoveNext())
             {
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingGems")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingGemsTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingGold")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingGoldTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingElixir")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingElixirTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingDarkElixir")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingDarkElixirTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingTrophies")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingTrophiesTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "maintenanceMode")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = EnableMaintenanceModeComboBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "maintenanceTimeleft")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = MaintenanceTimeTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingShieldTime")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingShieldTimeTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "clientVersion")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = ClientVersionTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "useCustomPatch")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = UsePatchComboBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "patchingServer")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = PatchingServerTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "databaseConnectionName")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = DBConnectionTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "loggingLevel")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = LoggingLevelTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "apiManager")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = ActiveAPIManagerComboBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "oldClientVersion")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = oldClientUrlTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "debugMode")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = DebugModeComboBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "debugPort")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = ServerDebugPortTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "serverPort")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = ServerPortTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "startingExperience")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = StartingExpTextBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "expertPve")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = PvEDiffComboBox.Text;
-                }
                 if ((ie.Current as XmlNode).Attributes["key"].Value == "saveThreadCount")
-                {
                     (ie.Current as XmlNode).Attributes["value"].Value = SaveThreadCountTextBox.Text;
-                }
             }
             doc.Save(path);
             var title2 = "Done.";
@@ -541,7 +480,7 @@ namespace UCS
                 speeds[i] = Math.Round(jQueryFileSize/(endTime - startTime).TotalSeconds);
             }
             MessageBox.Show(string.Format("Download Speed: {0}KB/s", speeds.Average(), MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question));
+                                          MessageBoxIcon.Question));
             Console.WriteLine("Download Speed: {0}KB/s", speeds.Average());
             File.Delete("speedtest.txt");
         }
@@ -577,7 +516,7 @@ namespace UCS
         {
             var dialogResult =
                 MessageBox.Show("Need Help ? Connect With Us At http://ultrapowa.com/ or https://www.flamewall.net/",
-                    "Need Help?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                "Need Help?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 var ucs = new ProcessStartInfo("http://ultrapowa.com/");
@@ -585,16 +524,14 @@ namespace UCS
                 var flamewall = new ProcessStartInfo("https:/www.flamewall.net/");
                 Process.Start(flamewall);
             }
-            else if (dialogResult == DialogResult.No)
-            {
-            }
+            else if (dialogResult == DialogResult.No) {}
         }
 
         private void UCSClick2_Click(object sender, EventArgs e)
         {
             var dialogResult =
                 MessageBox.Show("Need Help ? Connect With Us At http://ultrapowa.com/ or https://www.flamewall.net/",
-                    "Need Help?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                                "Need Help?", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (dialogResult == DialogResult.Yes)
             {
                 var ucs = new ProcessStartInfo("http://ultrapowa.com/");
@@ -602,9 +539,7 @@ namespace UCS
                 var flamewall = new ProcessStartInfo("https://www.flamewall.net/");
                 Process.Start(flamewall);
             }
-            else if (dialogResult == DialogResult.No)
-            {
-            }
+            else if (dialogResult == DialogResult.No) {}
         }
 
         private void updatecheck_Click(object sender, EventArgs e)
@@ -624,12 +559,11 @@ namespace UCS
                     while (reader.Read())
                     {
                         if (reader.NodeType == XmlNodeType.Element)
-                        {
                             elementName = reader.Name;
-                        }
                         else
                         {
                             if ((reader.NodeType == XmlNodeType.Text) && reader.HasValue)
+                            {
                                 switch (elementName)
                                 {
                                     case "version":
@@ -644,6 +578,7 @@ namespace UCS
                                         aboutUpdate = reader.Value;
                                         break;
                                 }
+                            }
                         }
                     }
                 }
@@ -663,11 +598,11 @@ namespace UCS
                 StatusLabel.Text = "Status : New version available!";
                 var str =
                     string.Format(
-                        "New version found!\nYour version: {0}.\nNewest version: {1}. \nAdded in this version: {2}. ",
-                        applicationVersion, newVersion, aboutUpdate);
+                                  "New version found!\nYour version: {0}.\nNewest version: {1}. \nAdded in this version: {2}. ",
+                                  applicationVersion, newVersion, aboutUpdate);
                 if (DialogResult.No !=
                     MessageBox.Show(str + "\nWould you like to download this update?", "Check for updates",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
                     try
                     {
@@ -682,7 +617,7 @@ namespace UCS
             else
             {
                 MessageBox.Show("Your version: " + applicationVersion + "  is up to date.", "Check for Updates",
-                    MessageBoxButtons.OK, MessageBoxIcon.None);
+                                MessageBoxButtons.OK, MessageBoxIcon.None);
             }
         }
 
@@ -708,62 +643,39 @@ namespace UCS
                 int PlayerNumAccess = account.GetAccountPrivileges();
                 string PlayerAccess;
                 if (PlayerNumAccess == 0)
-                {
                     PlayerAccess = "Standard";
-                }
                 else if (PlayerNumAccess == 1)
-                {
                     PlayerAccess = "Moderator";
-                }
                 else if (PlayerNumAccess == 2)
-                {
                     PlayerAccess = "High Moderator";
-                }
                 else if (PlayerNumAccess == 3)
-                {
                     PlayerAccess = "unused";
-                }
                 else if (PlayerNumAccess == 4)
-                {
                     PlayerAccess = "Administrator";
-                }
                 else if (PlayerNumAccess == 5)
-                {
                     PlayerAccess = "Server Owner";
-                }
                 else
-                {
                     PlayerAccess = "ERROR";
-                }
                 ;
                 var PlayerHaveClanNum = account.GetPlayerAvatar().GetAllianceId();
                 string PlayerHaveClan;
                 if (PlayerHaveClanNum == 0)
-                {
                     PlayerHaveClan = "Clans #0";
-                }
                 else
-                {
                     PlayerHaveClan = "Clans #" + PlayerHaveClanNum;
-                }
                 ;
                 string kPlayerAccStatus;
                 int PlayerAccStatusNum = account.GetAccountStatus();
                 if (PlayerAccStatusNum == 0)
-                {
                     kPlayerAccStatus = "Normal";
-                }
                 else if (PlayerAccStatusNum == 99)
-                {
                     kPlayerAccStatus = "Banned";
-                }
                 else
-                {
                     kPlayerAccStatus = "ERR0R";
-                }
 
                 PlayerListDataGrid.Rows.Add(account.GetPlayerAvatar().GetAvatarName(), account.GetPlayerAvatar().GetId(),
-                    kPlayerAccStatus, PlayerAccess, PlayerHaveClan, account.GetPlayerAvatar().GetTownHallLevel() + 1);
+                                            kPlayerAccStatus, PlayerAccess, PlayerHaveClan,
+                                            account.GetPlayerAvatar().GetTownHallLevel() + 1);
             }
             ;
         }
@@ -772,33 +684,19 @@ namespace UCS
         {
             Console.Beep();
             if (SetUserPriComboBox.Text == "Standard")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountPrivileges(0);
-            }
             else if (SetUserPriComboBox.Text == "Moderator")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountPrivileges(1);
-            }
             else if (SetUserPriComboBox.Text == "High Moderator")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountPrivileges(2);
-            }
             else if (SetUserPriComboBox.Text == "Administrator")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountPrivileges(4);
-            }
             else if (SetUserPriComboBox.Text == "Server Owner")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountPrivileges(5);
-            }
             if (SetUserStatusComboBox.Text == "Normal")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountStatus(0);
-            }
             else if (SetUserStatusComboBox.Text == "Banned")
-            {
                 ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text)).SetAccountStatus(99);
-            }
 
             ResourcesManager.GetPlayer(long.Parse(PlayerIDBox.Text))
                 .GetPlayerAvatar()

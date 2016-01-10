@@ -9,8 +9,6 @@ namespace UCS.Logic
         //a1 + 12
         private List<int> m_vIgnoredObjects;
 
-        //a1 + 16
-
         public void AddIgnoreObject(GameObject go)
         {
             if (m_vIgnoredObjects == null)
@@ -18,6 +16,7 @@ namespace UCS.Logic
             m_vIgnoredObjects.Add(go.GlobalId);
         }
 
+        //a1 + 16
         public virtual bool IsComponentFilter()
         {
             return false;
@@ -36,9 +35,7 @@ namespace UCS.Logic
         {
             var result = true;
             if (m_vIgnoredObjects != null)
-            {
                 result = m_vIgnoredObjects.IndexOf(go.GlobalId) == -1;
-            }
             return result;
         }
     }

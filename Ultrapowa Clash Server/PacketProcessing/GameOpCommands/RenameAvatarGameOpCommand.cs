@@ -36,9 +36,7 @@ namespace UCS.PacketProcessing
                             }
                         }
                         else
-                        {
                             Debugger.WriteLine("RenameAvatar failed: id " + id + " not found");
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -47,9 +45,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

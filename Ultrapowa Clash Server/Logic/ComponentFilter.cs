@@ -27,9 +27,7 @@
             var result = false;
             var c = go.GetComponent(Type, true);
             if (c != null)
-            {
                 result = base.TestGameObject(go);
-            }
             return result;
         }
     }

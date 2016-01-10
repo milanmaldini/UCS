@@ -30,7 +30,7 @@ namespace UCS.Network
         public Socket Socket { get; set; }
 
         public static SocketRead Begin(Socket socket, IncomingReadHandler readHandler,
-            IncomingReadErrorHandler errorHandler = null)
+                                       IncomingReadErrorHandler errorHandler = null)
         {
             return new SocketRead(socket, readHandler, errorHandler);
         }
@@ -74,9 +74,7 @@ namespace UCS.Network
             catch (Exception e)
             {
                 if (errorHandler != null)
-                {
                     errorHandler(this, e);
-                }
             }
         }
     }

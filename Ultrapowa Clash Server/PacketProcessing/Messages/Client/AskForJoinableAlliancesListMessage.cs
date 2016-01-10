@@ -19,6 +19,7 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
+
         }
 
         public override void Process(Level level)

@@ -21,8 +21,6 @@ namespace UCS.PacketProcessing
         public uint Unknown1 { get; set; }
 
         //00 00 02 11 1D CD 65 06 00 00 01 04 CA
-        public override void Execute(Level level)
-        {
-        }
+        public override void Execute(Level level) {}
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using UCS.Helpers;
 using UCS.Logic;
 
@@ -29,6 +28,7 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
+
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UCS.Helpers;
 
 namespace UCS.Logic
@@ -63,9 +63,7 @@ namespace UCS.Logic
         public void AddChatMessage(StreamEntry message)
         {
             while (m_vChatMessages.Count >= m_vMaxChatMessagesNumber)
-            {
                 m_vChatMessages.RemoveAt(0);
-            }
             m_vChatMessages.Add(message);
         }
 

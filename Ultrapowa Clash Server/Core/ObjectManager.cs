@@ -24,11 +24,8 @@ namespace UCS.Core
         private static string m_vHomeDefault;
 
         private static Random m_vRandomSeed;
-
         public bool m_vTimerCanceled;
-
         public Timer TimerReferenceA;
-
         public Timer TimerReferenceP;
 
         public ObjectManager()
@@ -39,14 +36,10 @@ namespace UCS.Core
             m_vAlliances = new Dictionary<long, Alliance>();
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
-            {
                 LoadFingerPrint();
-            }
 
             using (var sr = new StreamReader(@"gamefiles/starting_home.json"))
-            {
                 m_vHomeDefault = sr.ReadToEnd();
-            }
 
             m_vAvatarSeed = DatabaseManager.Singelton.GetMaxPlayerId() + 1;
             m_vAllianceSeed = DatabaseManager.Singelton.GetMaxAllianceId() + 1;
@@ -74,7 +67,6 @@ namespace UCS.Core
         public static DataTables DataTables { get; set; }
 
         public static FingerPrint FingerPrint { get; set; }
-
         public static Dictionary<int, string> NpcLevels { get; set; }
 
         public static Alliance CreateAlliance(long seed)
@@ -112,9 +104,7 @@ namespace UCS.Core
             foreach (var a in DatabaseManager.Singelton.GetAllAlliances())
             {
                 if (!m_vAlliances.ContainsKey(a.GetAllianceId()))
-                {
                     m_vAlliances.Add(a.GetAllianceId(), a);
-                }
             }
         }
 
@@ -122,16 +112,12 @@ namespace UCS.Core
         {
             Alliance alliance = null;
             if (m_vAlliances.ContainsKey(allianceId))
-            {
                 alliance = m_vAlliances[allianceId];
-            }
             else
             {
                 alliance = DatabaseManager.Singelton.GetAlliance(allianceId);
                 if (alliance != null)
-                {
                     m_vAlliances.Add(alliance.GetAllianceId(), alliance);
-                }
             }
             return alliance;
         }
@@ -168,7 +154,7 @@ namespace UCS.Core
             gameFiles.Add(new Tuple<string, string, int>("Characters", @"gamefiles/logic/characters.csv", 3));
             gameFiles.Add(new Tuple<string, string, int>("Decos", @"gamefiles/logic/decos.csv", 17));
             gameFiles.Add(new Tuple<string, string, int>("Experience Levels", @"gamefiles/logic/experience_levels.csv",
-                10));
+                                                         10));
             gameFiles.Add(new Tuple<string, string, int>("Globals", @"gamefiles/logic/globals.csv", 13));
             gameFiles.Add(new Tuple<string, string, int>("Heroes", @"gamefiles/logic/heroes.csv", 27));
             gameFiles.Add(new Tuple<string, string, int>("Leagues", @"gamefiles/logic/leagues.csv", 12));
@@ -200,9 +186,7 @@ namespace UCS.Core
                 for (var i = 0; i < 50; i++)
                 {
                     using (var sr = new StreamReader(@"gamefiles/pve/expertPve/level" + (i + 1) + ".json"))
-                    {
                         NpcLevels.Add(i, sr.ReadToEnd());
-                    }
                 }
             }
             else
@@ -210,9 +194,7 @@ namespace UCS.Core
                 for (var i = 0; i < 50; i++)
                 {
                     using (var sr = new StreamReader(@"gamefiles/pve/normalPve/level" + (i + 1) + ".json"))
-                    {
                         NpcLevels.Add(i, sr.ReadToEnd());
-                    }
                 }
             }
         }
@@ -223,9 +205,7 @@ namespace UCS.Core
             {
                 DatabaseManager.Singelton.Save(m_vAlliances.Values.ToList());
                 if (m_vTimerCanceled)
-                {
                     TimerReferenceA.Dispose();
-                }
             }
             catch (Exception ex)
             {
@@ -239,9 +219,7 @@ namespace UCS.Core
             {
                 DatabaseManager.Singelton.Save(ResourcesManager.GetInMemoryLevels());
                 if (m_vTimerCanceled)
-                {
                     TimerReferenceP.Dispose();
-                }
             }
             catch (Exception ex)
             {

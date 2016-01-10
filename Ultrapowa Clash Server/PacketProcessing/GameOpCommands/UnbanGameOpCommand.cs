@@ -25,13 +25,9 @@ namespace UCS.PacketProcessing
                         var id = Convert.ToInt64(m_vArgs[1]);
                         var l = ResourcesManager.GetPlayer(id);
                         if (l != null)
-                        {
                             l.SetAccountStatus(0);
-                        }
                         else
-                        {
                             Debugger.WriteLine("Unban failed: id " + id + " not found");
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -40,9 +36,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

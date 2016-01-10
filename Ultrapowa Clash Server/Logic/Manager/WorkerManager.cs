@@ -17,17 +17,13 @@ namespace UCS.Logic
         public void AllocateWorker(GameObject go)
         {
             if (m_vGameObjectReferences.IndexOf(go) == -1)
-            {
                 m_vGameObjectReferences.Add(go);
-            }
         }
 
         public void DeallocateWorker(GameObject go)
         {
             if (m_vGameObjectReferences.IndexOf(go) != -1)
-            {
                 m_vGameObjectReferences.Remove(go);
-            }
         }
 
         public void DecreaseWorkerCount()
@@ -90,18 +86,14 @@ namespace UCS.Logic
                 {
                     var c = (ConstructionItem) go;
                     if (c.IsConstructing())
-                    {
                         currentGOTime = c.GetRemainingConstructionTime();
-                    }
                     else
                     {
                         var hero = c.GetHeroBaseComponent();
                         if (hero != null)
                         {
                             if (hero.IsUpgrading())
-                            {
                                 currentGOTime = hero.GetRemainingUpgradeSeconds();
-                            }
                         }
                     }
                 }
@@ -137,6 +129,7 @@ namespace UCS.Logic
 
         public void RemoveGameObjectReferences(GameObject go)
         {
+
         }
     }
 }

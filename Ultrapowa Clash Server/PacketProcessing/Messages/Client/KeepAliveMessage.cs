@@ -8,12 +8,11 @@ namespace UCS.PacketProcessing
     internal class KeepAliveMessage : Message
     {
         public KeepAliveMessage(Client client, BinaryReader br)
-            : base(client, br)
-        {
-        }
+            : base(client, br) {}
 
         public override void Decode()
         {
+
         }
 
         public override void Process(Level level)

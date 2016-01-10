@@ -26,17 +26,13 @@ namespace UCS.PacketProcessing
                 {
                     var constructionItem = (ConstructionItem) go;
                     if (constructionItem.IsConstructing())
-                    {
                         constructionItem.CancelConstruction();
-                    }
                 }
                 else if (go.ClassId == 3)
                 {
                     var obstacle = (Obstacle) go;
                     if (obstacle.IsClearingOnGoing())
-                    {
                         obstacle.CancelClearing();
-                    }
                 }
             }
         }

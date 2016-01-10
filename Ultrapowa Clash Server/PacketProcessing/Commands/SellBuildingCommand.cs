@@ -37,13 +37,9 @@ namespace UCS.PacketProcessing
                     var rd = d.GetDecoData().GetBuildResource();
                     var sellPrice = d.GetDecoData().GetSellPrice();
                     if (rd.PremiumCurrency)
-                    {
                         ca.SetDiamonds(ca.GetDiamonds() + sellPrice);
-                    }
                     else
-                    {
                         ca.CommodityCountChangeHelper(0, rd, sellPrice);
-                    }
                     level.GameObjectManager.RemoveGameObject(d);
                 }
             }

@@ -54,7 +54,7 @@ namespace UCS.GameFiles
 
                     var indexerName =
                         ((DefaultMemberAttribute)
-                            newList.GetType().GetCustomAttributes(typeof (DefaultMemberAttribute), true)[0]).MemberName;
+                         newList.GetType().GetCustomAttributes(typeof (DefaultMemberAttribute), true)[0]).MemberName;
                     var indexerProp = newList.GetType().GetProperty(indexerName);
 
                     for (var i = row.GetRowOffset(); i < row.GetRowOffset() + row.GetArraySize(prop.Name); i++)

@@ -106,11 +106,6 @@ namespace UCS.Logic
             m_vSenderLeagueId = id;
         }
 
-        /*public void SetRemoved(byte removed)
-        {
-            m_vIsRemoved = removed;
-        }*/
-
         public void SetSenderLevel(int level)
         {
             m_vSenderLevel = level;
@@ -120,5 +115,10 @@ namespace UCS.Logic
         {
             m_vSenderName = name;
         }
+
+        /*public void SetRemoved(byte removed)
+        {
+            m_vIsRemoved = removed;
+        }*/
     }
 }

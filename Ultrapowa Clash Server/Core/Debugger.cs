@@ -30,7 +30,7 @@ namespace UCS.Core
         }
 
         public static void WriteLine(string text, Exception ex = null, int logLevel = 4,
-            ConsoleColor color = ConsoleColor.White)
+                                     ConsoleColor color = ConsoleColor.White)
         {
             var content = text;
             if (logLevel <= m_vLogLevel)
@@ -38,15 +38,11 @@ namespace UCS.Core
                 if (ex != null)
                     content += ex.ToString();
                 if (color != ConsoleColor.White)
-                {
                     Console.ForegroundColor = color;
-                }
                 else
                 {
                     if (logLevel == 5)
-                    {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    }
                 }
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["serverMode"]))
                 {
@@ -54,9 +50,7 @@ namespace UCS.Core
                     Console.ResetColor();
                 }
                 else
-                {
                     Console.ResetColor();
-                }
             }
             if (logLevel <= m_vLogLevel)
             {

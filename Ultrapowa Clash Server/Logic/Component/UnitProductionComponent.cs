@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using UCS.Core;
 using UCS.GameFiles;
 
@@ -99,13 +99,9 @@ namespace UCS.Logic
                 }
             }
             if (m_vIsSpellForge)
-            {
                 count += GetParent().GetLevel().GetComponentManager().GetTotalUsedHousing(true);
-            }
             if (m_vIsDarkForge)
-            {
                 count += GetParent().GetLevel().GetComponentManager().GetTotalUsedHousing(true);
-            }
             return count;
         }
 
@@ -126,10 +122,14 @@ namespace UCS.Logic
                             if (firstUnit)
                             {
                                 if (m_vTimer != null)
+                                {
                                     result += m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(),
-                                        ((ConstructionItem) GetParent()).IsBoosted,
-                                        ((ConstructionItem) GetParent()).GetBoostEndTime(),
-                                        ((ConstructionItem) GetParent()).GetBoostMultipier());
+                                                                           ((ConstructionItem) GetParent()).IsBoosted,
+                                                                           ((ConstructionItem) GetParent())
+                                                                               .GetBoostEndTime(),
+                                                                           ((ConstructionItem) GetParent())
+                                                                               .GetBoostMultipier());
+                                }
                                 count--;
                                 firstUnit = false;
                             }
@@ -169,14 +169,14 @@ namespace UCS.Logic
             return totalRoom <= maxHousing - usedHousing;
         }
 
-        public bool IsSpellForge()
-        {
-            return m_vIsSpellForge;
-        }
-
         public bool IsDarkForge()
         {
             return m_vIsDarkForge;
+        }
+
+        public bool IsSpellForge()
+        {
+            return m_vIsSpellForge;
         }
 
         public bool IsWaitingForSpace()
@@ -188,12 +188,10 @@ namespace UCS.Logic
                 {
                     if (
                         m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(),
-                            ((ConstructionItem) GetParent()).IsBoosted,
-                            ((ConstructionItem) GetParent()).GetBoostEndTime(),
-                            ((ConstructionItem) GetParent()).GetBoostMultipier()) == 0)
-                    {
+                                                     ((ConstructionItem) GetParent()).IsBoosted,
+                                                     ((ConstructionItem) GetParent()).GetBoostEndTime(),
+                                                     ((ConstructionItem) GetParent()).GetBoostMultipier()) == 0)
                         result = m_vIsWaitingForSpace;
-                    }
                 }
             }
             return result;
@@ -259,9 +257,7 @@ namespace UCS.Logic
                 result = true;
             }
             else
-            {
                 m_vIsWaitingForSpace = true;
-            }
             return result;
         }
 
@@ -327,15 +323,14 @@ namespace UCS.Logic
             {
                 var ci = (ConstructionItem) GetParent();
                 unitProdObject.Add("t",
-                    m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(), ci.IsBoosted, ci.GetBoostEndTime(),
-                        ci.GetBoostMultipier()));
+                                   m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(), ci.IsBoosted,
+                                                                ci.GetBoostEndTime(),
+                                                                ci.GetBoostMultipier()));
             }
             else
             {
                 if (GetSlotCount() >= 1)
-                {
                     unitProdObject.Add("t", 0);
-                }
             }
             return jsonObject;
         }
@@ -350,18 +345,14 @@ namespace UCS.Logic
 
         public void SpeedUp()
         {
-            while (m_vUnits.Count >= 1 && ProductionCompleted())
-            {
-            }
+            while (m_vUnits.Count >= 1 && ProductionCompleted()) {}
         }
 
         public void StartProducingNextUnit()
         {
             m_vTimer = null;
             if (GetSlotCount() >= 1)
-            {
                 RemoveUnit((CombatItemData) m_vUnits[0].Data);
-            }
         }
 
         public override void Tick()
@@ -370,13 +361,11 @@ namespace UCS.Logic
             {
                 var ci = (ConstructionItem) GetParent();
                 var remainingTime = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime(), ci.IsBoosted,
-                    ci.GetBoostEndTime(), ci.GetBoostMultipier());
+                                                                 ci.GetBoostEndTime(), ci.GetBoostMultipier());
                 if (remainingTime <= 0)
                 {
                     if (GetParent().GetLevel().GetTime() >= ci.GetBoostEndTime())
-                    {
                         ci.IsBoosted = false;
-                    }
                     ProductionCompleted();
                 }
             }

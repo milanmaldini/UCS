@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Configuration;
 
 namespace UCS.Core
@@ -10,12 +11,12 @@ namespace UCS.Core
 
         public static void Main()
         {
-            if (Convert.ToInt32(Microsoft.Win32.Registry.GetValue(REGISTRY_KEY, REGISTY_VALUE, 0)) == 0)
+            if (Convert.ToInt32(Registry.GetValue(REGISTRY_KEY, REGISTY_VALUE, 0)) == 0)
             {
                 Console.WriteLine("[INSTALLER] : Seem to be the first time you use UCS.");
                 Console.WriteLine("[INSTALLER] : Let's configure it together ! \n");
 
-            A:
+                A:
                 Console.WriteLine("[INSTALLER] : Global player starting level (1 - 499) => ");
                 var a = Console.ReadLine();
                 if (Convert.ToInt32(a) < 1 || Convert.ToInt32(a) > 499)
@@ -25,7 +26,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingLevel", a);
 
-            B:
+                B:
                 Console.WriteLine("[INSTALLER] : Global player starting experience (0 - 500k) => ");
                 var b = Console.ReadLine();
                 if (Convert.ToInt32(b) < 0 || Convert.ToInt32(b) > 500000)
@@ -35,7 +36,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingExperience", b);
 
-            C:
+                C:
                 Console.WriteLine("[INSTALLER] : Global player starting gold (0 - 999m) => ");
                 var c = Console.ReadLine();
                 if (Convert.ToInt32(c) < 0 || Convert.ToInt32(c) > 999999999)
@@ -45,7 +46,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingGold", c);
 
-            D:
+                D:
                 Console.WriteLine("[INSTALLER] : Global player starting elixir (0 - 999m) => ");
                 var d = Console.ReadLine();
                 if (Convert.ToInt32(d) < 0 || Convert.ToInt32(d) > 999999999)
@@ -55,7 +56,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingElixir", d);
 
-            E:
+                E:
                 Console.WriteLine("[INSTALLER] : Global player starting dark elixir (0 - 99m) => ");
                 var e = Console.ReadLine();
                 if (Convert.ToInt32(e) < 0 || Convert.ToInt32(e) > 99999999)
@@ -65,7 +66,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingDarkElixir", e);
 
-            F:
+                F:
                 Console.WriteLine("[INSTALLER] : Global player starting gems (0 - 999m) => ");
                 var f = Console.ReadLine();
                 if (Convert.ToInt32(f) < 0 || Convert.ToInt32(f) > 999999999)
@@ -75,7 +76,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingGems", f);
 
-            G:
+                G:
                 Console.WriteLine("[INSTALLER] : Global player starting trophies (0 - 5000) => ");
                 var g = Console.ReadLine();
                 if (Convert.ToInt32(g) < 0 || Convert.ToInt32(g) > 5000)
@@ -85,7 +86,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingTrophies", g);
 
-            H:
+                H:
                 Console.WriteLine("[INSTALLER] : Global player starting shield time (0 - x) => ");
                 var h = Console.ReadLine();
                 if (Convert.ToInt32(h) < 0)
@@ -95,7 +96,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("startingShieldTime", h);
 
-            I:
+                I:
                 Console.WriteLine("[INSTALLER] : This server is for CoC version (7 - 7.200.19) => ");
                 Console.WriteLine("[INSTALLER] : - 1 - Clash of Clans - 7.200.19");
                 Console.WriteLine("[INSTALLER] : - 2 - Clash of Clans - 7.200.13");
@@ -103,21 +104,13 @@ namespace UCS.Core
                 Console.WriteLine("[INSTALLER] : - 4 - Clash of Clans - 7.156.10");
                 var i = Console.ReadLine();
                 if (Convert.ToInt16(i) == 1)
-                {
                     i = "7.200.19";
-                }
                 else if (Convert.ToInt16(i) == 2)
-                {
                     i = "7.200.13";
-                }
                 else if (Convert.ToInt32(i) == 3)
-                {
                     i = "7.200.12";
-                }
                 else if (Convert.ToInt32(i) == 4)
-                {
                     i = "7.156.10";
-                }
                 else
                 {
                     Console.WriteLine("[INSTALLER] : Error, value must be 1, 2, 3, or 4 !");
@@ -125,7 +118,7 @@ namespace UCS.Core
                 }
                 ConfigurationManager.AppSettings.Set("clientVersion", i);
 
-            J:
+                J:
                 Console.WriteLine("[INSTALLER] : Do you want to use modded gamefiles (yes / no) => ");
                 var j = Console.ReadLine();
 
@@ -145,7 +138,7 @@ namespace UCS.Core
                     goto J;
                 }
 
-            K:
+                K:
                 if (Convert.ToBoolean(j))
                 {
                     Console.WriteLine("[INSTALLER] : Enter the URL of youre patch server => ");
@@ -158,19 +151,14 @@ namespace UCS.Core
                         Console.WriteLine("[INSTALLER] : https://www.flamewall.com/ucs/patch/");
                         goto K;
                     }
-                    else
-                    {
-                        ConfigurationManager.AppSettings.Set("patchingServer", Convert.ToString(k));
-                    }
+                    ConfigurationManager.AppSettings.Set("patchingServer", Convert.ToString(k));
                 }
 
-            L:
+                L:
                 Console.WriteLine("[INSTALLER] : You're server website (leave it empty if not) => ");
                 var l = Console.ReadLine();
                 if (string.IsNullOrEmpty(l))
-                {
                     ConfigurationManager.AppSettings.Set("oldClientVersion", "http://www.ultrapowa.com/");
-                }
                 else if (!l.EndsWith("/") || !l.StartsWith("http://") || !l.StartsWith("https://"))
                 {
                     Console.WriteLine("[INSTALLER] : Error when parsing URL ! Please enter a valid url, example : ");
@@ -180,11 +168,9 @@ namespace UCS.Core
                     goto L;
                 }
                 else
-                {
                     ConfigurationManager.AppSettings.Set("oldClientVersion", l);
-                }
 
-            M:
+                M:
                 Console.WriteLine("[INSTALLER] : Database configuration => ");
                 Console.WriteLine("[INSTALLER] : - 1 - MySQL");
                 Console.WriteLine("[INSTALLER] : - 2 - SQLite");
@@ -193,16 +179,15 @@ namespace UCS.Core
                 if (Convert.ToInt16(m) == 1)
                 {
                     m = "ucsdbEntities";
-                    Console.WriteLine("[INSTALLER] : Warning, for ucs work with MySQL, you need to edit ucsdbEntities connection string in App.Config !");
+                    Console.WriteLine(
+                                      "[INSTALLER] : Warning, for ucs work with MySQL, you need to edit ucsdbEntities connection string in App.Config !");
                 }
                 else if (Convert.ToInt16(m) == 2)
-                {
                     m = "sqliteEntities";
-                }
                 ConfigurationManager.AppSettings.Set("databaseConnectionName", m);
             }
 
-        N:
+            N:
             Console.WriteLine("[INSTALLER] : Logging configuration => ");
             Console.WriteLine("[INSTALLER] : - 1 - Almost no log");
             Console.WriteLine("[INSTALLER] : - 2 - Debugging log");
@@ -214,9 +199,7 @@ namespace UCS.Core
                 goto N;
             }
             if (Convert.ToInt16(n) == 2)
-            {
                 n = "4";
-            }
             ConfigurationManager.AppSettings.Set("logginLevel", n);
 
             // Berkan is going to sleep...

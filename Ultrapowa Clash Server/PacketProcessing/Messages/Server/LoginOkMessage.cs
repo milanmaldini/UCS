@@ -44,10 +44,9 @@ namespace UCS.PacketProcessing
             Unknown11 = "someid2"; //"108457211027966753069";
         }
 
-        //32 39 37 34 38 34 34 33 37 30 30 39 33 39 34
-
         public string Unknown11 { get; set; }
 
+        //32 39 37 34 38 34 34 33 37 30 30 39 33 39 34
         public string Unknown9 { get; set; }
 
         public override void Encode()

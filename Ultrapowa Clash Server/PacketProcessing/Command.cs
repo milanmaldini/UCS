@@ -12,6 +12,7 @@ namespace UCS.PacketProcessing
 
         public virtual void Execute(Level level)
         {
+
         }
     }
 }

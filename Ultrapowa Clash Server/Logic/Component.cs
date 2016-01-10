@@ -37,6 +37,7 @@ namespace UCS.Logic
 
         public virtual void Load(JObject jsonObject)
         {
+
         }
 
         public virtual JObject Save(JObject jsonObject)
@@ -51,6 +52,7 @@ namespace UCS.Logic
 
         public virtual void Tick()
         {
+
         }
     }
 }

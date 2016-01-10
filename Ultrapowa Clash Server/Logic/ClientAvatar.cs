@@ -1,9 +1,9 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -53,25 +53,25 @@ namespace UCS.Logic
             m_vAvatarLevel = Convert.ToInt32(ConfigurationManager.AppSettings["startingLevel"]);
             m_vAllianceId = 0;
 
-            // Starting experience 
+            // Starting experience
             if (ConfigurationManager.AppSettings["startingExperience"] == "random")
                 m_vExperience = rnd.Next(100, 500000);
             else
                 m_vExperience = Convert.ToInt32(ConfigurationManager.AppSettings["startingExperience"]);
 
-            // Starting shield time 
+            // Starting shield time
             EndShieldTime =
                 (int)
-                    (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds +
-                     Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
+                (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds +
+                 Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
 
-            // Starting gems 
+            // Starting gems
             if (ConfigurationManager.AppSettings["startingGems"] == "random")
                 m_vCurrentGems = rnd.Next(100000, 999999);
             else
                 m_vCurrentGems = Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]);
 
-            // Starting score 
+            // Starting score
             if (ConfigurationManager.AppSettings["startingTrophies"] == "random")
                 m_vScore = rnd.Next(500, 4000);
             else
@@ -79,49 +79,50 @@ namespace UCS.Logic
             TutorialStepsCount = 0x0A;
             m_vAvatarName = "NoNameYet";
 
-            // Gold 
+            // Gold
             if (ConfigurationManager.AppSettings["startingGold"] == "random")
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gold"), rnd.Next(1000, 10000000));
             else
+            {
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gold"),
-                    Convert.ToInt32(ConfigurationManager.AppSettings["startingGold"]));
+                                 Convert.ToInt32(ConfigurationManager.AppSettings["startingGold"]));
+            }
 
-            // Elixir 
+            // Elixir
             if (ConfigurationManager.AppSettings["startingElixir"] == "random")
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Elixir"), rnd.Next(1000, 10000000));
             else
+            {
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Elixir"),
-                    Convert.ToInt32(ConfigurationManager.AppSettings["startingElixir"]));
+                                 Convert.ToInt32(ConfigurationManager.AppSettings["startingElixir"]));
+            }
 
-            // Dark Elixir 
+            // Dark Elixir
             if (ConfigurationManager.AppSettings["startingDarkElixir"] == "random")
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("DarkElixir"), rnd.Next(1000, 1000000));
             else
+            {
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("DarkElixir"),
-                    Convert.ToInt32(ConfigurationManager.AppSettings["startingDarkElixir"]));
+                                 Convert.ToInt32(ConfigurationManager.AppSettings["startingDarkElixir"]));
+            }
 
-            // Starting gems 
+            // Starting gems
             if (ConfigurationManager.AppSettings["startingGems"] == "random")
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gems"), m_vCurrentGems);
             else
+            {
                 SetResourceCount(ObjectManager.DataTables.GetResourceByName("Diamonds"),
-                    Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]));
+                                 Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]));
+            }
         }
 
         public List<DataSlot> Achievements { get; set; }
-
         public List<DataSlotSpecial> AllianceUnits { get; set; }
-
         public int EndShieldTime { get; set; }
-
         public int LastUpdate { get; set; }
-
         public string Login { get; set; }
-
         public List<DataSlot> NpcLootedElixir { get; set; }
-
         public List<DataSlot> NpcLootedGold { get; set; }
-
         public List<DataSlot> NpcStars { get; set; }
 
         public int RemainingShieldTime
@@ -139,7 +140,7 @@ namespace UCS.Logic
         public Village Village { get; set; }
 
         /// <summary>
-        ///     Adds Diamonds.
+        /// Adds Diamonds.
         /// </summary>
         /// <param name="diamondCount"></param>
         public void AddDiamonds(int diamondCount)
@@ -148,9 +149,9 @@ namespace UCS.Logic
         }
 
         /// <summary>
-        ///     Adds experience and increase level on level up.
+        /// Adds experience and increase level on level up.
         /// </summary>
-        /// <param name="exp"> experience to add. </param>
+        /// <param name="exp">experience to add.</param>
         public void AddExperience(int exp)
         {
             m_vExperience += exp;
@@ -165,9 +166,7 @@ namespace UCS.Logic
                     m_vExperience = m_vExperience - experienceCap;
                 }
                 else
-                {
                     m_vExperience = 0;
-                }
             }
         }
 
@@ -272,9 +271,7 @@ namespace UCS.Logic
             //Unlocked Achievements
             data.AddRange(BitConverter.GetBytes(Achievements.Count).Reverse());
             foreach (var a in Achievements)
-            {
                 data.AddRange(BitConverter.GetBytes(a.Data.GetGlobalID()).Reverse());
-            }
 
             //Achievement Progress
             data.AddRange(BitConverter.GetBytes(Achievements.Count).Reverse());
@@ -303,9 +300,7 @@ namespace UCS.Logic
         {
             var alliance = ObjectManager.GetAlliance(m_vAllianceId);
             if (alliance != null)
-            {
                 return alliance.GetAllianceMember(m_vId);
-            }
             return null;
         }
 
@@ -313,9 +308,7 @@ namespace UCS.Logic
         {
             var ame = GetAllianceMemberEntry();
             if (ame != null)
-            {
                 return ame.GetRole();
-            }
             return -1;
         }
 

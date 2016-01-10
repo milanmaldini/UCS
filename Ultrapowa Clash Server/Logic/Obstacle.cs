@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -73,9 +73,7 @@ namespace UCS.Logic
         {
             var remainingSeconds = 0;
             if (IsClearingOnGoing())
-            {
                 remainingSeconds = m_vTimer.GetRemainingSeconds(m_vLevel.GetTime());
-            }
             var cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
             var ca = GetLevel().GetPlayerAvatar();
             if (ca.HasEnoughDiamonds(cost))
@@ -89,9 +87,7 @@ namespace UCS.Logic
         {
             var constructionTime = GetObstacleData().ClearTimeSeconds;
             if (constructionTime < 1)
-            {
                 ClearingFinished();
-            }
             else
             {
                 m_vTimer = new Timer();

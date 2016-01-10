@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,6 +18,7 @@ namespace UCS.PacketProcessing
 
         public Message()
         {
+
         }
 
         public Message(Client c)
@@ -51,7 +51,6 @@ namespace UCS.PacketProcessing
         }
 
         public int Broadcasting { get; set; }
-
         public Client Client { get; set; }
 
         public static string FilterString(string str)
@@ -82,9 +81,7 @@ namespace UCS.PacketProcessing
                 }
             }
             if (filterIsUsed)
-            {
                 return sb.ToString();
-            }
             return str;
         }
 
@@ -110,10 +107,12 @@ namespace UCS.PacketProcessing
 
         public virtual void Decode()
         {
+
         }
 
         public virtual void Encode()
         {
+
         }
 
         public byte[] GetData()
@@ -150,6 +149,7 @@ namespace UCS.PacketProcessing
 
         public virtual void Process(Level level)
         {
+
         }
 
         public void SetData(byte[] data)

@@ -21,9 +21,7 @@ namespace UCS.PacketProcessing
             if (go != null)
             {
                 if (go.ClassId == 0 || go.ClassId == 4)
-                {
                     ((ConstructionItem) go).SpeedUpConstruction();
-                }
             }
         }
     }

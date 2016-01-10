@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace UCS.GameFiles
 {
@@ -16,16 +16,12 @@ namespace UCS.GameFiles
             if (File.Exists(filePath))
             {
                 using (var sr = new StreamReader(filePath))
-                {
                     fpstring = sr.ReadToEnd();
-                }
                 LoadFromJson(fpstring);
                 Console.WriteLine("ObjectManager: fingerprint loaded");
             }
             else
-            {
                 Console.WriteLine("LoadFingerPrint: error! tried to load FingerPrint without file, run gen_patch first");
-            }
         }
 
         public List<GameFile> files { get; set; }

@@ -35,26 +35,6 @@ namespace UCS.Core
             TimerReference = TimerItem;
         }
 
-        private static void CheckClients()
-        {
-            foreach (var c in GetConnectedClients())
-            {
-                if (!c.IsClientSocketConnected())
-                {
-                    DropClient(c.GetSocketHandle());
-                    try
-                    {
-                        c.Socket.Shutdown(SocketShutdown.Both);
-                        c.Socket.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debugger.WriteLine("Error when dropping client.. : ", ex, 4, ConsoleColor.Red);
-                    }
-                }
-            }
-        }
-
         public static void AddClient(Client c)
         {
             var socketHandle = c.Socket.Handle.ToInt64();
@@ -172,6 +152,26 @@ namespace UCS.Core
             m_vInMemoryLevels.TryRemove(level.GetPlayerAvatar().GetId());
         }
 
+        private static void CheckClients()
+        {
+            foreach (var c in GetConnectedClients())
+            {
+                if (!c.IsClientSocketConnected())
+                {
+                    DropClient(c.GetSocketHandle());
+                    try
+                    {
+                        c.Socket.Shutdown(SocketShutdown.Both);
+                        c.Socket.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debugger.WriteLine("Error when dropping client.. : ", ex, 4, ConsoleColor.Red);
+                    }
+                }
+            }
+        }
+
         private static Level GetInMemoryPlayer(long id)
         {
             Level result = null;
@@ -187,9 +187,7 @@ namespace UCS.Core
         {
             CheckClients();
             if (m_vTimerCanceled)
-            {
                 TimerReference.Dispose();
-            }
         }
     }
 }

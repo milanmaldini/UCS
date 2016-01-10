@@ -5,7 +5,7 @@ namespace UCS.Core
 {
     internal class ExitHandler
     {
-        // An enumerated type for the control messages sent to the handler routine. 
+        // An enumerated type for the control messages sent to the handler routine.
         public enum CtrlType
         {
             CTRL_C_EVENT = 0,

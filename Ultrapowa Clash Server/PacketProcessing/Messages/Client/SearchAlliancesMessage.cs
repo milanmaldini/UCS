@@ -31,18 +31,8 @@ namespace UCS.PacketProcessing
 
         public SearchAlliancesMessage(Client client, BinaryReader br) : base(client, br)
         {
-        }
 
-        //00 00 00 03
-        //61 61 61
-        //00 00 00 01
-        //00 00 00 00
-        //00 00 00 01
-        //00 00 00 29
-        //00 00 07 D0
-        //01
-        //00 00 00 00 //???
-        //00 00 00 06
+        }
 
         public override void Decode()
         {
@@ -60,6 +50,16 @@ namespace UCS.PacketProcessing
             }
         }
 
+        //00 00 00 03
+        //61 61 61
+        //00 00 00 01
+        //00 00 00 00
+        //00 00 00 01
+        //00 00 00 29
+        //00 00 07 D0
+        //01
+        //00 00 00 00 //???
+        //00 00 00 06
         public override void Process(Level level)
         {
             var alliances = ObjectManager.GetInMemoryAlliances();

@@ -30,7 +30,7 @@ namespace UCS.PacketProcessing
                     mail.SetAllianceBadgeData(0);
                     mail.SetAllianceName("UCS System");
                     mail.SetMessage(
-                        "UCS Game Server FAQ:\n\nHow long is this server online?\nThis Server is 24/7 online every day in the week.\n\nWhat is UCS Shard?\nUCS Shard is the OFFICIAL Test server of the famous CoC Emulator: Ultrapowa Clash Server.\n\nIs my progress saved?\nYes, we save everything automatically.\n\nWhere can I find the homepage with the forum?\nHomePage: http://ultrapowa.com/shard \n\nMy Friends want to player here too, how can they play here?\nGive them our APK or Server IP, you can find both at the forums!\n\n\nGreetings,\n\nUCS Shard Team");
+                                    "UCS Game Server FAQ:\n\nHow long is this server online?\nThis Server is 24/7 online every day in the week.\n\nWhat is UCS Shard?\nUCS Shard is the OFFICIAL Test server of the famous CoC Emulator: Ultrapowa Clash Server.\n\nIs my progress saved?\nYes, we save everything automatically.\n\nWhere can I find the homepage with the forum?\nHomePage: http://ultrapowa.com/shard \n\nMy Friends want to player here too, how can they play here?\nGive them our APK or Server IP, you can find both at the forums!\n\n\nGreetings,\n\nUCS Shard Team");
                     mail.SetSenderLeagueId(22);
 
                     var p = new AvatarStreamEntryMessage(level.GetClient());
@@ -39,9 +39,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Windows;
-using Newtonsoft.Json.Linq;
 using UCS.GameFiles;
 
 namespace UCS.Logic
@@ -28,9 +28,7 @@ namespace UCS.Logic
         }
 
         public int GlobalId { get; set; }
-
         public int X { get; set; }
-
         public int Y { get; set; }
 
         //a1 + 4
@@ -104,9 +102,7 @@ namespace UCS.Logic
             foreach (var comp in m_vComponents)
             {
                 if (comp.IsEnabled())
-                {
                     comp.Tick();
-                }
             }
         }
     }

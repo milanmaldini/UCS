@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UCS.Network
 {
     internal class SocketAsyncEventArgsPool : IDisposable
     {
+        private bool _disposed;
+
+        private object _objLock;
+        private Stack<SocketAsyncEventArgs> _pool;
+
         public SocketAsyncEventArgsPool(int capacity)
         {
             if (capacity < 1)
@@ -19,12 +21,17 @@ namespace UCS.Network
             _pool = new Stack<SocketAsyncEventArgs>(capacity);
         }
 
-        private object _objLock;
-        private bool _disposed;
-        private Stack<SocketAsyncEventArgs> _pool;
-
         public int Capacity { get; private set; }
-        public int Count { get { return _pool.Count; } }
+
+        public int Count
+        {
+            get { return _pool.Count; }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
         public SocketAsyncEventArgs Pop()
         {
@@ -40,11 +47,6 @@ namespace UCS.Network
             {
                 _pool.Push(args);
             }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)

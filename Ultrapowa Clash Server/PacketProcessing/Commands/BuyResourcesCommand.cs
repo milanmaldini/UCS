@@ -23,9 +23,7 @@ namespace UCS.PacketProcessing
             m_vResourceCount = br.ReadInt32WithEndian();
             m_vIsCommandEmbedded = br.ReadByte();
             if (m_vIsCommandEmbedded >= 0x01)
-            {
                 m_vCommand = CommandFactory.Read(br);
-            }
             br.ReadInt32WithEndian(); //Unknown1
         }
 

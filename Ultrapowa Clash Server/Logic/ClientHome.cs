@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Ionic.Zlib;
+﻿using Ionic.Zlib;
+using System.Collections.Generic;
 using UCS.Helpers;
 
 namespace UCS.Logic
@@ -12,6 +12,7 @@ namespace UCS.Logic
 
         public ClientHome() : base(0)
         {
+
         }
 
         public ClientHome(long id)

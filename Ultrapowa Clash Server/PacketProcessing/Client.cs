@@ -62,24 +62,10 @@ namespace UCS.PacketProcessing
 
         public Socket Socket { get; set; }
 
-        public bool IsClientSocketConnected()
-        {
-            try
-            {
-                return !((Socket.Poll(1000, SelectMode.SelectRead) && (Socket.Available == 0)) || !Socket.Connected);
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
         public static int extract_number(int[] buffer, int ix)
         {
             if (ix == 0)
-            {
                 generate_numbers(buffer);
-            }
 
             var y = buffer[ix];
             y ^= y >> 11;
@@ -88,9 +74,7 @@ namespace UCS.PacketProcessing
             y ^= y >> 18;
 
             if ((y & (1 << 31)) != 0)
-            {
                 y = ~y + 1;
-            }
 
             ix = (ix + 1)%624;
             return y%256;
@@ -105,20 +89,16 @@ namespace UCS.PacketProcessing
                 var y = (int) ((buffer[i] & 0x80000000) + (buffer[(i + 1)%624] & 0x7fffffff));
                 buffer[i] = buffer[(i + 397)%624] ^ (y >> 1);
                 if (y%2 != 0)
-                {
                     buffer[i] = (int) (buffer[i] ^ 2567483615);
-                }
             }
         }
 
-        // Initialize the generator from a seed 
+        // Initialize the generator from a seed
         public static void initialize_generator(int seed, int[] buffer)
         {
             buffer[0] = seed;
             for (var i = 1; i < 624; ++i)
-            {
                 buffer[i] = 1812433253*((buffer[i - 1] ^ (buffer[i - 1] >> 30)) + 1);
-            }
         }
 
         public static void TransformSessionKey(int clientSeed, byte[] sessionKey)
@@ -127,14 +107,10 @@ namespace UCS.PacketProcessing
             initialize_generator(clientSeed, buffer);
             var byte100 = 0;
             for (var i = 0; i < 100; i++)
-            {
                 byte100 = extract_number(buffer, i);
-            }
 
             for (var i = 0; i < sessionKey.Length; i++)
-            {
                 sessionKey[i] ^= (byte) (extract_number(buffer, i + 100) & byte100);
-            }
         }
 
         public void Decrypt(byte[] data)
@@ -169,7 +145,8 @@ namespace UCS.PacketProcessing
                         key[key[4] + 8] = num3;
                         var num4 = key[(byte) (key[key[4] + 8] + key[key[0] + 8]) + 8];
                         data[data.Length - dataLen - 1] = (byte) (data[data.Length - dataLen - 1] ^ num4);
-                    } while (dataLen > 0);
+                    }
+                    while (dataLen > 0);
                 }
             }
         }
@@ -182,6 +159,18 @@ namespace UCS.PacketProcessing
         public long GetSocketHandle()
         {
             return m_vSocketHandle;
+        }
+
+        public bool IsClientSocketConnected()
+        {
+            try
+            {
+                return !((Socket.Poll(1000, SelectMode.SelectRead) && (Socket.Available == 0)) || !Socket.Connected);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void SetLevel(Level l)
@@ -205,9 +194,7 @@ namespace UCS.PacketProcessing
                     var packet = DataStream.Take(7 + length).ToArray();
 
                     using (var br = new BinaryReader(new MemoryStream(packet)))
-                    {
                         obj = MessageFactory.Read(this, br, type);
-                    }
 
                     if (obj != null)
                     {
@@ -261,7 +248,8 @@ namespace UCS.PacketProcessing
                 {
                     *(v5 + v11 + 8) = (byte) v11;
                     ++v11;
-                } while (v11 != 256);
+                }
+                while (v11 != 256);
                 *v5 = 0;
                 *(v5 + 4) = 0;
                 while (true)

@@ -14,7 +14,7 @@ namespace UCS.PacketProcessing
             m_vBuildingId = br.ReadInt32WithEndian(); //buildingId - 0x1DCD6500;
             m_vUnknown2 = br.ReadUInt32WithEndian();
             Debugger.WriteLine(string.Format("U1: {0}, BId {1}, U2: {2}", m_vUnknown1, m_vBuildingId, m_vUnknown2), null,
-                5);
+                               5);
         }
 
         //00 00 02 0D 00 00 00 01 1D CD 65 03 00 00 01 DF
@@ -33,9 +33,7 @@ namespace UCS.PacketProcessing
             if (go != null)
             {
                 if (go.GetComponent(1, true) != null)
-                {
                     ((CombatComponent) go.GetComponent(1, true)).FillAmmo();
-                }
             }
         }
     }

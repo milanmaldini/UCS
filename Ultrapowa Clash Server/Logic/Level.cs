@@ -1,28 +1,24 @@
-﻿using System;
-using System.Data.Entity;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Data.Entity;
 using UCS.Database;
 using UCS.PacketProcessing;
-using System.Data;
 
 namespace UCS.Logic
 {
     internal class Level
     {
         private readonly ClientAvatar m_vClientAvatar;
+        public GameObjectManager GameObjectManager;
 
-        public GameObjectManager GameObjectManager; //a1 + 44
+        //a1 + 44
         private byte m_vAccountPrivileges;
+
         private byte m_vAccountStatus;
         private Client m_vClient;
         private DateTime m_vTime;
         public WorkerManager WorkerManager;
-
-        //a1 + 40
-        //MissionManager
-        //AchievementManager
-        //CooldownManager
 
         public Level()
         {
@@ -33,6 +29,10 @@ namespace UCS.Logic
             m_vAccountStatus = 0;
         }
 
+        //a1 + 40
+        //MissionManager
+        //AchievementManager
+        //CooldownManager
         public Level(long id)
         {
             WorkerManager = new WorkerManager();
@@ -104,20 +104,20 @@ namespace UCS.Logic
                 p.AccountPrivileges = GetAccountPrivileges();
                 p.Avatar = GetPlayerAvatar().SaveToJSON();
                 p.GameObjects = SaveToJSON();
-                context.Entry(p).State = System.Data.Entity.EntityState.Modified;
+                context.Entry(p).State = EntityState.Modified;
             }
             else
             {
                 context.player.Add(
-                    new player
-                    {
-                        PlayerId = GetPlayerAvatar().GetId(),
-                        AccountStatus = GetAccountStatus(),
-                        AccountPrivileges = GetAccountPrivileges(),
-                        LastUpdateTime = GetTime(),
-                        Avatar = GetPlayerAvatar().SaveToJSON(),
-                        GameObjects = SaveToJSON()
-                    }
+                                   new player
+                                   {
+                                       PlayerId = GetPlayerAvatar().GetId(),
+                                       AccountStatus = GetAccountStatus(),
+                                       AccountPrivileges = GetAccountPrivileges(),
+                                       LastUpdateTime = GetTime(),
+                                       Avatar = GetPlayerAvatar().SaveToJSON(),
+                                       GameObjects = SaveToJSON()
+                                   }
                     );
             }
             return context;

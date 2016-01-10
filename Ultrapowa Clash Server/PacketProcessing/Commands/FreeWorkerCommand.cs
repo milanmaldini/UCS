@@ -10,7 +10,6 @@ namespace UCS.PacketProcessing
         private readonly object m_vCommand;
 
         private readonly byte m_vIsCommandEmbedded;
-
         public int m_vTimeLeftSeconds;
 
         public FreeWorkerCommand(BinaryReader br)
@@ -18,9 +17,7 @@ namespace UCS.PacketProcessing
             m_vTimeLeftSeconds = br.ReadInt32WithEndian();
             m_vIsCommandEmbedded = br.ReadByte();
             if (m_vIsCommandEmbedded >= 0x01)
-            {
                 m_vCommand = CommandFactory.Read(br);
-            }
         }
 
         public override void Execute(Level level)

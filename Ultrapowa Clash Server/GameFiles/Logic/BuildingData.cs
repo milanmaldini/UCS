@@ -114,10 +114,8 @@ namespace UCS.GameFiles
 
         public string ExportNameTriggered { get; set; }
 
-        public bool ForgesSpells { get; set; }
-
         public bool ForgesMiniSpells { get; set; }
-
+        public bool ForgesSpells { get; set; }
         public bool GroundTargets { get; set; }
 
         public int Height { get; set; }
@@ -286,14 +284,14 @@ namespace UCS.GameFiles
             return BuildCost.Count;
         }
 
-        public bool IsSpellForge()
-        {
-            return ForgesSpells;
-        }
-
         public bool IsDarkForge()
         {
             return ForgesMiniSpells;
+        }
+
+        public bool IsSpellForge()
+        {
+            return ForgesSpells;
         }
 
         public override bool IsTownHall()

@@ -9,14 +9,11 @@ namespace UCS.Network
 {
     internal class PacketManager
     {
+        private static readonly ConcurrentQueue<Message> m_vIncomingPackets = new ConcurrentQueue<Message>();
         private static readonly EventWaitHandle m_vIncomingWaitHandle = new AutoResetEvent(false);
 
-        private static readonly EventWaitHandle m_vOutgoingWaitHandle = new AutoResetEvent(false);
-
-        private static readonly ConcurrentQueue<Message> m_vIncomingPackets = new ConcurrentQueue<Message>();
-
         private static readonly ConcurrentQueue<Message> m_vOutgoingPackets = new ConcurrentQueue<Message>();
-
+        private static readonly EventWaitHandle m_vOutgoingWaitHandle = new AutoResetEvent(false);
         private bool m_vIsRunning;
 
         public PacketManager()
@@ -38,8 +35,10 @@ namespace UCS.Network
                 var pl = p.Client.GetLevel();
                 var player = "";
                 if (pl != null)
+                {
                     player += string.Format(" ({0}, {1})", pl.GetPlayerAvatar().GetId(),
-                        pl.GetPlayerAvatar().GetAvatarName());
+                                            pl.GetPlayerAvatar().GetAvatarName());
+                }
                 Debugger.WriteLine(string.Format("[S] {0} {1}{2}", p.GetMessageType(), p.GetType().Name, player));
                 GuiConsoleWrite.Write(string.Format("[S] {0} {1}{2}", p.GetMessageType(), p.GetType().Name, player));
                 m_vOutgoingPackets.Enqueue(p);
@@ -93,25 +92,19 @@ namespace UCS.Network
                     Logger.WriteLine(p, "S");
                     if (p.GetMessageType() == 20000)
                     {
-                        var sessionKey = ((SessionKeyMessage)p).Key;
+                        var sessionKey = ((SessionKeyMessage) p).Key;
                         p.Client.Encrypt(p.GetData());
                         p.Client.UpdateKey(sessionKey);
                     }
                     else
-                    {
                         p.Client.Encrypt(p.GetData());
-                    }
 
                     try
                     {
                         if (p.Client.Socket != null)
-                        {
                             p.Client.Socket.Send(p.GetRawData());
-                        }
                         else
-                        {
                             ResourcesManager.DropClient(p.Client.GetSocketHandle());
-                        }
                     }
                     catch (Exception)
                     {
@@ -124,7 +117,7 @@ namespace UCS.Network
                         catch (Exception ex)
                         {
                             Debugger.WriteLine("Error when closing the connection from client : ", ex, 4,
-                                ConsoleColor.Cyan);
+                                               ConsoleColor.Cyan);
                         }
                     }
                 }

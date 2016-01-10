@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.GameFiles;
 
@@ -69,7 +69,8 @@ namespace UCS.Logic
             if (m_vObstacleLimit == -1)
             {
                 m_vObstacleLimit = ObjectManager.DataTables.GetGlobals().GetGlobalData("OBSTACLE_COUNT_MAX").NumberValue;
-                m_vObstacleRespawnSeconds = ObjectManager.DataTables.GetGlobals().GetGlobalData("OBSTACLE_RESPAWN_SECONDS").NumberValue;
+                m_vObstacleRespawnSeconds =
+                    ObjectManager.DataTables.GetGlobals().GetGlobalData("OBSTACLE_RESPAWN_SECONDS").NumberValue;
             }
             if (m_vSpawnAbleObstacles.Count() == 0)
             {
@@ -88,9 +89,7 @@ namespace UCS.Logic
                             }
                         }
                         else
-                        {
                             m_vGemBoxes.Add(od);
-                        }
                     }
                 }
             }
@@ -121,12 +120,12 @@ namespace UCS.Logic
                 if (jObj["normal_t"] != null)
                 {
                     m_vNormalTimer.StartTimer(
-                        m_vObstacleRespawnSeconds - jObj["secondsFromLastRespawn"].ToObject<int>(),
-                        jObj["normal_t"].ToObject<DateTime>());
+                                              m_vObstacleRespawnSeconds - jObj["secondsFromLastRespawn"].ToObject<int>(),
+                                              jObj["normal_t"].ToObject<DateTime>());
                     m_vGemBoxTimer.StartTimer(jObj["time_to_gembox_drop"].ToObject<int>(),
-                        jObj["gembox_t"].ToObject<DateTime>());
+                                              jObj["gembox_t"].ToObject<DateTime>());
                     m_vSpecialTimer.StartTimer(jObj["time_to_special_drop"].ToObject<int>(),
-                        jObj["special_t"].ToObject<DateTime>());
+                                               jObj["special_t"].ToObject<DateTime>());
                 }
             }
             else
@@ -147,7 +146,8 @@ namespace UCS.Logic
             jobj.Add("obstacleClearCounter", m_vObstacleClearCount);
             if (m_vNormalTimer != null)
             {
-                jobj.Add("secondsFromLastRespawn", m_vObstacleRespawnSeconds - m_vNormalTimer.GetRemainingSeconds(m_vLevel.GetTime()));
+                jobj.Add("secondsFromLastRespawn",
+                         m_vObstacleRespawnSeconds - m_vNormalTimer.GetRemainingSeconds(m_vLevel.GetTime()));
                 jobj.Add("time_to_gembox_drop", m_vGemBoxTimer.GetRemainingSeconds(m_vLevel.GetTime()));
                 jobj.Add("time_to_special_drop", m_vSpecialTimer.GetRemainingSeconds(m_vLevel.GetTime()));
                 jobj.Add("normal_t", m_vNormalTimer.GetStartTime());
@@ -172,14 +172,12 @@ namespace UCS.Logic
                     SpawnObstacle(pos, ob);
                     m_vObstacleClearCount--;
                     if (m_vObstacleClearCount > 0)
-                    {		
-                         m_vNormalTimer.StartTimer(m_vObstacleRespawnSeconds,		
-                            m_vNormalTimer.GetStartTime().AddSeconds(m_vObstacleRespawnSeconds));		
-                   }		
-                    else		
-                    {		
-                       m_vNormalTimer.StartTimer(m_vObstacleRespawnSeconds, m_vLevel.GetTime());		
-                   }		
+                    {
+                        m_vNormalTimer.StartTimer(m_vObstacleRespawnSeconds,
+                                                  m_vNormalTimer.GetStartTime().AddSeconds(m_vObstacleRespawnSeconds));
+                    }
+                    else
+                        m_vNormalTimer.StartTimer(m_vObstacleRespawnSeconds, m_vLevel.GetTime());
                     Debugger.WriteLine("Finished adding new Obstacle " + ob.GetName(), null, 5, ConsoleColor.DarkMagenta);
                 }
                 else
@@ -200,13 +198,11 @@ namespace UCS.Logic
                         SpawnObstacle(pos, ob);
                         m_vGemBoxTimer.StartTimer(m_vObstacleRespawnSeconds*2, m_vLevel.GetTime());
                         Debugger.WriteLine("Finished adding new Obstacle " + ob.GetName(), null, 5,
-                            ConsoleColor.DarkMagenta);
+                                           ConsoleColor.DarkMagenta);
                     }
                 }
                 else
-                {
                     m_vGemBoxTimer.StartTimer(m_vObstacleRespawnSeconds*2, m_vLevel.GetTime());
-                }
             }
         }
 
@@ -257,9 +253,7 @@ namespace UCS.Logic
                         for (var i = 0; i < w; i++)
                         {
                             for (var j = 0; j < h; j++)
-                            {
                                 field[x + i, y + j] = 1;
-                            }
                         }
                     }
                 }
@@ -269,16 +263,12 @@ namespace UCS.Logic
                     for (var j = 2; j < 42 - od.Width; j++)
                     {
                         if (field[i, j] != 1)
-                        {
                             freePositions.Add(new[] {i, j});
-                        }
                     }
                 }
 
                 if (freePositions.Count < od.Height*od.Width)
-                {
                     return null;
-                }
 
                 freePositions.Shuffle();
                 var z = 0;
@@ -286,9 +276,7 @@ namespace UCS.Logic
                 while (z < freePositions.Count && pos == null)
                 {
                     if (obstacleHasSpace(od, freePositions[z][0], freePositions[z][1], field))
-                    {
                         pos = freePositions[z];
-                    }
                     z++;
                 }
 
@@ -303,9 +291,7 @@ namespace UCS.Logic
                             if (pos != null)
                             {
                                 if (j >= pos[0] && j < pos[0] + od.Width && i >= pos[1] && i < pos[1] + od.Height)
-                                {
                                     field[j, i] = 2;
-                                }
                             }
                             sb.Append(field[j, i]);
                             sb.Append(" ");
@@ -333,9 +319,7 @@ namespace UCS.Logic
             {
                 randomValue -= ob.RespawnWeight;
                 if (randomValue <= 0)
-                {
                     return ob;
-                }
             }
             return m_vSpawnAbleObstacles[0];
         }
@@ -348,9 +332,7 @@ namespace UCS.Logic
                 for (var j = 0; j < h; j++)
                 {
                     if (field[x + i, y + j] == 1)
-                    {
                         return false;
-                    }
                 }
             }
 

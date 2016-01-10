@@ -15,9 +15,9 @@ namespace UCS.Core
         {
             var i = 0;
             var splits = from item in list
-                group item by i++%parts
-                into part
-                select part.AsEnumerable();
+                         group item by i++%parts
+                         into part
+                         select part.AsEnumerable();
             return splits;
         }
     }
@@ -40,9 +40,7 @@ namespace UCS.Core
             get
             {
                 if (singelton == null)
-                {
                     singelton = new DatabaseManager();
-                }
                 return singelton;
             }
         }
@@ -52,19 +50,19 @@ namespace UCS.Core
             try
             {
                 Debugger.WriteLine("Saving new account to database (player id: " + l.GetPlayerAvatar().GetId() + ")",
-                    null, 0);
+                                   null, 0);
                 using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.player.Add(
-                        new player
-                        {
-                            PlayerId = l.GetPlayerAvatar().GetId(),
-                            AccountStatus = l.GetAccountStatus(),
-                            AccountPrivileges = l.GetAccountPrivileges(),
-                            LastUpdateTime = l.GetTime(),
-                            Avatar = l.GetPlayerAvatar().SaveToJSON(),
-                            GameObjects = l.SaveToJSON()
-                        }
+                                  new player
+                                  {
+                                      PlayerId = l.GetPlayerAvatar().GetId(),
+                                      AccountStatus = l.GetAccountStatus(),
+                                      AccountPrivileges = l.GetAccountPrivileges(),
+                                      LastUpdateTime = l.GetTime(),
+                                      Avatar = l.GetPlayerAvatar().SaveToJSON(),
+                                      GameObjects = l.SaveToJSON()
+                                  }
                         );
                     db.SaveChanges();
                 }
@@ -83,12 +81,12 @@ namespace UCS.Core
                 using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.clan.Add(
-                        new clan
-                        {
-                            ClanId = a.GetAllianceId(),
-                            LastUpdateTime = DateTime.Now,
-                            Data = a.SaveToJSON()
-                        }
+                                new clan
+                                {
+                                    ClanId = a.GetAllianceId(),
+                                    LastUpdateTime = DateTime.Now,
+                                    Data = a.SaveToJSON()
+                                }
                         );
                     db.SaveChanges();
                 }
@@ -133,9 +131,7 @@ namespace UCS.Core
             {
                 List<clan> clans;
                 using (var db = new ucsdbEntities(m_vConnectionString))
-                {
                     clans = db.clan.ToList();
-                }
 
                 foreach (var c in clans)
                 {
@@ -193,7 +189,7 @@ namespace UCS.Core
             using (var db = new ucsdbEntities(m_vConnectionString))
             {
                 max = (from alliance in db.clan
-                    select (long?) alliance.ClanId ?? 0).DefaultIfEmpty().Max();
+                       select (long?) alliance.ClanId ?? 0).DefaultIfEmpty().Max();
             }
             return max;
         }
@@ -204,24 +200,9 @@ namespace UCS.Core
             using (var db = new ucsdbEntities(m_vConnectionString))
             {
                 max = (from ep in db.player
-                    select (long?) ep.PlayerId ?? 0).DefaultIfEmpty().Max();
+                       select (long?) ep.PlayerId ?? 0).DefaultIfEmpty().Max();
             }
             return max;
-        }
-
-        public void Save(Level avatar)
-        {
-            Debugger.WriteLine(
-                "Starting saving player " + avatar.GetPlayerAvatar().GetAvatarName() + " from memory to database at " +
-                DateTime.Now, null, 5, ConsoleColor.DarkGreen);
-            var context = new ucsdbEntities(m_vConnectionString);
-            context.Configuration.AutoDetectChangesEnabled = false;
-            context.Configuration.ValidateOnSaveEnabled = false;
-            context = avatar.SaveToDatabse(context);
-            context.SaveChanges();
-            Debugger.WriteLine(
-                "Finished saving player " + avatar.GetPlayerAvatar().GetAvatarName() + " from memory to database at " +
-                DateTime.Now, null, 5, ConsoleColor.DarkGreen);
         }
 
         public void RemoveAlliance(Alliance alliance)
@@ -231,6 +212,23 @@ namespace UCS.Core
                 db.clan.Remove(db.clan.Find((int) alliance.GetAllianceId()));
                 db.SaveChanges();
             }
+        }
+
+        public void Save(Level avatar)
+        {
+            Debugger.WriteLine(
+                               "Starting saving player " + avatar.GetPlayerAvatar().GetAvatarName() +
+                               " from memory to database at " +
+                               DateTime.Now, null, 5, ConsoleColor.DarkGreen);
+            var context = new ucsdbEntities(m_vConnectionString);
+            context.Configuration.AutoDetectChangesEnabled = false;
+            context.Configuration.ValidateOnSaveEnabled = false;
+            context = avatar.SaveToDatabse(context);
+            context.SaveChanges();
+            Debugger.WriteLine(
+                               "Finished saving player " + avatar.GetPlayerAvatar().GetAvatarName() +
+                               " from memory to database at " +
+                               DateTime.Now, null, 5, ConsoleColor.DarkGreen);
         }
 
         public void Save(List<Level> avatars)
@@ -256,9 +254,7 @@ namespace UCS.Core
                     Parallel.ForEach(saveThreads, t =>
                     {
                         if (t.IsAlive)
-                        {
                             workerArentFinished = true;
-                        }
                     });
                 }
 
@@ -267,7 +263,7 @@ namespace UCS.Core
             catch (Exception ex)
             {
                 Debugger.WriteLine("An exception occured during Save processing for avatars:", ex, 0,
-                    ConsoleColor.DarkRed);
+                                   ConsoleColor.DarkRed);
             }
         }
 
@@ -294,9 +290,7 @@ namespace UCS.Core
                     Parallel.ForEach(saveThreads, t =>
                     {
                         if (t.IsAlive)
-                        {
                             workerArentFinished = true;
-                        }
                     });
                 }
 
@@ -305,7 +299,7 @@ namespace UCS.Core
             catch (Exception ex)
             {
                 Debugger.WriteLine("An exception occured during Save processing for alliances:", ex, 0,
-                    ConsoleColor.DarkRed);
+                                   ConsoleColor.DarkRed);
             }
         }
     }

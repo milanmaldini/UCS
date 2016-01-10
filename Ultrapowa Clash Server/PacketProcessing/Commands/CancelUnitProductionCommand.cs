@@ -49,7 +49,8 @@ namespace UCS.PacketProcessing
                     //Ajouter gestion remboursement ressources
                     c.RemoveUnit(cd);
                     Count--;
-                } while (Count > 0);
+                }
+                while (Count > 0);
             }
         }
 

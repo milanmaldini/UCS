@@ -1,5 +1,5 @@
-﻿using System.Resources;
-using System.Reflection;
+﻿using System.Reflection;
+using System.Resources;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following set of attributes.
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM 
+// The following GUID is for the ID of the typelib if this project is exposed to COM
 
 [assembly: Guid("eccf482f-241c-4c18-9896-329c57b73ac8")]
 
@@ -33,4 +33,3 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("0.6.4.0")]
 [assembly: AssemblyFileVersion("0.6.4.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
-

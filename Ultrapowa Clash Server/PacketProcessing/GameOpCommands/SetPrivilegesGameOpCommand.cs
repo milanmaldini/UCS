@@ -28,18 +28,12 @@ namespace UCS.PacketProcessing
                         if (accountPrivileges < level.GetAccountPrivileges())
                         {
                             if (l != null)
-                            {
                                 l.SetAccountPrivileges(accountPrivileges);
-                            }
                             else
-                            {
                                 Debugger.WriteLine("SetPrivileges failed: id " + id + " not found");
-                            }
                         }
                         else
-                        {
                             Debugger.WriteLine("SetPrivileges failed: target privileges too high");
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -48,9 +42,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

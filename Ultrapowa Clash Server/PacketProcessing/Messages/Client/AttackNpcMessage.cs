@@ -10,6 +10,7 @@ namespace UCS.PacketProcessing
     {
         public AttackNpcMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public int LevelId { get; set; }
@@ -17,9 +18,7 @@ namespace UCS.PacketProcessing
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
-            {
                 LevelId = br.ReadInt32WithEndian();
-            }
         }
 
         public override void Process(Level level)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using UCS.Core;
 using UCS.Helpers;
@@ -13,8 +12,6 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
-        public bool m_vMaintance;
-
         private long m_vAccountId;
 
         private int m_vClientBuild;
@@ -30,7 +27,7 @@ namespace UCS.PacketProcessing
         private string m_vGameVersion;
 
         private string m_vMacAddress;
-
+        public bool m_vMaintance;
         private string m_vOpenUDID;
 
         private string m_vPassToken;
@@ -52,6 +49,7 @@ namespace UCS.PacketProcessing
 
         public LoginMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public override void Decode()
@@ -95,18 +93,14 @@ namespace UCS.PacketProcessing
         {
             try
             {
-                if (m_vMaintance == true)
-                {
+                if (m_vMaintance)
                     Console.WriteLine("Hi");
-                }
                 if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceProMode"]))
                 {
                     if (Convert.ToBoolean(ConfigurationManager.AppSettings["adminSpecialMode"]))
                     {
                         level = ResourcesManager.GetPlayer(m_vAccountId);
-                        if (level != null && level.GetAccountPrivileges() > 3)
-                        {
-                        }
+                        if (level != null && level.GetAccountPrivileges() > 3) {}
                         else
                         {
                             var p = new LoginFailedMessage(Client);
@@ -132,9 +126,7 @@ namespace UCS.PacketProcessing
                     if (Convert.ToBoolean(ConfigurationManager.AppSettings["adminSpecialMode"]))
                     {
                         level = ResourcesManager.GetPlayer(m_vAccountId);
-                        if (level != null && level.GetAccountPrivileges() > 3)
-                        {
-                        }
+                        if (level != null && level.GetAccountPrivileges() > 3) {}
                         else
                         {
                             var p = new LoginFailedMessage(Client);
@@ -168,9 +160,7 @@ namespace UCS.PacketProcessing
                     }
                 }
                 else
-                {
                     Debugger.WriteLine("Connection failed. UCS config key clientVersion is not properly set.");
-                }
 
                 level = ResourcesManager.GetPlayer(m_vAccountId);
                 if (level != null)
@@ -239,7 +229,8 @@ namespace UCS.PacketProcessing
                 //loginOk.SetFacebookId("100001230452744");
                 //loginOk.SetGamecenterId("");
                 loginOk.SetServerTime(
-                    Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds*1000).ToString());
+                                      Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds*1000)
+                                          .ToString());
                 loginOk.SetAccountCreatedDate("1414003838000");
                 loginOk.SetStartupCooldownSeconds(0);
                 loginOk.SetCountryCode("US");
@@ -277,7 +268,6 @@ namespace UCS.PacketProcessing
                 p.SetErrorCode(9);
                 p.SetRedirectDomain(ConfigurationManager.AppSettings["failSafe"]);
                 PacketManager.ProcessOutgoingPacket(p);
-                return;
             }
         }
     }

@@ -32,9 +32,7 @@ namespace UCS.PacketProcessing
                             PacketManager.ProcessOutgoingPacket(p);
                         }
                         else
-                        {
                             Debugger.WriteLine("Chat Mute failed: id " + id + " not found");
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -43,9 +41,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

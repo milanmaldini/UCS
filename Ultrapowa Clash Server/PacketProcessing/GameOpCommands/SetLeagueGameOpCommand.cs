@@ -27,21 +27,15 @@ namespace UCS.PacketProcessing
                         {
                             var l = ResourcesManager.GetPlayer(id);
                             if (l != null)
-                            {
                                 l.GetPlayerAvatar().SetLeagueId(newLeague);
-                            }
                             else
-                            {
                                 Debugger.WriteLine("SetLeague failed: id " + id + " not found");
-                            }
                         }
                     }
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

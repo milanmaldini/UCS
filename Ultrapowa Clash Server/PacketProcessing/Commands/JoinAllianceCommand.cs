@@ -10,15 +10,12 @@ namespace UCS.PacketProcessing
     {
         private Alliance m_vAlliance;
 
-        //00 00 00 0B
-
-        //00 00 00 46 00 03 46 FE
-
         public JoinAllianceCommand()
         {
             //AvailableServerCommandMessage
         }
 
+        //00 00 00 46 00 03 46 FE
         public JoinAllianceCommand(BinaryReader br)
         {
             br.ReadInt64WithEndian();
@@ -30,6 +27,7 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
+        //00 00 00 0B
         public override byte[] Encode()
         {
             var data = new List<byte>();
@@ -46,7 +44,6 @@ namespace UCS.PacketProcessing
         //00 00 00 02
         //00
         //5E 00 2C 5A
-
         //4C 61 20 54 65 61 6D 20 54 44 41
         //00 00 1C 35
     }

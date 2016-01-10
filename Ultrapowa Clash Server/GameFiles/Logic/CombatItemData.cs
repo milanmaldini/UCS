@@ -3,9 +3,7 @@
     internal class CombatItemData : Data
     {
         public CombatItemData(CSVRow row, DataTable dt)
-            : base(row, dt)
-        {
-        }
+            : base(row, dt) {}
 
         public virtual int GetCombatItemType()
         {

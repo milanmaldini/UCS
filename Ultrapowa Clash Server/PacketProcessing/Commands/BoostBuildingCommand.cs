@@ -14,9 +14,7 @@ namespace UCS.PacketProcessing
             BuildingIds = new List<int>();
             BoostedBuildingsCount = br.ReadInt32WithEndian();
             for (var i = 0; i < BoostedBuildingsCount; i++)
-            {
                 BuildingIds.Add(br.ReadInt32WithEndian()); //buildingId - 0x1DCD6500;
-            }
         }
 
         public int BoostedBuildingsCount { get; set; }

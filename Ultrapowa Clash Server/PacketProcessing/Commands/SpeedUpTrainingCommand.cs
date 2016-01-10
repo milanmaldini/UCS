@@ -17,8 +17,6 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
-        //00 00 02 01 1D CD 65 10 00 00 38 A6
-
         public override void Execute(Level level)
         {
             var ca = level.GetPlayerAvatar();
@@ -42,7 +40,7 @@ namespace UCS.PacketProcessing
                                     .NumberValue;
                             cost = (int) ((cost*(long) multiplier*1374389535) >> 32);
                             cost = Math.Max((cost >> 5) + (cost >> 31), 1);
-                            }
+                        }
                         if (upc.IsDarkForge())
                         {
                             var multiplier1 =
@@ -64,5 +62,7 @@ namespace UCS.PacketProcessing
                 }
             }
         }
+
+        //00 00 02 01 1D CD 65 10 00 00 38 A6
     }
 }

@@ -71,9 +71,7 @@ namespace UCS.Logic
         {
             var result = 0;
             if (m_vTimer != null)
-            {
                 result = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
-            }
             return result;
         }
 
@@ -125,9 +123,7 @@ namespace UCS.Logic
             {
                 var remainingSeconds = 0;
                 if (m_vTimer != null)
-                {
                     remainingSeconds = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
-                }
                 var cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
                 var ca = GetParent().GetLevel().GetPlayerAvatar();
                 if (ca.HasEnoughDiamonds(cost))
@@ -153,9 +149,7 @@ namespace UCS.Logic
             if (m_vTimer != null)
             {
                 if (m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()) <= 0)
-                {
                     FinishUpgrading();
-                }
             }
         }
     }

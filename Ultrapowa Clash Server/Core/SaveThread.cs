@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using UCS.Database;
 using UCS.Logic;
@@ -42,17 +41,17 @@ namespace UCS.Core
                             {
                                 c.LastUpdateTime = DateTime.Now;
                                 c.Data = alliance.SaveToJSON();
-                                context.Entry(c).State = System.Data.Entity.EntityState.Modified;
+                                context.Entry(c).State = EntityState.Modified;
                             }
                             else
                             {
                                 context.clan.Add(
-                                    new clan
-                                    {
-                                        ClanId = alliance.GetAllianceId(),
-                                        LastUpdateTime = DateTime.Now,
-                                        Data = alliance.SaveToJSON()
-                                    }
+                                                 new clan
+                                                 {
+                                                     ClanId = alliance.GetAllianceId(),
+                                                     LastUpdateTime = DateTime.Now,
+                                                     Data = alliance.SaveToJSON()
+                                                 }
                                     );
                             }
                         }

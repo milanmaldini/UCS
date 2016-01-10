@@ -17,39 +17,6 @@ namespace UCS.Core
     {
         private string[] m_vArgs;
         public bool m_vMaintance;
-        private static void MenuList()
-        {
-            Console.WriteLine("");
-            Console.WriteLine("Available commands :");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("/startx - This commands start the server Gui");
-            Console.WriteLine("");
-            Console.WriteLine("/restart - This commands restart server and sending online player info about it.");
-            Console.WriteLine("");
-            Console.WriteLine("/update - This commands check for new UCS update");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine(
-                "/shutdown - This commands fully close the server with message after five minutes.");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("/status - This commands show informations about the server.");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("/clear - Clean the emulator screen");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine("/help - This commands show a list of available commands.");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(
-                "/sysinfo - This command will send the current Server Status to all online players.");
-            Console.WriteLine("");
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("/reloadfilter - This commands reload in memory filtered texts");
-            Console.ResetColor();
-        }
 
         public Menu()
         {
@@ -63,9 +30,7 @@ namespace UCS.Core
                     Application.Run(new UCSManager());
                 }
                 else if (line == "/stopucslist")
-                {
                     Ucslist.Stop();
-                }
                 else if (line == "/reloadfilter")
                 {
                     Console.WriteLine("Filter Has Been Reload");
@@ -82,13 +47,11 @@ namespace UCS.Core
                     Console.WriteLine("Message has been send to the user");
                 }
                 else if (line == "/clear")
-                {
                     Console.Clear();
-                }
                 else if (line == "/restart")
                 {
                     var mail = new AllianceMailStreamEntry();
-                    mail.SetId((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                    mail.SetId((int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
                     mail.SetSenderId(0);
                     mail.SetSenderAvatarId(0);
                     mail.SetSenderName("System Manager");
@@ -135,12 +98,11 @@ namespace UCS.Core
                             while (reader.Read())
                             {
                                 if (reader.NodeType == XmlNodeType.Element)
-                                {
                                     elementName = reader.Name;
-                                }
                                 else
                                 {
                                     if ((reader.NodeType == XmlNodeType.Text) && reader.HasValue)
+                                    {
                                         switch (elementName)
                                         {
                                             case "version":
@@ -155,6 +117,7 @@ namespace UCS.Core
                                                 aboutUpdate = reader.Value;
                                                 break;
                                         }
+                                    }
                                 }
                             }
                         }
@@ -173,19 +136,17 @@ namespace UCS.Core
                     {
                         var str =
                             string.Format(
-                                "New version found!\nYour version: {0}.\nNewest version: {1}. \nAdded in this version: {2}. ",
-                                applicationVersion, newVersion, aboutUpdate);
+                                          "New version found!\nYour version: {0}.\nNewest version: {1}. \nAdded in this version: {2}. ",
+                                          applicationVersion, newVersion, aboutUpdate);
                         if (DialogResult.No !=
                             MessageBox.Show(str + "\nWould you like to download this update?", "Check for updates",
-                                MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                                            MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                         {
                             try
                             {
                                 Process.Start(downloadUrl);
                             }
-                            catch
-                            {
-                            }
+                            catch {}
                             return;
                         }
                         ;
@@ -193,7 +154,7 @@ namespace UCS.Core
                     else
                     {
                         MessageBox.Show("Your version: " + applicationVersion + "  is up to date.", "Check for Updates",
-                            MessageBoxButtons.OK, MessageBoxIcon.None);
+                                        MessageBoxButtons.OK, MessageBoxIcon.None);
                     }
                 }
                 else if (line == "/status")
@@ -216,9 +177,7 @@ namespace UCS.Core
                         Console.WriteLine("Patching Server : " + ConfigurationManager.AppSettings["patchingServer"]);
                     }
                     else
-                    {
                         Console.WriteLine("Patch : Disable");
-                    }
                     if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
                     {
                         Console.WriteLine("Maintance Mode : Active");
@@ -227,16 +186,14 @@ namespace UCS.Core
                                           " Seconds");
                     }
                     else
-                    {
                         Console.WriteLine("Maintance Mode : Disable");
-                    }
                 }
                 else if (line == "/sysinfo")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Server Status is now sent to all online players");
                     var mail = new AllianceMailStreamEntry();
-                    mail.SetId((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                    mail.SetId((int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
                     mail.SetSenderId(0);
                     mail.SetSenderAvatarId(0);
                     mail.SetSenderName("System Manager");
@@ -266,14 +223,44 @@ namespace UCS.Core
                     Console.ForegroundColor = ConsoleColor.White;
                 }
                 else if (line == "/help")
-                {
                     MenuList();
-                }
                 else
-                {
                     MenuList();
-                }
             }
+        }
+
+        private static void MenuList()
+        {
+            Console.WriteLine("");
+            Console.WriteLine("Available commands :");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("/startx - This commands start the server Gui");
+            Console.WriteLine("");
+            Console.WriteLine("/restart - This commands restart server and sending online player info about it.");
+            Console.WriteLine("");
+            Console.WriteLine("/update - This commands check for new UCS update");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine(
+                              "/shutdown - This commands fully close the server with message after five minutes.");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("/status - This commands show informations about the server.");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("/clear - Clean the emulator screen");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("/help - This commands show a list of available commands.");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(
+                              "/sysinfo - This command will send the current Server Status to all online players.");
+            Console.WriteLine("");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("/reloadfilter - This commands reload in memory filtered texts");
+            Console.ResetColor();
         }
     }
 }

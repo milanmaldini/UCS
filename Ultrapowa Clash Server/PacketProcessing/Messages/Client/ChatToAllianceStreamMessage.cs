@@ -14,14 +14,13 @@ namespace UCS.PacketProcessing
 
         public ChatToAllianceStreamMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
-            {
                 m_vChatMessage = br.ReadScString();
-            }
         }
 
         public override void Process(Level level)
@@ -63,17 +62,13 @@ namespace UCS.PacketProcessing
                                     var p = new AllianceStreamEntryMessage(onlinePlayer.GetClient());
                                     var name = cm.GetSenderName();
                                     if (onlinePlayer.isPermittedUser())
-                                    {
                                         cm.SetSenderName(name + " #" + cm.GetSenderId());
-                                    }
 
                                     p.SetStreamEntry(cm);
                                     PacketManager.ProcessOutgoingPacket(p);
 
                                     if (onlinePlayer.isPermittedUser())
-                                    {
                                         cm.SetSenderName(name);
-                                    }
                                 }
                             }
                         }

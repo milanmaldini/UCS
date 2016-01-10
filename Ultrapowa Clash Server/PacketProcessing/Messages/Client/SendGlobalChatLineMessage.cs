@@ -11,6 +11,7 @@ namespace UCS.PacketProcessing
     {
         public SendGlobalChatLineMessage(Client client, BinaryReader br) : base(client, br)
         {
+
         }
 
         public string MessageString { get; set; }
@@ -18,9 +19,7 @@ namespace UCS.PacketProcessing
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
-            {
                 MessageString = br.ReadScString();
-            }
         }
 
         public override void Process(Level level)
@@ -34,15 +33,17 @@ namespace UCS.PacketProcessing
                     {
                         var player = "";
                         if (level != null)
+                        {
                             player += " (" + level.GetPlayerAvatar().GetId() + ", " +
                                       level.GetPlayerAvatar().GetAvatarName() + ")";
+                        }
                         Debugger.WriteLine("\t" + obj.GetType().Name + player);
                         ((GameOpCommand) obj).Execute(level);
                     }
                 }
                 else if (!MessageString.Contains("./"))
                 {
-                var senderId = level.GetPlayerAvatar().GetId();
+                    var senderId = level.GetPlayerAvatar().GetId();
                     var senderName = level.GetPlayerAvatar().GetAvatarName();
                     foreach (var onlinePlayer in ResourcesManager.GetOnlinePlayers())
                     {

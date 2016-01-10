@@ -51,7 +51,8 @@ namespace UCS.PacketProcessing
                     ca.SetResourceCount(trainingResource, ca.GetResourceCount(trainingResource) - trainingCost);
                     c.AddUnitToProductionQueue(cid);
                     Count--;
-                } while (Count > 0);
+                }
+                while (Count > 0);
             }
         }
 

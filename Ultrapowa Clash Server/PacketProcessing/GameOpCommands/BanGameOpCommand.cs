@@ -38,14 +38,10 @@ namespace UCS.PacketProcessing
                                 }
                             }
                             else
-                            {
                                 Debugger.WriteLine("Ban failed: insufficient privileges");
-                            }
                         }
                         else
-                        {
                             Debugger.WriteLine("Ban failed: id " + id + " not found");
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -54,9 +50,7 @@ namespace UCS.PacketProcessing
                 }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

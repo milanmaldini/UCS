@@ -10,7 +10,6 @@ namespace UCS
         private readonly MessageManager _mm;
         private readonly PacketManager _pm;
         private List<Level> _list;
-
         public bool m_vRunning = false;
 
         public ProgramThread()
@@ -23,7 +22,7 @@ namespace UCS
 
         public ProgramThread(List<Level> list)
         {
-            this._list = list;
+            _list = list;
         }
 
         public void Start()

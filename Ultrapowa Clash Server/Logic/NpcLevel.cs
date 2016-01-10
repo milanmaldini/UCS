@@ -24,13 +24,9 @@
         }
 
         public int Index { get; set; }
-
         public int LootedElixir { get; set; }
-
         public int LootedGold { get; set; }
-
         public string Name { get; set; }
-
         public int Stars { get; set; }
     }
 }

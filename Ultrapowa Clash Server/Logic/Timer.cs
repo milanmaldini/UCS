@@ -20,19 +20,15 @@ namespace UCS.Logic
         }
 
         public int GetRemainingSeconds(DateTime time, bool boost = false, DateTime boostEndTime = default(DateTime),
-            float multiplier = 0f)
+                                       float multiplier = 0f)
         {
             var result = int.MaxValue;
             if (!boost)
-            {
                 result = m_vSeconds - (int) time.Subtract(m_vStartTime).TotalSeconds;
-            }
             else
             {
                 if (boostEndTime >= time)
-                {
                     result = m_vSeconds - (int) (time.Subtract(m_vStartTime).TotalSeconds*multiplier);
-                }
                 else
                 {
                     var boostedTime = (float) time.Subtract(m_vStartTime).TotalSeconds -

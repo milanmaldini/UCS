@@ -22,9 +22,7 @@ namespace UCS.PacketProcessing
                 Debugger.WriteLine("Filterlist is reloaded!", null, 0, ConsoleColor.DarkCyan);
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

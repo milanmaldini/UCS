@@ -22,8 +22,10 @@ namespace UCS.Core
             try
             {
                 if (!HttpListener.IsSupported)
+                {
                     throw new NotSupportedException(
                         "Windows XP SP2, Server 2003 or higher needed.Please Disable Api Manager");
+                }
 
                 if (prefixes == null || prefixes.Length == 0)
                     throw new ArgumentException("prefixes");
@@ -44,9 +46,7 @@ namespace UCS.Core
         }
 
         public ApiManagerPro(Func<HttpListenerRequest, string> method, params string[] prefixes)
-            : this(prefixes, method)
-        {
-        }
+            : this(prefixes, method) {}
 
         public IPEndPoint RemoteEndPoint { get; set; }
 
@@ -58,34 +58,34 @@ namespace UCS.Core
                 var f = new JsonApi
                 {
                     Ucs = new Dictionary<string, string>
-                {
-                    {"Codename", GlobalStrings.__Codename},
-                    {"StartingLevel", ConfigurationManager.AppSettings["startingLevel"]},
-                    {"StartingExperience", ConfigurationManager.AppSettings["startingExperience"]},
-                    {"StartingGems", ConfigurationManager.AppSettings["startingGems"]},
-                    {"StartingGold", ConfigurationManager.AppSettings["startingGold"]},
-                    {"StartingElixir", ConfigurationManager.AppSettings["startingElixir"]},
-                    {"StartingDarkElixir", ConfigurationManager.AppSettings["startingDarkElixir"]},
-                    {"StartingTrophies", ConfigurationManager.AppSettings["startingTrophies"]},
-                    {"StartingShieldTime", ConfigurationManager.AppSettings["startingShieldTime"]},
-                    {"PatchingServer", ConfigurationManager.AppSettings["patchingServer"]},
-                    {"Maintenance", ConfigurationManager.AppSettings["maintenanceMode"]},
-                    {"MaintenanceTimeLeft", ConfigurationManager.AppSettings["maintenanceTimeLeft"]},
-                    {"ServerPort", ConfigurationManager.AppSettings["serverPort"]},
-                    {"ClientVersion", ConfigurationManager.AppSettings["clientVersion"]},
-                    {"ServerVersion", ucsVersion},
-                    {"LoggingLevel", ConfigurationManager.AppSettings["loggingLevel"]},
-                    {"OldClientVersion", ConfigurationManager.AppSettings["oldClientVersion"]},
-                    {"DatabaseType", ConfigurationManager.AppSettings["databaseConnectionName"]},
-                    {"ExpertPVE", ConfigurationManager.AppSettings["expertPve"]},
-                    {"SaveThreadCount", ConfigurationManager.AppSettings["saveThreadCount"]},
-                    {"OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count)},
-                    {"InMemoryPlayers", Convert.ToString(ResourcesManager.GetInMemoryLevels().Count)},
-                    {"InMemoryClans", Convert.ToString(ObjectManager.GetInMemoryAlliances().Count)},
-                    {"TotalPlayer", Convert.ToString(ResourcesManager.GetAllPlayerIds().Count)},
-                    {"TotalClans", Convert.ToString(ObjectManager.GetInMemoryAlliances().Count)},
-                    {"TotalConnectedClients", Convert.ToString(ResourcesManager.GetConnectedClients().Count)}
-                }
+                    {
+                        {"Codename", GlobalStrings.__Codename},
+                        {"StartingLevel", ConfigurationManager.AppSettings["startingLevel"]},
+                        {"StartingExperience", ConfigurationManager.AppSettings["startingExperience"]},
+                        {"StartingGems", ConfigurationManager.AppSettings["startingGems"]},
+                        {"StartingGold", ConfigurationManager.AppSettings["startingGold"]},
+                        {"StartingElixir", ConfigurationManager.AppSettings["startingElixir"]},
+                        {"StartingDarkElixir", ConfigurationManager.AppSettings["startingDarkElixir"]},
+                        {"StartingTrophies", ConfigurationManager.AppSettings["startingTrophies"]},
+                        {"StartingShieldTime", ConfigurationManager.AppSettings["startingShieldTime"]},
+                        {"PatchingServer", ConfigurationManager.AppSettings["patchingServer"]},
+                        {"Maintenance", ConfigurationManager.AppSettings["maintenanceMode"]},
+                        {"MaintenanceTimeLeft", ConfigurationManager.AppSettings["maintenanceTimeLeft"]},
+                        {"ServerPort", ConfigurationManager.AppSettings["serverPort"]},
+                        {"ClientVersion", ConfigurationManager.AppSettings["clientVersion"]},
+                        {"ServerVersion", ucsVersion},
+                        {"LoggingLevel", ConfigurationManager.AppSettings["loggingLevel"]},
+                        {"OldClientVersion", ConfigurationManager.AppSettings["oldClientVersion"]},
+                        {"DatabaseType", ConfigurationManager.AppSettings["databaseConnectionName"]},
+                        {"ExpertPVE", ConfigurationManager.AppSettings["expertPve"]},
+                        {"SaveThreadCount", ConfigurationManager.AppSettings["saveThreadCount"]},
+                        {"OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count)},
+                        {"InMemoryPlayers", Convert.ToString(ResourcesManager.GetInMemoryLevels().Count)},
+                        {"InMemoryClans", Convert.ToString(ObjectManager.GetInMemoryAlliances().Count)},
+                        {"TotalPlayer", Convert.ToString(ResourcesManager.GetAllPlayerIds().Count)},
+                        {"TotalClans", Convert.ToString(ObjectManager.GetInMemoryAlliances().Count)},
+                        {"TotalConnectedClients", Convert.ToString(ResourcesManager.GetConnectedClients().Count)}
+                    }
                 };
                 jsonapp = JsonConvert.SerializeObject(f);
             }
@@ -95,10 +95,10 @@ namespace UCS.Core
                 var e = new JsonApiE
                 {
                     Error = new Dictionary<string, string>
-                {
-                    {"Codename", GlobalStrings.__Codename},
-                    {"Issue", Convert.ToString(ex)},
-                }
+                    {
+                        {"Codename", GlobalStrings.__Codename},
+                        {"Issue", Convert.ToString(ex)}
+                    }
                 };
                 jsonapp = JsonConvert.SerializeObject(e);
             }
@@ -175,6 +175,7 @@ namespace UCS.Core
         {
             public Dictionary<string, string> Ucs { get; set; }
         }
+
         private class JsonApiE
         {
             public Dictionary<string, string> Error { get; set; }

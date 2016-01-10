@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -28,7 +28,6 @@ namespace UCS.Logic
         }
 
         public bool IsBoosted { get; set; }
-
         public int UpgradeLevel { get; set; }
 
         public void BoostBuilding()
@@ -44,9 +43,7 @@ namespace UCS.Logic
                 var wasUpgrading = IsUpgrading();
                 m_vIsConstructing = false;
                 if (wasUpgrading)
-                {
                     SetUpgradeLevel(UpgradeLevel);
-                }
                 var bd = GetConstructionItemData();
                 var rd = bd.GetBuildResource(UpgradeLevel + 1);
                 var cost = bd.GetBuildCost(UpgradeLevel + 1);
@@ -74,9 +71,7 @@ namespace UCS.Logic
                         var currentTownHallLevel = GetLevel().GetPlayerAvatar().GetTownHallLevel();
                         var requiredTownHallLevel = GetRequiredTownHallLevelForUpgrade();
                         if (currentTownHallLevel < requiredTownHallLevel)
-                        {
                             result = false;
-                        }
                     }
                 }
             }
@@ -89,9 +84,7 @@ namespace UCS.Logic
             m_vLevel.WorkerManager.DeallocateWorker(this);
             SetUpgradeLevel(GetUpgradeLevel() + 1);
             if (GetResourceProductionComponent() != null)
-            {
                 GetResourceProductionComponent().Reset();
-            }
 
             //Add exp to client avatar
             var constructionTime = GetConstructionItemData().GetConstructionTime(GetUpgradeLevel());
@@ -114,21 +107,15 @@ namespace UCS.Logic
         public int GetBoostDuration()
         {
             if (GetResourceProductionComponent() != null)
-            {
                 return ObjectManager.DataTables.GetGlobals().GetGlobalData("RESOURCE_PRODUCTION_BOOST_MINS").NumberValue;
-            }
             if (GetUnitProductionComponent() != null)
             {
                 if (GetUnitProductionComponent().IsSpellForge())
-                {
                     return ObjectManager.DataTables.GetGlobals().GetGlobalData("SPELL_FACTORY_BOOST_MINS").NumberValue;
-                }
                 return ObjectManager.DataTables.GetGlobals().GetGlobalData("BARRACKS_BOOST_MINS").NumberValue;
             }
             if (GetHeroBaseComponent() != null)
-            {
                 return ObjectManager.DataTables.GetGlobals().GetGlobalData("HERO_REST_BOOST_MINS").NumberValue;
-            }
 
             return 0;
         }
@@ -159,9 +146,7 @@ namespace UCS.Logic
                 return ObjectManager.DataTables.GetGlobals().GetGlobalData("BARRACKS_BOOST_MULTIPLIER").NumberValue;
             }
             if (GetHeroBaseComponent() != null)
-            {
                 return ObjectManager.DataTables.GetGlobals().GetGlobalData("HERO_REST_BOOST_MULTIPLIER").NumberValue;
-            }
 
             return 0;
         }
@@ -175,9 +160,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(10, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (HeroBaseComponent) comp;
-            }
             return null;
         }
 
@@ -196,9 +179,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(5, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (ResourceProductionComponent) comp;
-            }
             return null;
         }
 
@@ -206,9 +187,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(6, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (ResourceStorageComponent) comp;
-            }
             return null;
         }
 
@@ -216,9 +195,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(3, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (UnitProductionComponent) comp;
-            }
             return null;
         }
 
@@ -226,9 +203,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(0, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (UnitStorageComponent) comp;
-            }
             return null;
         }
 
@@ -236,9 +211,7 @@ namespace UCS.Logic
         {
             var comp = GetComponent(9, enabled);
             if (comp != null && comp.Type != -1)
-            {
                 return (UnitUpgradeComponent) comp;
-            }
             return null;
         }
 
@@ -280,9 +253,7 @@ namespace UCS.Logic
             Locked = false;
             var lockedToken = jsonObject["locked"];
             if (lockedToken != null)
-            {
                 Locked = lockedToken.ToObject<bool>();
-            }
 
             var boostToken = jsonObject["boost_endTime"];
             if (boostToken != null)
@@ -305,9 +276,7 @@ namespace UCS.Logic
             if (IsBoosted)
             {
                 if ((int) (m_vBoostEndTime - GetLevel().GetTime()).TotalSeconds >= 0)
-                {
                     jsonObject.Add("boost_t", (int) (m_vBoostEndTime - GetLevel().GetTime()).TotalSeconds);
-                }
                 jsonObject.Add("boost_endTime", m_vBoostEndTime);
             }
             base.Save(jsonObject);
@@ -318,9 +287,7 @@ namespace UCS.Logic
         {
             UpgradeLevel = level;
             if (GetConstructionItemData().IsTownHall())
-            {
                 GetLevel().GetPlayerAvatar().SetTownHallLevel(level);
-            }
             if (UpgradeLevel > -1 || IsUpgrading() || !IsConstructing())
             {
                 if (GetUnitStorageComponent(true) != null)
@@ -365,9 +332,7 @@ namespace UCS.Logic
             Y = newY;
             var constructionTime = GetConstructionItemData().GetConstructionTime(UpgradeLevel + 1);
             if (constructionTime < 1)
-            {
                 FinishConstruction();
-            }
             else
             {
                 m_vTimer = new Timer();
@@ -381,9 +346,7 @@ namespace UCS.Logic
         {
             var constructionTime = GetConstructionItemData().GetConstructionTime(UpgradeLevel + 1);
             if (constructionTime < 1)
-            {
                 FinishConstruction();
-            }
             else
             {
                 //todo : collecter les ressources avant upgrade si un component de ressources est défini

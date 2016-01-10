@@ -42,9 +42,7 @@ namespace UCS.Core
             requestip.Method = "GET";
             requestip.Referer = "http://ultrapowa.com/";
             using (var stream = new StreamReader(requestip.GetResponse().GetResponseStream()))
-            {
                 direction = stream.ReadToEnd();
-            }
 
             //Search for the ip in the html
             var first = direction.IndexOf("Address: ") + 9;
@@ -55,10 +53,10 @@ namespace UCS.Core
 
             var request = context.Request;
 
-            // Obtain a response object. 
+            // Obtain a response object.
             var response = context.Response;
 
-            // Construct a response. 
+            // Construct a response.
             var responseString = "<HTML><BODY><PRE>";
 
             responseString += "Active Connections: ";
@@ -106,9 +104,7 @@ namespace UCS.Core
             responseString += "<details><summary>";
             responseString += "In Memory Alliances: " + ObjectManager.GetInMemoryAlliances().Count + "</summary>";
             foreach (var alliance in ObjectManager.GetInMemoryAlliances())
-            {
                 responseString += "    " + alliance.GetAllianceId() + ", " + alliance.GetAllianceName() + " \n";
-            }
             responseString += "</details>";
 
             var hostName = Dns.GetHostName();
@@ -120,12 +116,12 @@ namespace UCS.Core
                 "<center><img src='https://d14.usercdn.com/i/02212/ea18nj5uxcll.png' style='width: 25%; height: 50%'></img></center></PRE></BODY></HTML>";
             var buffer = Encoding.UTF8.GetBytes(responseString);
 
-            // Get a response stream and write the response to it. 
+            // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;
             var output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);
 
-            // You must close the output stream. 
+            // You must close the output stream.
             output.Close();
         }
 
@@ -155,7 +151,7 @@ namespace UCS.Core
 
         private void StartListener(object data)
         {
-            // Note: The GetContext method blocks while waiting for a request. 
+            // Note: The GetContext method blocks while waiting for a request.
             var context = m_vListener.GetContext();
 
             m_vListener.Stop();

@@ -35,7 +35,6 @@ namespace UCS.Logic
         protected List<DataSlot> m_vSpellCount;
 
         protected List<DataSlot> m_vSpellUpgradeLevel;
-
         private int m_vTownHallLevel;
 
         //a1 + 12
@@ -74,15 +73,14 @@ namespace UCS.Logic
                         if (resourceCount < resourceCap)
                         {
                             if (newResourceValue > resourceCap)
-                            {
                                 newResourceValue = resourceCap;
-                            }
                         }
                     }
                     Debugger.WriteLine(
-                        string.Format("Old Resources: {0} New Resources: {1} Resource Cap: {2}",
-                            GetResourceCount((ResourceData) data), newResourceValue, GetResourceCap((ResourceData) data)),
-                        null, 5);
+                                       string.Format("Old Resources: {0} New Resources: {1} Resource Cap: {2}",
+                                                     GetResourceCount((ResourceData) data), newResourceValue,
+                                                     GetResourceCap((ResourceData) data)),
+                                       null, 5);
                     SetResourceCount((ResourceData) data, newResourceValue);
                 }
             }
@@ -231,9 +229,7 @@ namespace UCS.Logic
                 m_vHeroHealth.Add(ds);
             }
             else
-            {
                 m_vHeroHealth[index].Value = health;
-            }
         }
 
         public void SetHeroState(HeroData hd, int state)
@@ -245,9 +241,7 @@ namespace UCS.Logic
                 m_vHeroState.Add(ds);
             }
             else
-            {
                 m_vHeroState[index].Value = state;
-            }
         }
 
         public void SetResourceCap(ResourceData rd, int value)
@@ -259,9 +253,7 @@ namespace UCS.Logic
                 m_vResourceCaps.Add(ds);
             }
             else
-            {
                 m_vResourceCaps[index].Value = value;
-            }
         }
 
         public void SetResourceCount(ResourceData rd, int value)
@@ -273,9 +265,7 @@ namespace UCS.Logic
                 m_vResources.Add(ds);
             }
             else
-            {
                 m_vResources[index].Value = value;
-            }
 
             //LogicLevel::getComponentManager(v18);
             //LogicComponentManager::divideAvatarResourcesToStorages(v19)

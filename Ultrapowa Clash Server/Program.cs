@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -19,15 +17,26 @@ namespace UCS
     internal class Program
     {
         public static readonly int Port = 9339;
-        private static bool isclosing = false;
 
         private static EventHandler _handler;
+        private static bool isclosing = false;
+
+        public static void ExitProgram()
+        {
+            Debugger.WriteLine("Starting saving all player to database", null, 0, ConsoleColor.Cyan);
+            ResourcesManager.GetOnlinePlayers().ForEach(DatabaseManager.Singelton.Save);
+            Environment.Exit(1);
+        }
 
         [DllImport("Kernel32")]
         public static extern int GetConsoleWindow();
 
-        [DllImport("Kernel32")]
-        private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
+        public static void RestartProgram()
+        {
+            Debugger.WriteLine("Starting saving all player to database", null, 0, ConsoleColor.Cyan);
+            ResourcesManager.GetOnlinePlayers().ForEach(DatabaseManager.Singelton.Save);
+            Process.Start(@"tools\ucs-restart.bat");
+        }
 
         private static void InitConsoleStuff()
         {
@@ -57,20 +66,6 @@ namespace UCS
             Console.ResetColor();
         }
 
-        public static void ExitProgram()
-        {
-            Debugger.WriteLine("Starting saving all player to database", null, 0, ConsoleColor.Cyan);
-            ResourcesManager.GetOnlinePlayers().ForEach(DatabaseManager.Singelton.Save);
-            Environment.Exit(1);
-        }
-
-        public static void RestartProgram()
-        {
-            Debugger.WriteLine("Starting saving all player to database", null, 0, ConsoleColor.Cyan);
-            ResourcesManager.GetOnlinePlayers().ForEach(DatabaseManager.Singelton.Save);
-            Process.Start(@"tools\ucs-restart.bat");
-        }
-
         private static void InitUCS()
         {
             if (!Directory.Exists("logs"))
@@ -80,17 +75,13 @@ namespace UCS
             }
 
             if (Convert.ToBoolean(Utils.parseConfigString("UCSList")))
-            {
                 Ucslist.Start();
-            }
             new ResourcesManager();
             new ObjectManager();
             new Gateway().Start();
 
             if (Convert.ToBoolean(Utils.parseConfigString("apiManager")))
-            {
                 new ApiManager();
-            }
 
             if (Convert.ToBoolean(Utils.parseConfigString("apiManagerPro")))
             {
@@ -100,7 +91,9 @@ namespace UCS
                     ConfigurationManager.AppSettings.Set("ApiKey", ch);
                     Console.WriteLine("Your Random API key : {0}", ch);
                 }
-                var ws = new ApiManagerPro(ApiManagerPro.SendResponse, "http://+:" + Utils.ParseConfigInt("proDebugPort") + "/" + Utils.parseConfigString("ApiKey") + "/");
+                var ws = new ApiManagerPro(ApiManagerPro.SendResponse,
+                                           "http://+:" + Utils.ParseConfigInt("proDebugPort") + "/" +
+                                           Utils.parseConfigString("ApiKey") + "/");
                 Console.WriteLine("Your API key : {0}", Utils.parseConfigString("ApiKey"));
                 ws.Run();
             }
@@ -114,19 +107,16 @@ namespace UCS
             {
                 Debugger.WriteLine("\t", null, 5);
                 Debugger.WriteLine("Played ID's:", null, 5, ConsoleColor.Cyan);
-                ResourcesManager.GetAllPlayerIds().ForEach(id => Debugger.WriteLine("\t" + id, null, 5, ConsoleColor.Cyan));
+                ResourcesManager.GetAllPlayerIds()
+                    .ForEach(id => Debugger.WriteLine("\t" + id, null, 5, ConsoleColor.Cyan));
                 Debugger.WriteLine("\t", null, 5);
             }
             Console.WriteLine("Server started on port " + Port + ". Let's play Clash of Clans!");
 
             if (Convert.ToBoolean(Utils.parseConfigString("consoleCommand")))
-            {
                 new Menu();
-            }
             else
-            {
                 Application.Run(new UCSManager());
-            }
         }
 
         private static void Main()
@@ -143,9 +133,12 @@ namespace UCS
                 _handler += ExitHandler.Handler;
                 SetConsoleCtrlHandler(_handler, true);
                 InitConsoleStuff();
-                 InitUCS();
+                InitUCS();
             }
         }
+
+        [DllImport("Kernel32")]
+        private static extern bool SetConsoleCtrlHandler(EventHandler handler, bool add);
 
         [DllImport("user32.dll")]
         private static extern int ShowWindow(int handle, int showState);

@@ -21,21 +21,15 @@ namespace UCS.PacketProcessing
                 if (l != null)
                 {
                     using (var sr = new StreamReader(@"gamefiles/default/home.json"))
-                    {
                         level.SetHome(sr.ReadToEnd());
-                    }
                     var p = new OutOfSyncMessage(l.GetClient());
                     PacketManager.ProcessOutgoingPacket(p);
                 }
                 else
-                {
                     Debugger.WriteLine("ResetPlayer failed: id " + id + " not found");
-                }
             }
             else
-            {
                 SendCommandFailedMessage(level.GetClient());
-            }
         }
     }
 }

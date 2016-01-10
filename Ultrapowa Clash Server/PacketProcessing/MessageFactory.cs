@@ -38,9 +38,7 @@ namespace UCS.PacketProcessing
         public static object Read(Client c, BinaryReader br, int packetType)
         {
             if (m_vMessages.ContainsKey(packetType))
-            {
                 return Activator.CreateInstance(m_vMessages[packetType], c, br);
-            }
             Debugger.WriteLine("[U] " + packetType + " Unhandled Message (ignored)", null, 5, ConsoleColor.Red);
             return null;
         }

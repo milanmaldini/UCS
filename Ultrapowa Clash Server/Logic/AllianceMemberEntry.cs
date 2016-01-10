@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.Helpers;
 
@@ -49,34 +49,10 @@ namespace UCS.Logic
             m_vWarOptInStatus = 1;
         }
 
-        /*public void SetScore(int score)
-        {
-            m_vScore = score;
-        } */
-
         public void Decode(byte[] avatarData)
         {
-            using (var br = new BinaryReader(new MemoryStream(avatarData)))
-            {
-            }
+            using (var br = new BinaryReader(new MemoryStream(avatarData))) {}
         }
-
-        //00 00 00 2A 00 17 E8 BD
-        //00 00 00 06
-        //6B 61 69 73 65 72
-        //00 00 00 02
-        //00 00 00 58
-        //00 00 00 00
-        //00 00 0B 0C
-        //00 00 00 83
-        //00 00 00 5B
-        //00 00 00 01
-        //00 00 00 01
-        //00
-        //00 01 15 7A
-        //00 00 00 01
-        //01
-        //00 00 00 2A 00 17 E8 BD
 
         public byte[] Encode()
         {
@@ -102,6 +78,22 @@ namespace UCS.Logic
             return data.ToArray();
         }
 
+        //00 00 00 2A 00 17 E8 BD
+        //00 00 00 06
+        //6B 61 69 73 65 72
+        //00 00 00 02
+        //00 00 00 58
+        //00 00 00 00
+        //00 00 0B 0C
+        //00 00 00 83
+        //00 00 00 5B
+        //00 00 00 01
+        //00 00 00 01
+        //00
+        //00 01 15 7A
+        //00 00 00 01
+        //01
+        //00 00 00 2A 00 17 E8 BD
         public long GetAvatarId()
         {
             return m_vAvatarId;
@@ -111,21 +103,6 @@ namespace UCS.Logic
         {
             return 150;
         }
-
-        /*public long GetHomeid()
-        {
-            return m_vHomeId;
-        }
-
-        public int GetExpLevel()
-        {
-            return m_vExpLevel;
-        }
-
-        public string GetName()
-        {
-            return m_vName;
-        }*/
 
         public int GetOrder()
         {
@@ -141,11 +118,6 @@ namespace UCS.Logic
         {
             return m_vRole;
         }
-
-        /*public int GetScore()
-        {
-            return m_vScore;
-        }*/
 
         public bool HasLowerRoleThan(int role)
         {
@@ -181,21 +153,6 @@ namespace UCS.Logic
             m_vAvatarId = id;
         }
 
-        /*public void SetExpLevel(int level)
-        {
-            m_vExpLevel = level;
-        }
-
-        public void SetHomeId(long id)
-        {
-            m_vHomeId = id;
-        }
-
-        public void SetName(string name)
-        {
-            m_vName = name;
-        }*/
-
         public void SetOrder(int order)
         {
             m_vOrder = order;
@@ -210,5 +167,42 @@ namespace UCS.Logic
         {
             m_vRole = role;
         }
+
+        /*public void SetExpLevel(int level)
+        {
+            m_vExpLevel = level;
+        }
+
+        public void SetHomeId(long id)
+        {
+            m_vHomeId = id;
+        }
+
+        public void SetName(string name)
+        {
+            m_vName = name;
+        }*/
+        /*public int GetScore()
+        {
+            return m_vScore;
+        }*/
+        /*public long GetHomeid()
+        {
+            return m_vHomeId;
+        }
+
+        public int GetExpLevel()
+        {
+            return m_vExpLevel;
+        }
+
+        public string GetName()
+        {
+            return m_vName;
+        }*/
+        /*public void SetScore(int score)
+        {
+            m_vScore = score;
+        } */
     }
 }

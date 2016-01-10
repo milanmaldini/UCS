@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -132,9 +132,7 @@ namespace UCS.Logic
         {
             var remainingSeconds = 0;
             if (IsUpgrading())
-            {
                 remainingSeconds = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
-            }
             var cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
             var ca = GetParent().GetLevel().GetPlayerAvatar();
             if (ca.HasEnoughDiamonds(cost))
@@ -164,9 +162,7 @@ namespace UCS.Logic
             if (m_vTimer != null)
             {
                 if (m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()) <= 0)
-                {
                     FinishUpgrading();
-                }
             }
         }
     }

@@ -16,9 +16,7 @@ namespace UCS.Logic
         public virtual void Decode(byte[] baseData)
         {
             using (var br = new BinaryReader(new MemoryStream(baseData)))
-            {
                 m_vUnknown1 = br.ReadInt32WithEndian();
-            }
         }
 
         public virtual byte[] Encode()
