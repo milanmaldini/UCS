@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ultrapowa Clash Server", "Ultrapowa Clash Server\Ultrapowa Clash Server.csproj", "{DE9F20DA-F885-4A0D-90A5-E139189BC633}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|x64.ActiveCfg = Debug|x64
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|x64.Build.0 = Debug|x64
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|x86.ActiveCfg = Debug|x86
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Debug|x86.Build.0 = Debug|x86
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|x64.ActiveCfg = Release|x64
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|x64.Build.0 = Release|x64
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|x86.ActiveCfg = Release|x86
+		{DE9F20DA-F885-4A0D-90A5-E139189BC633}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(CodealikeProperties) = postSolution
+		SolutionGuid = 3811f591-e42c-49c4-876a-0781860c15c6
+	EndGlobalSection
+EndGlobal
