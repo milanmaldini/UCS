@@ -75,7 +75,7 @@ namespace UCS.PacketProcessing
             var p = new LoginFailedMessage(Client);
             p.SetErrorCode(10);
             p.RemainingTime(0);
-            p.SetReason("You are connecting with 8.67 client but UCS not support it yet");
+            p.SetReason("You are connecting with a 8.67 Client but UCS doesn't support it yet.");
             PacketManager.ProcessOutgoingPacket(p);
         }
     }
