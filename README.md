@@ -9,6 +9,8 @@ Aidid
 iSwürfel																
 thecheater887
 
+ADeltaX
+
 UCS is NOT affiliated with Supercell.
 Help and Support: http://ultrapowa.com/forum/
 
