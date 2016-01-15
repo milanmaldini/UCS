@@ -80,5 +80,10 @@ namespace UCS.PacketProcessing
             m_vUpdateURL = url;
         }
 
+        public void RemainingTime(int code)
+        {
+            m_vRemainingTime = code;
+        }
+
     }
 }
