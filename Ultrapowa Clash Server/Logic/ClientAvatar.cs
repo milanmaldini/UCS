@@ -260,7 +260,7 @@ namespace UCS.Logic
             jsonData.Add("experience", m_vExperience);
             jsonData.Add("current_gems", m_vCurrentGems);
             jsonData.Add("score", m_vScore);
-            jsonData.Add("is_avatar_name_set", m_vIsAvatarNameSet);
+            jsonData.Add("is_avatar_name_set", (ushort)m_vIsAvatarNameSet);
 
             /*JArray jsonResourceCapsArray = new JArray();
             foreach (var resource in GetResourceCaps())

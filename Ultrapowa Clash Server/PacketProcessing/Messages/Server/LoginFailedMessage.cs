@@ -13,6 +13,7 @@ namespace UCS.PacketProcessing
     class LoginFailedMessage : Message
     {
         private int m_vErrorCode;//48
+        private int m_vRemainingTime; //50
         private string m_vResourceFingerprintData;//52
         private string m_vRedirectDomain;//56
         private string m_vContentURL;//60

@@ -35,7 +35,6 @@ namespace UCS.Core
 
         private void RunServer()
         {
-            Console.WriteLine("Api Manager listening...");
             while (m_vListener.IsListening)
             {
                 IAsyncResult result = m_vListener.BeginGetContext(Handle, m_vListener);

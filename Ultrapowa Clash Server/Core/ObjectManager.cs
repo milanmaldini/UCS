@@ -133,6 +133,7 @@ namespace UCS.Core
 
         public static void LoadNpcLevels()
         {
+            Console.WriteLine("");
             Console.Write("Loading Npc levels... ");
             for(int i=0;i<50;i++)
             {
@@ -169,7 +170,9 @@ namespace UCS.Core
             {
                 Console.Write("\t" + data.Item1);
                 DataTables.InitDataTable(new CSVTable(data.Item2),data.Item3);
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(" done");
+                Console.ResetColor();
             }
         }
 

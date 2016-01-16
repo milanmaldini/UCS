@@ -18,7 +18,7 @@ namespace UCS.PacketProcessing
         static MessageFactory()
         {
             m_vMessages = new Dictionary<int, Type>();
-            m_vMessages.Add(20100, typeof(Askfor20100));
+            //m_vMessages.Add(20100, typeof(Askfor20100));
             m_vMessages.Add(10101, typeof(LoginMessage));
             m_vMessages.Add(10108, typeof(KeepAliveMessage));
             m_vMessages.Add(10212, typeof(ChangeAvatarNameMessage));
@@ -26,7 +26,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(14102, typeof(ExecuteCommandsMessage));
             m_vMessages.Add(14113, typeof(VisitHomeMessage));
             m_vMessages.Add(14134, typeof(AttackNpcMessage));
-            m_vMessages.Add(14316, typeof(EditClanSettingsMessage));
+            //m_vMessages.Add(14316, typeof(EditClanSettingsMessage));
             m_vMessages.Add(14301, typeof(CreateAllianceMessage));
             m_vMessages.Add(14302, typeof(AskForAllianceDataMessage));
             m_vMessages.Add(14303, typeof(AskForJoinableAlliancesListMessage));

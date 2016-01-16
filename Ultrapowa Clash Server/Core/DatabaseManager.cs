@@ -28,7 +28,7 @@ namespace UCS.Core
             try
             {
                 Debugger.WriteLine("Saving new account to database (player id: " + l.GetPlayerAvatar().GetId() + ")");
-                using (var db = new Database.ucsdbEntities(m_vConnectionString))
+                using (var db = new UCS.Database.ucsdbEntities(m_vConnectionString))
                 {
                     db.player.Add(
                         new Database.player
@@ -78,7 +78,7 @@ namespace UCS.Core
         {
             Level account = null;
             try
-            {  
+            {
                 using (var db = new Database.ucsdbEntities(m_vConnectionString))
                 {
                     var p = db.player.Find(playerId);
@@ -142,8 +142,10 @@ namespace UCS.Core
             long max = 0;
             using (var db = new Database.ucsdbEntities(m_vConnectionString))
             {
+
                 max = (from ep in db.player
                        select (long?)ep.PlayerId ?? 0).DefaultIfEmpty().Max();
+
             }
             return max;
         }
@@ -201,7 +203,7 @@ namespace UCS.Core
             catch (Exception ex)
             {
                 Debugger.WriteLine("An exception occured during Save processing for avatars:", ex);
-            } 
+            }
         }
 
         public void Save(List<Alliance> alliances)
