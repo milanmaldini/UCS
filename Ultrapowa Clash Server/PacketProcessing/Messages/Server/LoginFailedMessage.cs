@@ -23,7 +23,7 @@ namespace UCS.PacketProcessing
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
-            //SetMessageVersion(3);
+            SetMessageVersion(3);
 
             //errorcodes:
             //9: removeredirectdomain
