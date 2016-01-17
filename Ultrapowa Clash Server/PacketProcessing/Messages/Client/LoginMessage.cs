@@ -80,10 +80,7 @@ namespace UCS.PacketProcessing
             {
                 if (ResourcesManager.GetOnlinePlayers().Count >= Convert.ToInt32(ConfigurationManager.AppSettings["ServerCapacity"]))
                 {
-                    if (level != null && level.GetAccountPrivileges() > 1)
-                    {
-                    }
-                    else
+                    if (!(level.GetAccountPrivileges() >= 1))
                     {
                         var p = new LoginFailedMessage(Client);
                         p.SetErrorCode(12);
