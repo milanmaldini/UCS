@@ -185,6 +185,26 @@ namespace UCS.Logic
             return m_vAllianceId;
         }
 
+        public AllianceMemberEntry GetAllianceMemberEntry()
+        {
+            var alliance = ObjectManager.GetAlliance(m_vAllianceId);
+            if (alliance != null)
+            {
+                return alliance.GetAllianceMember(m_vId);
+            }
+            return null;
+        }
+
+        public int GetAllianceRole()
+        {
+            var ame = GetAllianceMemberEntry();
+            if (ame != null)
+            {
+                return ame.GetRole();
+            }
+            return -1;
+        }
+
         public int GetAvatarLevel()
         {
             return m_vAvatarLevel;

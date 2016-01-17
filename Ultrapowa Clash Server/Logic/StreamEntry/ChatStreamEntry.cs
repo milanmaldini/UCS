@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UCS.PacketProcessing;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UCS.Helpers;
+
 
 namespace UCS.Logic
 {
-    class ChatStreamEntry : StreamEntry
+    internal class ChatStreamEntry : StreamEntry
     {
         private string m_vMessage;
-        
-        public ChatStreamEntry() : base()
+
+        public override byte[] Encode()
         {
+            var data = new List<byte>();
+
+            data.AddRange(base.Encode());
+            data.AddString(m_vMessage);
+
+            return data.ToArray();
         }
 
         public string GetMessage()
@@ -26,19 +29,22 @@ namespace UCS.Logic
             return 2;
         }
 
-        public override byte[] Encode()
+        public override void Load(JObject jsonObject)
         {
-            List<Byte> data = new List<Byte>();
+            base.Load(jsonObject);
+            m_vMessage = jsonObject["message"].ToObject<string>();
+        }
 
-            data.AddRange(base.Encode());
-            data.AddString(m_vMessage);
-
-            return data.ToArray();
+        public override JObject Save(JObject jsonObject)
+        {
+            jsonObject = base.Save(jsonObject);
+            jsonObject.Add("message", m_vMessage);
+            return jsonObject;
         }
 
         public void SetMessage(string message)
         {
             m_vMessage = message;
         }
-    }    
+    }
 }
