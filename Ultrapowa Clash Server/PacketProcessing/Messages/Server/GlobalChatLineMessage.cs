@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UCS.Logic;
 using UCS.Helpers;
 
@@ -16,6 +13,12 @@ namespace UCS.PacketProcessing
         private long m_vCurrentHomeId;
         private string m_vPlayerName;
         private int m_vLeagueId;
+        private bool m_vHasAlliance;
+        private int m_vAllianceIcon;
+        private string m_vAllianceName;
+        private long m_vAllianceId;
+        private int m_vPlayerLevel;
+
 
         public GlobalChatLineMessage(Client client) : base(client)
         {
@@ -25,6 +28,8 @@ namespace UCS.PacketProcessing
             m_vPlayerName = "default";
             m_vHomeId = 1;
             m_vCurrentHomeId = 1;
+            m_vPlayerLevel = 1;
+            m_vHasAlliance = false;
         }
 
         public override void Encode()
@@ -33,11 +38,22 @@ namespace UCS.PacketProcessing
 
             pack.AddString(m_vMessage);
             pack.AddString(m_vPlayerName);
-            pack.AddInt32(0x05);
+            pack.AddInt32(m_vPlayerLevel);
             pack.AddInt32(m_vLeagueId);
             pack.AddInt64(m_vHomeId);
             pack.AddInt64(m_vCurrentHomeId);
-            pack.AddInt32(0);
+
+            if (!m_vHasAlliance)
+            {
+                pack.Add((Byte)0);
+            }
+            else
+            {
+                pack.Add((Byte)1);
+                pack.AddInt64(m_vAllianceId);
+                pack.AddString(m_vAllianceName);
+                pack.AddInt32(m_vAllianceIcon);
+            }
 
             SetData(pack.ToArray());
         }
@@ -61,6 +77,17 @@ namespace UCS.PacketProcessing
         public void SetLeagueId(int leagueId)
         {
             m_vLeagueId = leagueId;
+        }
+
+        public void SetAlliance(Alliance alliance)
+        {
+            if (alliance != null)
+            {
+                m_vHasAlliance = true;
+                m_vAllianceId = alliance.GetAllianceId();
+                m_vAllianceName = alliance.GetAllianceName();
+                m_vAllianceIcon = alliance.GetAllianceBadgeData();
+            }
         }
     }
 }

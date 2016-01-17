@@ -58,6 +58,7 @@ namespace UCS.PacketProcessing
                         p.SetChatMessage(this.Message);
                         p.SetPlayerId(senderId);
                         p.SetLeagueId(level.GetPlayerAvatar().GetLeagueId());
+                        p.SetAlliance(ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId()));
                         PacketManager.ProcessOutgoingPacket(p);
                     }
                 }
