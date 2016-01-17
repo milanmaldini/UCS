@@ -45,6 +45,7 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vContentURL);
             pack.AddString(m_vUpdateURL);
             pack.AddString(m_vReason);
+            pack.AddInt32(m_vRemainingTime);
             pack.AddInt32(-1);
             pack.Add(0);
 
