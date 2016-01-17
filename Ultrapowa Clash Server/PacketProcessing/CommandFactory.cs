@@ -45,7 +45,7 @@ namespace UCS.PacketProcessing
             //m_vCommands.Add(0x020A, typeof(BuyShield));
             //m_vCommands.Add(0x020B, typeof(ClaimAchievementReward));
             //m_vCommands.Add(0x020C, typeof(ToggleAttackMode));
-            //m_vCommands.Add(0x020D, typeof(LoadTurret));
+            m_vCommands.Add(0x020D, typeof(LoadTurretCommand));
             //m_vCommands.Add(0x020E, typeof(BoostBuilding));
             m_vCommands.Add(0x020F, typeof(UpgradeHeroCommand));
             m_vCommands.Add(0x0210, typeof(SpeedUpHeroUpgradeCommand));
@@ -83,3 +83,5 @@ namespace UCS.PacketProcessing
         }
     }
 }
+
+//Last Edit: 16.01.2016 - iSwuerfel

@@ -76,6 +76,25 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ServerCapacityMode"]))
+            {
+                if (ResourcesManager.GetOnlinePlayers().Count >= Convert.ToInt32(ConfigurationManager.AppSettings["ServerCapacity"]))
+                {
+                    if (level != null && level.GetAccountPrivileges() > 1)
+                    {
+                    }
+                    else
+                    {
+                        var p = new LoginFailedMessage(Client);
+                        p.SetErrorCode(12);
+                        p.RemainingTime(0);
+                        p.SetReason(ConfigurationManager.AppSettings["ServerFullMessage"]);
+                        PacketManager.ProcessOutgoingPacket(p);
+                        return;
+                    }
+                }
+            }
+
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
                 var p = new LoginFailedMessage(this.Client);
@@ -170,3 +189,5 @@ namespace UCS.PacketProcessing
         }
     }
 }
+
+// Last edit: 17.01.2016 - iSwuerfel
