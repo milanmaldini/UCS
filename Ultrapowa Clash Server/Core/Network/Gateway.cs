@@ -47,9 +47,9 @@ namespace UCS.Network
             try
             {
                 Socket clientSocket = m_vServerSocket.EndAccept(result);
-                Console.WriteLine("Client connected (" + ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString() + ":" + ((IPEndPoint)clientSocket.RemoteEndPoint).Port.ToString() + ")");
                 ResourcesManager.AddClient(new Client(clientSocket));
                 SocketRead.Begin(clientSocket, OnReceive, OnReceiveError);
+                Console.WriteLine("Client connected (" + ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString() + ":" + ((IPEndPoint)clientSocket.RemoteEndPoint).Port.ToString() + ")");
             }
             catch (System.Exception e)
             {

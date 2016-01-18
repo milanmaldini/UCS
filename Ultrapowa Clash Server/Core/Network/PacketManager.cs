@@ -36,13 +36,13 @@ namespace UCS.Network
 
         public void Start()
         {
+            m_vIsRunning = true;
+
             IncomingProcessingDelegate incomingProcessing = new IncomingProcessingDelegate(IncomingProcessing);
             incomingProcessing.BeginInvoke(null, null);
 
             OutgoingProcessingDelegate outgoingProcessing = new OutgoingProcessingDelegate(OutgoingProcessing);
             outgoingProcessing.BeginInvoke(null, null);
-
-            m_vIsRunning = true;
 
             Console.WriteLine("Packet Manager started");
         }

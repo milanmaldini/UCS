@@ -1,12 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.ComponentModel;
-using System.IO;
-using System.Reflection;
 
 namespace UCS.GameFiles
 {
@@ -32,10 +25,10 @@ namespace UCS.GameFiles
         public int PlacementLimitHigh { get; set; }
         public int DemoteLimit { get; set; }
         public int PromoteLimit { get; set; }
-        public int BucketPlacementRangeLow { get; set; }
-        public int BucketPlacementRangeHigh { get; set; }
-        public int BucketPlacementSoftLimit { get; set; }
-        public int BucketPlacementHardLimit { get; set; }
+        public List<int> BucketPlacementRangeLow { get; set; }
+        public List<int> BucketPlacementRangeHigh { get; set; }
+        public List<int> BucketPlacementSoftLimit { get; set; }
+        public List<int> BucketPlacementHardLimit { get; set; }
         public bool IgnoredByServer { get; set; }
         public bool DemoteEnabled { get; set; }
         public bool PromoteEnabled { get; set; }
