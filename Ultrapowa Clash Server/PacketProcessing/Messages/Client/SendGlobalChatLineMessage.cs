@@ -48,7 +48,26 @@ namespace UCS.PacketProcessing
                 {
                     long senderId = level.GetPlayerAvatar().GetId();
                     string senderName = level.GetPlayerAvatar().GetAvatarName();
-                    foreach(var onlinePlayer in ResourcesManager.GetOnlinePlayers())
+
+                    List<string> badwords = new List<string>();
+                    StreamReader r = new StreamReader(@"filter.ucs");
+                    string line = "";
+                    while ((line = r.ReadLine()) != null)
+                    {
+                        badwords.Add(line);
+                    }
+                    bool badword = badwords.Any(s => Message.Contains(s));
+                    if (badword)
+                    {
+                        var p = new GlobalChatLineMessage(level.GetClient());
+                        p.SetPlayerId(0);
+                        p.SetPlayerName("UCS Chat Filter System");
+                        p.SetChatMessage("DETECTED BAD WORD! PLEASE AVOID USING BAD WORDS!");
+                        PacketManager.ProcessOutgoingPacket(p);
+                        return;
+                    }
+
+                    foreach (var onlinePlayer in ResourcesManager.GetOnlinePlayers())
                     {
                         var p = new GlobalChatLineMessage(onlinePlayer.GetClient());
                         if(onlinePlayer.GetAccountPrivileges() > 0)
