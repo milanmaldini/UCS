@@ -55,7 +55,8 @@ namespace UCS.PacketProcessing
                             p.SetPlayerName(senderName + " #" + senderId);
                         else
                             p.SetPlayerName(senderName);
-                        p.SetChatMessage(this.Message);
+
+                        p.SetChatMessage(Message);
                         p.SetPlayerId(senderId);
                         p.SetLeagueId(level.GetPlayerAvatar().GetLeagueId());
                         p.SetAlliance(ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId()));

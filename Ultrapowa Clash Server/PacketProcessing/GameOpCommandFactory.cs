@@ -26,6 +26,7 @@ namespace UCS.PacketProcessing
             m_vCommands.Add("/unban", typeof(UnbanGameOpCommand));
             m_vCommands.Add("/visit", typeof(VisitGameOpCommand));
             m_vCommands.Add("/sysmsg", typeof(SystemMessageGameOpCommand));
+            m_vCommands.Add("/id", typeof(GetIdGameopCommand));
         }
 
         public static object Parse(string command)
