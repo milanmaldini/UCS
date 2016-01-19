@@ -26,7 +26,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(14102, typeof(ExecuteCommandsMessage));
             m_vMessages.Add(14113, typeof(VisitHomeMessage));
             m_vMessages.Add(14134, typeof(AttackNpcMessage));
-            //m_vMessages.Add(14316, typeof(EditClanSettingsMessage));
+            m_vMessages.Add(14316, typeof(EditClanSettingsMessage));
             m_vMessages.Add(14301, typeof(CreateAllianceMessage));
             m_vMessages.Add(14302, typeof(AskForAllianceDataMessage));
             m_vMessages.Add(14303, typeof(AskForJoinableAlliancesListMessage));

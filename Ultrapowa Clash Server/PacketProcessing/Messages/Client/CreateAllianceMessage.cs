@@ -67,6 +67,7 @@ namespace UCS.PacketProcessing
             availableServerCommandMessage.SetCommandId(1);
             availableServerCommandMessage.SetCommand(joinAllianceCommand);
             PacketManager.ProcessOutgoingPacket(availableServerCommandMessage);
+            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level)); // Necessary to display the "Customize" Button.
         }
     }
 }

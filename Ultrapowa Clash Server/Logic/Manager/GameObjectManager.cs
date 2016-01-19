@@ -107,7 +107,7 @@ namespace UCS.Logic
 
             //Buildings
             JArray jsonBuildingsArray = new JArray();
-            foreach (var go in m_vGameObjects[0])
+            foreach (var go in new List<GameObject>(m_vGameObjects[0]))
             {
                 Building b = (Building)go;
                 JObject jsonObject = new JObject();
@@ -119,7 +119,7 @@ namespace UCS.Logic
 
             //Traps
             JArray jsonTrapsArray = new JArray();
-            foreach (var go in m_vGameObjects[4])
+            foreach (var go in new List<GameObject>(m_vGameObjects[4]))
             {
                 Trap t = (Trap)go;
                 JObject jsonObject = new JObject();
@@ -131,7 +131,7 @@ namespace UCS.Logic
 
             //Decos
             JArray jsonDecosArray = new JArray();
-            foreach (var go in m_vGameObjects[6])
+            foreach (var go in new List<GameObject>(m_vGameObjects[6]))
             {
                 Deco d = (Deco)go;
                 JObject jsonObject = new JObject();

@@ -28,7 +28,7 @@ namespace UCS.Core
             try
             {
                 Debugger.WriteLine("Saving new account to database (player id: " + l.GetPlayerAvatar().GetId() + ")");
-                using (var db = new UCS.Database.ucsdbEntities(m_vConnectionString))
+                using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.player.Add(
                         new Database.player
@@ -55,7 +55,7 @@ namespace UCS.Core
             try
             {
                 Debugger.WriteLine("Saving new Alliance to database (alliance id: " + a.GetAllianceId() + ")");
-                using (var db = new Database.ucsdbEntities(m_vConnectionString))
+                using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.clan.Add(
                         new Database.clan
@@ -79,7 +79,7 @@ namespace UCS.Core
             Level account = null;
             try
             {
-                using (var db = new Database.ucsdbEntities(m_vConnectionString))
+                using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     var p = db.player.Find(playerId);
 
@@ -107,7 +107,7 @@ namespace UCS.Core
             Alliance alliance = null;
             try
             {
-                using (var db = new Database.ucsdbEntities(m_vConnectionString))
+                using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     var p = db.clan.Find(allianceId);
 
@@ -129,7 +129,7 @@ namespace UCS.Core
         public long GetMaxAllianceId()
         {
             long max = 0;
-            using (var db = new Database.ucsdbEntities(m_vConnectionString))
+            using (var db = new ucsdbEntities(m_vConnectionString))
             {
                 max = (from alliance in db.clan
                        select (long?)alliance.ClanId ?? 0).DefaultIfEmpty().Max();
@@ -140,7 +140,7 @@ namespace UCS.Core
         public long GetMaxPlayerId()
         {
             long max = 0;
-            using (var db = new Database.ucsdbEntities(m_vConnectionString))
+            using (var db = new ucsdbEntities(m_vConnectionString))
             {
 
                 max = (from ep in db.player
@@ -155,7 +155,7 @@ namespace UCS.Core
             Debugger.WriteLine("Starting saving players from memory to database at " + DateTime.Now.ToString());
             try
             {
-                using (var context = new Database.ucsdbEntities(m_vConnectionString))
+                using (var context = new ucsdbEntities(m_vConnectionString))
                 {
                     context.Configuration.AutoDetectChangesEnabled = false;
                     context.Configuration.ValidateOnSaveEnabled = false;
@@ -211,7 +211,7 @@ namespace UCS.Core
             Debugger.WriteLine("Starting saving alliances from memory to database at " + DateTime.Now.ToString());
             try
             {
-                using (var context = new Database.ucsdbEntities(m_vConnectionString))
+                using (var context = new ucsdbEntities(m_vConnectionString))
                 {
                     context.Configuration.AutoDetectChangesEnabled = false;
                     context.Configuration.ValidateOnSaveEnabled = false;
