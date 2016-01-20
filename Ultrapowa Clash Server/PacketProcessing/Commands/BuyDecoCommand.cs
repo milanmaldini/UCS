@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
-using UCS.GameFiles;
+﻿using System.IO;
 using UCS.Core;
+using UCS.GameFiles;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -24,23 +19,23 @@ namespace UCS.PacketProcessing
 
         //00 00 02 00 00 00 00 22 00 00 00 1C 01 12 A8 81 00 00 0C 4F
 
-        public int X { get; set; } 
+        public int X { get; set; }
         public int Y { get; set; }
         public int DecoId { get; set; } //01 12 A8 81
         public uint Unknown1 { get; set; }
 
         public override void Execute(Level level)
         {
-            ClientAvatar ca = level.GetPlayerAvatar();
+            var ca = level.GetPlayerAvatar();
 
-            DecoData dd = (DecoData)ObjectManager.DataTables.GetDataById(DecoId);
+            var dd = (DecoData) ObjectManager.DataTables.GetDataById(DecoId);
 
             if (ca.HasEnoughResources(dd.GetBuildResource(), dd.GetBuildCost()))
             {
-                ResourceData rd = dd.GetBuildResource();
+                var rd = dd.GetBuildResource();
                 ca.CommodityCountChangeHelper(0, rd, -dd.GetBuildCost());
 
-                Deco d = new Deco(dd, level);
+                var d = new Deco(dd, level);
                 d.SetPositionXY(X, Y);
                 level.GameObjectManager.AddGameObject(d);
             }

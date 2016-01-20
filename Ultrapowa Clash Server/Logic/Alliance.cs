@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UCS.Helpers;
 
 namespace UCS.Logic
@@ -227,7 +227,7 @@ namespace UCS.Logic
             if (jsonObject["alliance_origin"] != null)
                 m_vAllianceOrigin = jsonObject["alliance_origin"].ToObject<int>();
 
-            var jsonMembers = (JArray)jsonObject["members"];
+            var jsonMembers = (JArray) jsonObject["members"];
             foreach (JObject jsonMember in jsonMembers)
             {
                 var id = jsonMember["avatar_id"].ToObject<long>();
@@ -238,7 +238,7 @@ namespace UCS.Logic
                 m_vAllianceMembers.Add(id, member);
             }
 
-            var jsonMessages = (JArray)jsonObject["chatMessages"];
+            var jsonMessages = (JArray) jsonObject["chatMessages"];
             if (jsonMessages != null)
             {
                 foreach (JObject jsonMessage in jsonMessages)

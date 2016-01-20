@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using UCS.PacketProcessing;
-using UCS.Logic;
 
 namespace UCS.Core
 {
@@ -29,12 +22,11 @@ namespace UCS.Core
 
         public static void WriteLine(string text, Exception ex = null, int logLevel = 4)
         {
-            string content = text;
+            var content = text;
             if (ex != null)
                 content += ex.ToString();
             Console.WriteLine(content);
-            if(logLevel <= m_vLogLevel)
-            {
+            if (logLevel <= m_vLogLevel)
                 lock (m_vSyncObject)
                 {
                     m_vTextWriter.Write(DateTime.Now.ToString("yyyyMMddHHmmss"));
@@ -44,7 +36,6 @@ namespace UCS.Core
                         m_vTextWriter.WriteLine(ex.ToString());
                     m_vTextWriter.Flush();
                 }
-            } 
         }
     }
 }

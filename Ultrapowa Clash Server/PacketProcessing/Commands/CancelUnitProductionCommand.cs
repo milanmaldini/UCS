@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
-using UCS.GameFiles;
+﻿using System.IO;
 using UCS.Core;
+using UCS.GameFiles;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -31,23 +26,22 @@ namespace UCS.PacketProcessing
         public uint Unknown3 { get; set; } //00 00 00 00
         public uint Unknown4 { get; set; } //00 00 34 E4
 
-        //00 00 01 FD 1D CD 65 05 00 00 00 00 00 3D 09 09 00 00 00 01 00 00 00 00 00 00 04 24 
+        //00 00 01 FD 1D CD 65 05 00 00 00 00 00 3D 09 09 00 00 00 01 00 00 00 00 00 00 04 24
 
         public override void Execute(Level level)
         {
-            GameObject go = level.GameObjectManager.GetGameObjectByID(BuildingId);
+            var go = level.GameObjectManager.GetGameObjectByID(BuildingId);
             if (Count > 0)
             {
-                Building b = (Building)go;
-                UnitProductionComponent c = b.GetUnitProductionComponent();
-                CombatItemData cd = (CombatItemData)ObjectManager.DataTables.GetDataById(UnitType);
+                var b = (Building) go;
+                var c = b.GetUnitProductionComponent();
+                var cd = (CombatItemData) ObjectManager.DataTables.GetDataById(UnitType);
                 do
                 {
                     //Ajouter gestion remboursement ressources
                     c.RemoveUnit(cd);
                     Count--;
-                }
-                while (Count > 0);
+                } while (Count > 0);
             }
         }
     }

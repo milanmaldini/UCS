@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -24,11 +17,11 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            GameObject go = level.GameObjectManager.GetGameObjectByID(m_vObstacleId);
-            if(go != null)
+            var go = level.GameObjectManager.GetGameObjectByID(m_vObstacleId);
+            if (go != null)
             {
-                if(go.ClassId == 3)
-                    ((Obstacle)go).SpeedUpClearing();
+                if (go.ClassId == 3)
+                    ((Obstacle) go).SpeedUpClearing();
             }
         }
     }

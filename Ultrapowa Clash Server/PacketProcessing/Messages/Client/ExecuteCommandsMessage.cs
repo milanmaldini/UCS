@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
+using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
-using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
@@ -15,9 +11,18 @@ namespace UCS.PacketProcessing
     {
         private byte[] m_vCommands;
 
-        public ExecuteCommandsMessage(Client client, BinaryReader br) : base (client, br)
+        public ExecuteCommandsMessage(Client client, BinaryReader br) : base(client, br)
         {
         }
+
+        public byte[] NestedCommands
+        {
+            get { return m_vCommands; }
+        }
+
+        public uint Unknown1 { get; set; } //00 00 2B D8 some sort of server tick
+        public uint Unknown2 { get; set; } // 01 EB 30 36 some sort of server tick or checksum
+        public uint NumberOfCommands { get; set; }
 
         public override void Decode()
         {
@@ -35,15 +40,6 @@ namespace UCS.PacketProcessing
             }
         }
 
-        public byte[] NestedCommands
-        {
-            get { return m_vCommands; }
-        }
-
-        public uint Unknown1 { get; set; } //00 00 2B D8 some sort of server tick
-        public uint Unknown2 { get; set; } // 01 EB 30 36 some sort of server tick or checksum
-        public uint NumberOfCommands { get; set; }
-        
         public override void Process(Level level)
         {
             try
@@ -54,16 +50,17 @@ namespace UCS.PacketProcessing
                 {
                     using (var br = new BinaryReader(new MemoryStream(NestedCommands)))
                     {
-                        for (int i = 0; i < NumberOfCommands; i++)
+                        for (var i = 0; i < NumberOfCommands; i++)
                         {
-                            object obj = CommandFactory.Read(br);
+                            var obj = CommandFactory.Read(br);
                             if (obj != null)
                             {
-                                string player = "";
+                                var player = "";
                                 if (level != null)
-                                    player += " (" + level.GetPlayerAvatar().GetId() + ", " + level.GetPlayerAvatar().GetAvatarName() + ")";
+                                    player += " (" + level.GetPlayerAvatar().GetId() + ", " +
+                                              level.GetPlayerAvatar().GetAvatarName() + ")";
                                 Debugger.WriteLine("\t" + obj.GetType().Name + player);
-                                ((Command)obj).Execute(level);
+                                ((Command) obj).Execute(level);
                                 //Debugger.WriteLine("finished processing of command " + obj.GetType().Name + player);
                             }
                             else
@@ -75,7 +72,7 @@ namespace UCS.PacketProcessing
             catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Debugger.WriteLine("Exception occurred during command processing." + ex.ToString());
+                Debugger.WriteLine("Exception occurred during command processing." + ex);
                 Console.ResetColor();
             }
         }

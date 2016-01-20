@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using UCS.Helpers;
-using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Packet 20103
     class LoginFailedMessage : Message
     {
-        private int m_vErrorCode;//48
+        private string m_vContentURL; //60
+        private int m_vErrorCode; //48
+        private string m_vReason; //68
+        private string m_vRedirectDomain; //56
         private int m_vRemainingTime; //50
-        private string m_vResourceFingerprintData;//52
-        private string m_vRedirectDomain;//56
-        private string m_vContentURL;//60
-        private string m_vUpdateURL;//64
-        private string m_vReason;//68
-        
+        private string m_vResourceFingerprintData; //52
+        private string m_vUpdateURL; //64
+
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
@@ -37,7 +31,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            List<Byte> pack = new List<Byte>();
+            var pack = new List<byte>();
 
             pack.AddInt32(m_vErrorCode);
             pack.AddString(m_vResourceFingerprintData);
@@ -86,6 +80,5 @@ namespace UCS.PacketProcessing
         {
             m_vRemainingTime = code;
         }
-
     }
 }

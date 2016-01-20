@@ -1,44 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.Collections.Generic;
 using UCS.Helpers;
-using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Packet 20104
     class LoginOkMessage : Message
     {
+        private string m_vAccountCreatedDate;
         private long m_vAccountId;
-        private string m_vPassToken;
+        private int m_vContentVersion;
+        private string m_vCountryCode;
+        private int m_vDaysSinceStartedPlaying;
         private string m_vFacebookId;
         private string m_vGamecenterId;
-        private int m_vServerMajorVersion;
-        private int m_vServerBuild;
-        private int m_vContentVersion;
-        private string m_vServerEnvironment;
-        private int m_vSessionCount;
-        private int m_vDaysSinceStartedPlaying;
-        private string m_vServerTime;
+        private string m_vPassToken;
         private int m_vPlayTimeSeconds;
-        private string m_vAccountCreatedDate;
+        private int m_vServerBuild;
+        private string m_vServerEnvironment;
+        private int m_vServerMajorVersion;
+        private string m_vServerTime;
+        private int m_vSessionCount;
         private int m_vStartupCooldownSeconds;
-        private string m_vCountryCode;
-        
-        public LoginOkMessage(Client client) : base (client)
+
+        public LoginOkMessage(Client client) : base(client)
         {
             SetMessageType(20104);
             SetMessageVersion(1);
 
-            Unknown11 = "someid2";//"108457211027966753069";
+            Unknown11 = "someid2"; //"108457211027966753069";
         }
+
+        public string Unknown9 { get; set; } //32 39 37 34 38 34 34 33 37 30 30 39 33 39 34
+        public string Unknown11 { get; set; }
 
         public override void Encode()
         {
-            List<Byte> pack = new List<Byte>();
+            var pack = new List<byte>();
 
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
@@ -52,11 +49,11 @@ namespace UCS.PacketProcessing
             pack.AddInt32(m_vDaysSinceStartedPlaying);
             pack.AddInt32(m_vPlayTimeSeconds);
             pack.AddInt32(m_vSessionCount);
-            pack.AddString("someid1");//"297484437009394";
+            pack.AddString("someid1"); //"297484437009394";
             pack.AddString(m_vServerTime);
             pack.AddString(m_vAccountCreatedDate);
             pack.AddInt32(m_vStartupCooldownSeconds);
-            pack.AddString("someid2");//"108457211027966753069";
+            pack.AddString("someid2"); //"108457211027966753069";
             pack.AddString(m_vCountryCode);
 
             SetData(pack.ToArray());
@@ -136,8 +133,5 @@ namespace UCS.PacketProcessing
         {
             m_vStartupCooldownSeconds = seconds;
         }
-
-        public String Unknown9 { get; set; } //32 39 37 34 38 34 34 33 37 30 30 39 33 39 34
-        public String Unknown11 { get; set; }
     }
 }

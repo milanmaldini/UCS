@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+﻿using System.IO;
 using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
@@ -37,10 +32,10 @@ namespace UCS.PacketProcessing
             if (targetLevel != null)
             {
                 targetLevel.Tick();
-                var p = new AvatarProfileMessage(this.Client);
+                var p = new AvatarProfileMessage(Client);
                 p.SetLevel(targetLevel);
                 PacketManager.ProcessOutgoingPacket(p);
-            } 
+            }
         }
     }
 }

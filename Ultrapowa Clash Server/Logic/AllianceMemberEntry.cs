@@ -1,39 +1,36 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.ComponentModel;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UCS.Core;
-using UCS.PacketProcessing;
 using UCS.Helpers;
 
 namespace UCS.Logic
 {
     class AllianceMemberEntry
     {
+        private readonly int[] m_vRoleTable = {1, 1, 4, 2, 3}; //mapping roles so comparison is easier
+
         //private long m_vHomeId;
         private long m_vAvatarId;
-        //private string m_vName;
-        private int m_vRole; //1 : member, 2 : chef, 3 : aîné, 4 : chef adjoint
-        private readonly int[] m_vRoleTable = {1, 1, 4, 2, 3 };//mapping roles so comparison is easier
+
+        private int m_vDonatedTroops;
+        private byte m_vIsNewMember;
+
         //private int m_vExpLevel;
         //private int m_vScore;
         private int m_vOrder;
+
         private int m_vPreviousOrder;
         private int m_vReceivedTroops;
-        private int m_vDonatedTroops;
-        private byte m_vIsNewMember;
+
+        //private string m_vName;
+        private int m_vRole; //1 : member, 2 : chef, 3 : aîné, 4 : chef adjoint
+
         private int m_vWarCooldown;
         private int m_vWarOptInStatus;
 
-        
-
-        public AllianceMemberEntry(long avatarId) {
+        public AllianceMemberEntry(long avatarId)
+        {
             m_vAvatarId = avatarId;
             m_vIsNewMember = 0;
             m_vOrder = 1;
@@ -52,28 +49,28 @@ namespace UCS.Logic
             }
         }
 
-        //00 00 00 2A 00 17 E8 BD 
-        //00 00 00 06 
-        //6B 61 69 73 65 72 
-        //00 00 00 02 
-        //00 00 00 58 
-        //00 00 00 00 
-        //00 00 0B 0C 
-        //00 00 00 83 
-        //00 00 00 5B 
-        //00 00 00 01 
-        //00 00 00 01 
-        //00 
+        //00 00 00 2A 00 17 E8 BD
+        //00 00 00 06
+        //6B 61 69 73 65 72
+        //00 00 00 02
+        //00 00 00 58
+        //00 00 00 00
+        //00 00 0B 0C
+        //00 00 00 83
+        //00 00 00 5B
+        //00 00 00 01
+        //00 00 00 01
+        //00
         //00 01 15 7A
-        //00 00 00 01 
-        //01 
+        //00 00 00 01
+        //01
         //00 00 00 2A 00 17 E8 BD
 
         public byte[] Encode()
         {
-            List<Byte> data = new List<Byte>();
+            var data = new List<byte>();
 
-            Level avatar = ResourcesManager.GetPlayer(m_vAvatarId);
+            var avatar = ResourcesManager.GetPlayer(m_vAvatarId);
             data.AddInt64(m_vAvatarId);
             data.AddString(avatar.GetPlayerAvatar().GetAvatarName());
             data.AddInt32(m_vRole);
@@ -140,7 +137,7 @@ namespace UCS.Logic
 
         public bool HasLowerRoleThan(int role)
         {
-            bool result = true;
+            var result = true;
             if (role < m_vRoleTable.Length && m_vRole < m_vRoleTable.Length)
             {
                 if (m_vRoleTable[m_vRole] >= m_vRoleTable[role])

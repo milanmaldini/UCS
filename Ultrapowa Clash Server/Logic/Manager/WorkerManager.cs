@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.ComponentModel;
-using Newtonsoft.Json;
-using UCS.PacketProcessing;
-using UCS.Core;
-using UCS.GameFiles;
+﻿using System.Collections.Generic;
 
 namespace UCS.Logic
 {
@@ -17,7 +7,7 @@ namespace UCS.Logic
         private List<GameObject> m_vGameObjectReferences;
         private int m_vWorkerCount;
 
-        public WorkerManager() 
+        public WorkerManager()
         {
             m_vGameObjectReferences = new List<GameObject>();
             m_vWorkerCount = 0;
@@ -35,7 +25,7 @@ namespace UCS.Logic
 
         public void AllocateWorker(GameObject go)
         {
-            if(m_vGameObjectReferences.IndexOf(go) == -1)
+            if (m_vGameObjectReferences.IndexOf(go) == -1)
             {
                 m_vGameObjectReferences.Add(go);
             }
@@ -51,7 +41,6 @@ namespace UCS.Logic
 
         public void RemoveGameObjectReferences(GameObject go)
         {
-
         }
 
         public void IncreaseWorkerCount()
@@ -67,44 +56,44 @@ namespace UCS.Logic
         public GameObject GetShortestTaskGO()
         {
             GameObject shortestTaskGO = null;
-            int shortestGOTime = 0;
+            var shortestGOTime = 0;
             int currentGOTime;
 
-            foreach(var go in m_vGameObjectReferences)
+            foreach (var go in m_vGameObjectReferences)
             {
                 currentGOTime = -1;
-                if(go.ClassId == 3)
+                if (go.ClassId == 3)
                 {
-                    Obstacle o = (Obstacle)go;
-                    if(o.IsClearingOnGoing())
+                    var o = (Obstacle) go;
+                    if (o.IsClearingOnGoing())
                         currentGOTime = o.GetRemainingClearingTime();
                 }
                 else
                 {
-                    ConstructionItem c = (ConstructionItem)go;
-                    if(c.IsConstructing())
+                    var c = (ConstructionItem) go;
+                    if (c.IsConstructing())
                     {
                         currentGOTime = c.GetRemainingConstructionTime();
                     }
                     else
                     {
                         var hero = c.GetHeroBaseComponent();
-                        if(hero != null)
+                        if (hero != null)
                         {
-                            if(hero.IsUpgrading())
+                            if (hero.IsUpgrading())
                             {
                                 currentGOTime = hero.GetRemainingUpgradeSeconds();
                             }
                         }
                     }
                 }
-                if(shortestTaskGO == null)
+                if (shortestTaskGO == null)
                 {
-                    if(currentGOTime > -1)
+                    if (currentGOTime > -1)
                     {
                         shortestTaskGO = go;
                         shortestGOTime = currentGOTime;
-                    }  
+                    }
                 }
                 else if (currentGOTime > -1)
                 {
@@ -125,18 +114,18 @@ namespace UCS.Logic
 
         public void FinishTaskOfOneWorker()
         {
-            GameObject go = GetShortestTaskGO();
-            if(go != null)
+            var go = GetShortestTaskGO();
+            if (go != null)
             {
                 if (go.ClassId == 3)
                 {
-                    Obstacle o = (Obstacle)go;
+                    var o = (Obstacle) go;
                     if (o.IsClearingOnGoing())
                         o.SpeedUpClearing();
                 }
                 else
                 {
-                    ConstructionItem b = (ConstructionItem)go;
+                    var b = (ConstructionItem) go;
                     if (b.IsConstructing())
                         b.SpeedUpConstruction();
                     else

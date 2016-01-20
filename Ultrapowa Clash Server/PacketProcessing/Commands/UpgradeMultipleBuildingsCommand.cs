@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
 using UCS.GameFiles;
-using UCS.Core;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -21,10 +16,10 @@ namespace UCS.PacketProcessing
         {
             m_vIsAltResource = br.ReadByte();
             m_vBuildingIdList = new List<int>();
-            int buildingCount = br.ReadInt32WithEndian();
-            for (int i = 0; i < buildingCount; i++)
+            var buildingCount = br.ReadInt32WithEndian();
+            for (var i = 0; i < buildingCount; i++)
             {
-                int buildingId = br.ReadInt32WithEndian();//= buildingId - 0x1DCD6500;
+                var buildingId = br.ReadInt32WithEndian(); //= buildingId - 0x1DCD6500;
                 m_vBuildingIdList.Add(buildingId);
             }
             br.ReadInt32WithEndian();
@@ -35,17 +30,17 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            ClientAvatar ca = level.GetPlayerAvatar();
+            var ca = level.GetPlayerAvatar();
 
-            foreach(var buildingId in m_vBuildingIdList)
+            foreach (var buildingId in m_vBuildingIdList)
             {
-                Building b = (Building)level.GameObjectManager.GetGameObjectByID(buildingId);
+                var b = (Building) level.GameObjectManager.GetGameObjectByID(buildingId);
                 if (b.CanUpgrade())
                 {
-                    BuildingData bd = b.GetBuildingData();
-                    int cost = bd.GetBuildCost(b.GetUpgradeLevel() + 1);
+                    var bd = b.GetBuildingData();
+                    var cost = bd.GetBuildCost(b.GetUpgradeLevel() + 1);
                     ResourceData rd;
-                    if(m_vIsAltResource == 0)
+                    if (m_vIsAltResource == 0)
                         rd = bd.GetBuildResource(b.GetUpgradeLevel() + 1);
                     else
                         rd = bd.GetAltBuildResource(b.GetUpgradeLevel() + 1);

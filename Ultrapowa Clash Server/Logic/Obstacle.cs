@@ -1,42 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
-using UCS.PacketProcessing;
-using UCS.Core;
+﻿using Newtonsoft.Json.Linq;
 using UCS.GameFiles;
 using UCS.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
     class Obstacle : GameObject
     {
-        private Timer m_vTimer;
         private Level m_vLevel;
-
-        public override int ClassId
-        {
-            get { return 3; }
-        }
+        private Timer m_vTimer;
 
         public Obstacle(Data data, Level l) : base(data, l)
         {
             m_vLevel = l;
         }
 
+        public override int ClassId
+        {
+            get { return 3; }
+        }
+
         public ObstacleData GetObstacleData()
         {
-            return (ObstacleData)GetData();
+            return (ObstacleData) GetData();
         }
 
         public void StartClearing()
         {
-            int constructionTime = GetObstacleData().ClearTimeSeconds;
+            var constructionTime = GetObstacleData().ClearTimeSeconds;
             if (constructionTime < 1)
             {
                 ClearingFinished();
@@ -55,7 +45,7 @@ namespace UCS.Logic
             m_vTimer = null;
             var od = GetObstacleData();
             var rd = od.GetClearingResource();
-            int cost = od.ClearCost;
+            var cost = od.ClearCost;
             GetLevel().GetPlayerAvatar().CommodityCountChangeHelper(0, rd, cost);
         }
 
@@ -85,12 +75,12 @@ namespace UCS.Logic
 
         public void SpeedUpClearing()
         {
-            int remainingSeconds = 0;
-            if(IsClearingOnGoing())
+            var remainingSeconds = 0;
+            if (IsClearingOnGoing())
             {
                 remainingSeconds = m_vTimer.GetRemainingSeconds(m_vLevel.GetTime());
             }
-            int cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
+            var cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
             var ca = GetLevel().GetPlayerAvatar();
             if (ca.HasEnoughDiamonds(cost))
             {
@@ -101,18 +91,18 @@ namespace UCS.Logic
 
         public bool IsClearingOnGoing()
         {
-            return (m_vTimer != null);
+            return m_vTimer != null;
         }
 
         public JObject ToJson()
         {
-            JObject jsonObject = new JObject();
+            var jsonObject = new JObject();
             jsonObject.Add("data", GetObstacleData().GetGlobalID());
             //const_t à vérifier pour un obstacle
             if (IsClearingOnGoing())
                 jsonObject.Add("const_t", m_vTimer.GetRemainingSeconds(m_vLevel.GetTime()));
-            jsonObject.Add("x", this.X);
-            jsonObject.Add("y", this.Y);
+            jsonObject.Add("x", X);
+            jsonObject.Add("y", Y);
             return jsonObject;
         }
     }

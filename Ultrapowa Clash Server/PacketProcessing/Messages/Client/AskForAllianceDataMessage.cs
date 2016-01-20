@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
+﻿using System.IO;
 using UCS.Core;
 using UCS.Helpers;
-using UCS.Network;
 using UCS.Logic;
+using UCS.Network;
 
 namespace UCS.PacketProcessing
 {
@@ -30,10 +25,10 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            Alliance alliance = ObjectManager.GetAlliance(m_vAllianceId);
+            var alliance = ObjectManager.GetAlliance(m_vAllianceId);
             if (alliance != null)
             {
-                PacketManager.ProcessOutgoingPacket(new AllianceDataMessage(this.Client, alliance));
+                PacketManager.ProcessOutgoingPacket(new AllianceDataMessage(Client, alliance));
             }
         }
     }

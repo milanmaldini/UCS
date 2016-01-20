@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
-using UCS.PacketProcessing;
-using UCS.Core;
-using UCS.GameFiles;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
-namespace UCS.Logic
+﻿namespace UCS.Logic
 {
     class ComponentFilter : GameObjectFilter
     {
-        public int Type;//a1 + 20
+        public int Type; //a1 + 20
 
-        public ComponentFilter(int type) : base()
+        public ComponentFilter(int type)
         {
             Type = type;
         }
@@ -29,9 +16,9 @@ namespace UCS.Logic
 
         public new bool TestGameObject(GameObject go)
         {
-            bool result = false;
-            Component c = go.GetComponent(Type, true);
-            if(c != null)
+            var result = false;
+            var c = go.GetComponent(Type, true);
+            if (c != null)
             {
                 result = base.TestGameObject(go);
             }
@@ -40,7 +27,7 @@ namespace UCS.Logic
 
         public bool TestComponent(Component c)
         {
-            GameObject go = c.GetParent();
+            var go = c.GetParent();
             return TestGameObject(go);
         }
     }

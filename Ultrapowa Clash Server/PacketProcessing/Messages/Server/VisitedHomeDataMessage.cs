@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.IO;
-using Newtonsoft.Json;
-using UCS.Logic;
+﻿using System.Collections.Generic;
 using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -17,7 +10,7 @@ namespace UCS.PacketProcessing
         private Level m_vOwnerLevel;
         private Level m_vVisitorLevel;
 
-        public VisitedHomeDataMessage(Client client, Level ownerLevel, Level visitorLevel) : base (client)
+        public VisitedHomeDataMessage(Client client, Level ownerLevel, Level visitorLevel) : base(client)
         {
             SetMessageType(24113);
             m_vOwnerLevel = ownerLevel;
@@ -26,12 +19,12 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            List<Byte> data = new List<Byte>();
+            var data = new List<byte>();
 
             //data.AddRange(BitConverter.GetBytes(Player.GetPlayerAvatar().GetSecondsFromLastUpdate()).Reverse());
-            data.AddInt32(0);//replace previous after patch
+            data.AddInt32(0); //replace previous after patch
 
-            ClientHome ch = new ClientHome(m_vOwnerLevel.GetPlayerAvatar().GetId());
+            var ch = new ClientHome(m_vOwnerLevel.GetPlayerAvatar().GetId());
             ch.SetShieldDurationSeconds(m_vOwnerLevel.GetPlayerAvatar().RemainingShieldTime);
             ch.SetHomeJSON(m_vOwnerLevel.SaveToJSON());
 

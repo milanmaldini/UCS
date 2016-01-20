@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -19,8 +13,8 @@ namespace UCS.PacketProcessing
         public MoveMultipleBuildingsCommand(BinaryReader br)
         {
             m_vBuildingsToMove = new List<BuildingToMove>();
-            int buildingCount = br.ReadInt32WithEndian();
-            for (int i = 0; i < buildingCount; i++)
+            var buildingCount = br.ReadInt32WithEndian();
+            for (var i = 0; i < buildingCount; i++)
             {
                 var buildingToMove = new BuildingToMove();
                 buildingToMove.X = br.ReadInt32WithEndian();
@@ -37,7 +31,7 @@ namespace UCS.PacketProcessing
         {
             foreach (var buildingToMove in m_vBuildingsToMove)
             {
-                GameObject go = level.GameObjectManager.GetGameObjectByID(buildingToMove.GameObjectId);
+                var go = level.GameObjectManager.GetGameObjectByID(buildingToMove.GameObjectId);
                 go.SetPositionXY(buildingToMove.X, buildingToMove.Y);
             }
         }
@@ -45,7 +39,6 @@ namespace UCS.PacketProcessing
 
     class BuildingToMove
     {
-        public BuildingToMove() { }
         public int GameObjectId { get; set; }
         public int X { get; set; }
         public int Y { get; set; }

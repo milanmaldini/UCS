@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using UCS.PacketProcessing;
 
@@ -17,7 +13,8 @@ namespace UCS.Core
 
         static Logger()
         {
-            m_vTextWriter = TextWriter.Synchronized(File.AppendText("logs/data_" + DateTime.Now.ToString("yyyyMMdd") + ".log"));
+            m_vTextWriter =
+                TextWriter.Synchronized(File.AppendText("logs/data_" + DateTime.Now.ToString("yyyyMMdd") + ".log"));
             m_vLogLevel = 1;
         }
 
@@ -26,9 +23,9 @@ namespace UCS.Core
             m_vLogLevel = level;
         }
 
-        public static void WriteLine(Message p, String prefix = null, int logLevel = 4)
+        public static void WriteLine(Message p, string prefix = null, int logLevel = 4)
         {
-            if(logLevel <= m_vLogLevel)
+            if (logLevel <= m_vLogLevel)
             {
                 lock (m_vSyncObject)
                 {
@@ -53,7 +50,7 @@ namespace UCS.Core
             }
         }
 
-        public static void WriteLine (String s, String prefix = null, int logLevel = 4)
+        public static void WriteLine(string s, string prefix = null, int logLevel = 4)
         {
             if (logLevel <= m_vLogLevel)
             {
@@ -69,7 +66,7 @@ namespace UCS.Core
                     m_vTextWriter.WriteLine(s);
                     m_vTextWriter.Flush();
                 }
-            }     
+            }
         }
     }
 }

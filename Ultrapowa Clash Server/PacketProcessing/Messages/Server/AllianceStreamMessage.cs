@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using UCS.Logic;
 using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -23,16 +19,16 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            List<Byte> pack = new List<Byte>();
+            var pack = new List<byte>();
 
-            List<StreamEntry> chatMessages = m_vAlliance.GetChatMessages().ToList();//avoid concurrent access issues
+            var chatMessages = m_vAlliance.GetChatMessages().ToList(); //avoid concurrent access issues
 
             pack.AddInt32(chatMessages.Count);
             foreach (var chatMessage in chatMessages)
             {
                 pack.AddRange(chatMessage.Encode());
             }
-            
+
             SetData(pack.ToArray());
         }
     }

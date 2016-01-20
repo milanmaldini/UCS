@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
+﻿using System.IO;
 using UCS.GameFiles;
-using UCS.Core;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -18,7 +12,7 @@ namespace UCS.PacketProcessing
         {
             X = br.ReadInt32WithEndian();
             Y = br.ReadInt32WithEndian();
-            Spell = (SpellData)br.ReadDataReference();
+            Spell = (SpellData) br.ReadDataReference();
             Unknown1 = br.ReadUInt32WithEndian();
         }
 
@@ -29,10 +23,10 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            List<Component> components = level.GetComponentManager().GetComponents(0);
-            for (int i = 0; i < components.Count; i++)
+            var components = level.GetComponentManager().GetComponents(0);
+            for (var i = 0; i < components.Count; i++)
             {
-                UnitStorageComponent c = (UnitStorageComponent)components[i];
+                var c = (UnitStorageComponent) components[i];
                 if (c.GetUnitTypeIndex(Spell) != -1)
                 {
                     var storageCount = c.GetUnitCountByData(Spell);
