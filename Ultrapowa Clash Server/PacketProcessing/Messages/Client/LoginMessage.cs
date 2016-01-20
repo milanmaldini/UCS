@@ -94,7 +94,7 @@ namespace UCS.PacketProcessing
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
-                var p = new LoginFailedMessage(this.Client);
+                var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
                 PacketManager.ProcessOutgoingPacket(p);
                 return;
@@ -105,7 +105,7 @@ namespace UCS.PacketProcessing
             {
                 if(m_vClientMajorVersion != Convert.ToInt32(versionData[0]) || m_vClientBuild != Convert.ToInt32(versionData[1]))
                 {
-                    var p = new LoginFailedMessage(this.Client);
+                    var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(8);
                     p.SetUpdateURL("market://details?id=com.supercell.clashofclans");
                     PacketManager.ProcessOutgoingPacket(p);
@@ -118,22 +118,32 @@ namespace UCS.PacketProcessing
             }
 
             level = ResourcesManager.GetPlayer(m_vAccountId);
-            if(level != null)
+            if (level != null)
+            //Console.WriteLine("Debug: Retrieve Player Data for player " + auth.PlayerId.ToString());
             {
-                if(level.GetAccountStatus() == 99)
+                if (level.GetAccountStatus() == 99)
                 {
-                    var p = new LoginFailedMessage(this.Client);
+                    var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(11);
                     PacketManager.ProcessOutgoingPacket(p);
                     return;
                 }
+            }
+            else
+            {
+                //New player
+                level = ObjectManager.CreateAvatar(m_vAccountId);
+                byte[] tokenSeed = new byte[20];
+                new Random().NextBytes(tokenSeed);
+                SHA1 sha = new SHA1CryptoServiceProvider();
+                m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
             }
 
             if(Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
             {
                 if (m_vResourceSha != ObjectManager.FingerPrint.sha)
                 {
-                    var p = new LoginFailedMessage(this.Client);
+                    var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(7);
                     p.SetResourceFingerprintData(ObjectManager.FingerPrint.SaveToJson());
                     p.SetContentURL(ConfigurationManager.AppSettings["patchingServer"]);
@@ -143,26 +153,17 @@ namespace UCS.PacketProcessing
                 }
             }
 
-            this.Client.ClientSeed = m_vClientSeed;
-            PacketManager.ProcessOutgoingPacket(new SessionKeyMessage(this.Client));
-            //Console.WriteLine("Debug: Retrieve Player Data for player " + auth.PlayerId.ToString());
-            //New player
-            if (level == null)
-            {
-                level = ObjectManager.CreateAvatar(m_vAccountId);
-                byte[] tokenSeed = new byte[20];
-                new Random().NextBytes(tokenSeed);
-                SHA1 sha = new SHA1CryptoServiceProvider();
-                m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-","");
-            }
+            Client.ClientSeed = m_vClientSeed;
+            PacketManager.ProcessOutgoingPacket(new SessionKeyMessage(Client));
+
             if (level.GetAccountPrivileges() > 0)
                 level.GetPlayerAvatar().SetLeagueId(21);
             if (level.GetAccountPrivileges() > 4)
                 level.GetPlayerAvatar().SetLeagueId(22);
-            ResourcesManager.LogPlayerIn(level, this.Client);
+            ResourcesManager.LogPlayerIn(level, Client);
             level.Tick();
 
-            var loginOk = new LoginOkMessage(this.Client);
+            var loginOk = new LoginOkMessage(Client);
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
             loginOk.SetPassToken(m_vPassToken);
@@ -180,11 +181,11 @@ namespace UCS.PacketProcessing
             Alliance alliance = ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId());
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
-            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(this.Client, level));
+            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
-                PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(this.Client, alliance));
+                PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }
     }
 }
 
-// Last edit: 17.01.2016 - iSwuerfel
+// Last edit: 20.01.2016 - iSwuerfel
