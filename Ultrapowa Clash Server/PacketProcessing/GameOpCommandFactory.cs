@@ -20,6 +20,7 @@ namespace UCS.PacketProcessing
             m_vCommands.Add("/visit", typeof (VisitGameOpCommand));
             m_vCommands.Add("/sysmsg", typeof (SystemMessageGameOpCommand));
             m_vCommands.Add("/id", typeof (GetIdGameopCommand));
+            m_vCommands.Add("/global", typeof(CheckGlobalChatGameOpCommand)); //This Command is only necessary for Shard because the global chat is limited.
         }
 
         public static object Parse(string command)
