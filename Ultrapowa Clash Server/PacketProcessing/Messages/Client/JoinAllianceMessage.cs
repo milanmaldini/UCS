@@ -1,4 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
@@ -11,7 +16,7 @@ namespace UCS.PacketProcessing
     {
         private long m_vAllianceId;
 
-        public JoinAllianceMessage(Client client, BinaryReader br) : base(client, br)
+        public JoinAllianceMessage(Client client, BinaryReader br) : base (client, br)
         {
         }
 
@@ -28,20 +33,20 @@ namespace UCS.PacketProcessing
             var alliance = ObjectManager.GetAlliance(m_vAllianceId);
             if (alliance != null)
             {
-                if (!alliance.IsAllianceFull())
+                if(!alliance.IsAllianceFull())
                 {
                     level.GetPlayerAvatar().SetAllianceId(alliance.GetAllianceId());
-                    var member = new AllianceMemberEntry(level.GetPlayerAvatar().GetId());
+                    AllianceMemberEntry member = new AllianceMemberEntry(level.GetPlayerAvatar().GetId());
                     member.SetRole(1);
                     alliance.AddAllianceMember(member);
 
                     var joinAllianceCommand = new JoinAllianceCommand();
                     joinAllianceCommand.SetAlliance(alliance);
-                    var availableServerCommandMessage = new AvailableServerCommandMessage(Client);
+                    var availableServerCommandMessage = new AvailableServerCommandMessage(this.Client);
                     availableServerCommandMessage.SetCommandId(1);
                     availableServerCommandMessage.SetCommand(joinAllianceCommand);
                     PacketManager.ProcessOutgoingPacket(availableServerCommandMessage);
-                    PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
+                    PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(this.Client, alliance));
                 }
             }
         }

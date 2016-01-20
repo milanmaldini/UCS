@@ -1,6 +1,14 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.IO;
+using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -26,7 +34,7 @@ namespace UCS.Logic
 
         public byte[] Encode()
         {
-            var data = new List<byte>();
+            List<Byte> data = new List<Byte>();
             data.AddInt32(Data.GetGlobalID());
             data.AddInt32(Value);
             return data.ToArray();

@@ -1,14 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
 using System.IO;
+using System.Reflection;
 
 namespace UCS.GameFiles
 {
     class CSVTable
     {
+        private List<CSVRow> m_vCSVRows;
         private List<string> m_vColumnHeaders;
         private List<string> m_vColumnTypes;
         private List<CSVColumn> m_vCSVColumns;
-        private List<CSVRow> m_vCSVRows;
 
         public CSVTable(string filePath)
         {
@@ -35,13 +42,13 @@ namespace UCS.GameFiles
                 while (!sr.EndOfStream)
                 {
                     var values = sr.ReadLine().Replace("\"", "").Split(',');
-
-                    if (values[0] != string.Empty)
+                    
+                    if(values[0] != String.Empty)
                     {
                         CreateRow();
                     }
 
-                    for (var i = 0; i < m_vColumnHeaders.Count; i++)
+                    for (int i = 0; i < m_vColumnHeaders.Count;i++ )
                     {
                         m_vCSVColumns[i].Add(values[i]);
                     }
@@ -51,21 +58,21 @@ namespace UCS.GameFiles
 
         public int GetArraySizeAt(CSVRow row, int columnIndex)
         {
-            var rowIndex = m_vCSVRows.IndexOf(row);
+            int rowIndex = m_vCSVRows.IndexOf(row);
             if (rowIndex == -1)
                 return 0;
-            var c = m_vCSVColumns[columnIndex];
-            var nextOffset = 0;
-            if (rowIndex + 1 >= m_vCSVRows.Count)
+            CSVColumn c = m_vCSVColumns[columnIndex];
+            int nextOffset = 0;
+            if(rowIndex + 1 >= m_vCSVRows.Count)
             {
                 nextOffset = c.GetSize();
             }
             else
             {
-                var nextRow = m_vCSVRows[rowIndex + 1];
+                CSVRow nextRow = m_vCSVRows[rowIndex + 1];
                 nextOffset = nextRow.GetRowOffset();
             }
-            var currentOffset = row.GetRowOffset();
+            int currentOffset = row.GetRowOffset();
             return c.GetArraySize(currentOffset, nextOffset);
         }
 
@@ -96,7 +103,7 @@ namespace UCS.GameFiles
 
         public string GetValue(string name, int level)
         {
-            var index = m_vColumnHeaders.IndexOf(name);
+            int index = m_vColumnHeaders.IndexOf(name);
             return GetValueAt(index, level);
         }
 
@@ -112,10 +119,11 @@ namespace UCS.GameFiles
 
         public int GetColumnRowCount()
         {
-            var result = 0;
+            int result = 0;
             if (m_vCSVColumns.Count > 0)
                 result = m_vCSVColumns[0].GetSize();
             return result;
         }
     }
+
 }

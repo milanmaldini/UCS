@@ -1,15 +1,22 @@
-﻿using System.IO;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x209
     class FreeWorkerCommand : Command
     {
-        private object m_vCommand;
-        private byte m_vIsCommandEmbedded;
         public int m_vTimeLeftSeconds;
+        private byte m_vIsCommandEmbedded;
+        private object m_vCommand;
 
         public FreeWorkerCommand(BinaryReader br)
         {
@@ -27,8 +34,8 @@ namespace UCS.PacketProcessing
             {
                 level.WorkerManager.FinishTaskOfOneWorker();
                 if (m_vIsCommandEmbedded >= 1)
-                    ((Command) m_vCommand).Execute(level);
-            }
+                    ((Command)m_vCommand).Execute(level);
+            }  
         }
     }
 }

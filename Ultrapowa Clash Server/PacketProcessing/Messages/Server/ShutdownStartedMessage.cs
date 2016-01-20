@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UCS.Logic;
+using UCS.Core;
 using UCS.Helpers;
 
 namespace UCS.PacketProcessing
@@ -16,7 +22,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            var data = new List<byte>();
+            List<Byte> data = new List<Byte>();
             data.AddInt32(m_vCode);
             SetData(data.ToArray());
         }

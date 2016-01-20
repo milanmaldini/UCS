@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
-using UCS.Core;
-using UCS.Helpers;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
@@ -21,26 +26,23 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            var ca = level.GetPlayerAvatar();
-            var go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
-
-            if (go != null)
+            ClientAvatar ca = level.GetPlayerAvatar();
+            GameObject go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
+            
+            if(go != null)
             {
-                if (go.ClassId == 0)
+                if(go.ClassId == 0)
                 {
-                    var b = (Building) go;
-                    var upc = b.GetUnitProductionComponent();
-                    if (upc != null)
+                    Building b = (Building)go;
+                    UnitProductionComponent upc = b.GetUnitProductionComponent();
+                    if(upc != null)
                     {
-                        var totalRemainingTime = upc.GetTotalRemainingSeconds();
-                        var cost = GamePlayUtil.GetSpeedUpCost(totalRemainingTime);
-                        if (upc.IsSpellForge())
+                        int totalRemainingTime = upc.GetTotalRemainingSeconds();
+                        int cost = GamePlayUtil.GetSpeedUpCost(totalRemainingTime);
+                        if(upc.IsSpellForge())
                         {
-                            var multiplier =
-                                ObjectManager.DataTables.GetGlobals()
-                                    .GetGlobalData("SPELL_SPEED_UP_COST_MULTIPLIER")
-                                    .NumberValue;
-                            cost = (int) ((cost*(long) multiplier*1374389535) >> 32);
+                            int multiplier = ObjectManager.DataTables.GetGlobals().GetGlobalData("SPELL_SPEED_UP_COST_MULTIPLIER").NumberValue;
+                            cost = (int)(((long)cost * (long)multiplier * (long)1374389535) >> 32);
                             cost = Math.Max((cost >> 5) + (cost >> 31), 1);
                         }
                         if (ca.HasEnoughDiamonds(cost))

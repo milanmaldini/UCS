@@ -1,6 +1,13 @@
-﻿using System.IO;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
@@ -19,13 +26,13 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            var ca = level.GetPlayerAvatar();
-            var go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
+            ClientAvatar ca = level.GetPlayerAvatar();
+            GameObject go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
 
             if (go != null)
             {
-                var b = (Building) go;
-                var hbc = b.GetHeroBaseComponent();
+                Building b = (Building)go;
+                HeroBaseComponent hbc = b.GetHeroBaseComponent();
                 if (hbc != null)
                     hbc.SpeedUpUpgrade();
             }

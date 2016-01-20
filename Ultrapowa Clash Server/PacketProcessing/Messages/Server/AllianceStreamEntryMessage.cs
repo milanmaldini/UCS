@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UCS.Logic;
 
 namespace UCS.PacketProcessing
@@ -20,7 +24,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            var pack = new List<byte>();
+            List<Byte> pack = new List<Byte>();
 
             pack.AddRange(m_vStreamEntry.Encode());
 

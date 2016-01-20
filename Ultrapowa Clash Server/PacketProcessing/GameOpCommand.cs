@@ -1,5 +1,15 @@
-﻿using UCS.Logic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using System.IO;
+using UCS.Core;
 using UCS.Network;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -7,9 +17,9 @@ namespace UCS.PacketProcessing
     {
         private byte m_vRequiredAccountPrivileges;
 
-        public virtual void Execute(Level level)
-        {
-        }
+        public GameOpCommand() { }
+
+        public virtual void Execute(Level level) { }
 
         public byte GetRequiredAccountPrivileges()
         {

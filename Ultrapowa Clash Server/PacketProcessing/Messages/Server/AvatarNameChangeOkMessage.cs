@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -30,7 +35,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            var pack = new List<byte>();
+            List<Byte> pack = new List<Byte>();
 
             pack.AddInt32(m_vServerCommandType);
             pack.AddString(m_vAvatarName);
@@ -39,5 +44,6 @@ namespace UCS.PacketProcessing
 
             SetData(pack.ToArray());
         }
+
     }
 }

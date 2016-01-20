@@ -34,7 +34,7 @@ namespace UCS.PacketProcessing
             {
                 if (go.GetComponent(1, true) != null)
                 {
-                    ((CombatComponent) go.GetComponent(1, true)).FillAmmo();
+                    ((CombatComponent)go.GetComponent(1, true)).FillAmmo();
                 }
             }
         }

@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using UCS.PacketProcessing;
 using UCS.Helpers;
 
 namespace UCS.Logic
 {
     class AvatarStreamEntry
     {
-        private DateTime m_vCreationTime;
         private int m_vId;
-        private byte m_vIsNew;
         private long m_vSenderId;
-        private int m_vSenderLeagueId;
-        private int m_vSenderLevel;
         private string m_vSenderName;
+        private int m_vSenderLevel;
+        private int m_vSenderLeagueId;
+        private DateTime m_vCreationTime;
+        private byte m_vIsNew;
         //private byte m_vIsRemoved;
 
         public AvatarStreamEntry()
@@ -22,8 +26,7 @@ namespace UCS.Logic
 
         public int GetAgeSeconds()
         {
-            return (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds -
-                   (int) m_vCreationTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds - (int)m_vCreationTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
         public int GetId()
@@ -53,9 +56,9 @@ namespace UCS.Logic
 
         public virtual byte[] Encode()
         {
-            var data = new List<byte>();
+            List<Byte> data = new List<Byte>();
 
-            data.AddInt32(GetStreamEntryType()); //alliancemailstreamentry
+            data.AddInt32(GetStreamEntryType());//alliancemailstreamentry
             data.AddInt32(0);
             data.AddInt32(m_vId);
             data.AddInt64(m_vSenderId);
@@ -114,5 +117,5 @@ namespace UCS.Logic
         {
             m_vSenderName = name;
         }
-    }
+    }    
 }

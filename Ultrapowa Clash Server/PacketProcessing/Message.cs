@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using System.IO;
 using UCS.Helpers;
 using UCS.Logic;
 
@@ -10,18 +13,26 @@ namespace UCS.PacketProcessing
 {
     class Message
     {
-        private byte[] m_vData;
-        private int m_vLength;
-        private ushort m_vMessageVersion;
         private ushort m_vType;
-
-        public Message()
+        private int m_vLength;
+        private byte[] m_vData;
+        private ushort m_vMessageVersion;
+        public Client Client
         {
+            get;
+            set;
+        }
+        public int Broadcasting
+        {
+            get;
+            set;
         }
 
-        public Message(Client c)
+        public Message() { }
+
+        public Message(Client c) 
         {
-            Client = c;
+            this.Client = c;
             m_vType = 0;
             m_vLength = -1;
             m_vMessageVersion = 0;
@@ -35,41 +46,37 @@ namespace UCS.PacketProcessing
             m_vData = new byte[m.GetLength()];
             Array.Copy(m.GetData(), m_vData, m.GetLength());
             m_vMessageVersion = m.GetMessageVersion();
-            Client = c;
+            this.Client = c;
         }
 
         public Message(Client c, BinaryReader br)
         {
-            Client = c;
+            this.Client = c;
             m_vType = br.ReadUInt16WithEndian();
-            var tempLength = br.ReadBytes(3);
-            m_vLength = (0x00 << 24) | (tempLength[0] << 16) | (tempLength[1] << 8) | tempLength[2];
+            byte[] tempLength = br.ReadBytes(3);
+            m_vLength = ((0x00 << 24) | (tempLength[0] << 16) | (tempLength[1] << 8) | tempLength[2]);
             m_vMessageVersion = br.ReadUInt16WithEndian();
             m_vData = br.ReadBytes(m_vLength);
         }
 
-        public Client Client { get; set; }
-
-        public int Broadcasting { get; set; }
-
-        public override string ToString()
+        public override String ToString()
         {
-            return Encoding.UTF8.GetString(m_vData, 0, m_vLength);
+            return Encoding.UTF8.GetString(this.m_vData, 0, m_vLength);
         }
 
-        public string ToHexString()
+        public String ToHexString()
         {
-            var hex = BitConverter.ToString(m_vData);
-            return hex.Replace("-", " ");
+            String hex = BitConverter.ToString(this.m_vData);
+            return hex.Replace("-"," ");
         }
 
         public byte[] GetRawData()
         {
-            var encodedMessage = new List<byte>();
+            List<Byte> encodedMessage = new List<Byte>();
 
-            encodedMessage.AddRange(BitConverter.GetBytes(m_vType).Reverse());
-            encodedMessage.AddRange(BitConverter.GetBytes(m_vLength).Reverse().Skip(1));
-            encodedMessage.AddRange(BitConverter.GetBytes(m_vMessageVersion).Reverse());
+            encodedMessage.AddRange(BitConverter.GetBytes(this.m_vType).Reverse());
+            encodedMessage.AddRange(BitConverter.GetBytes(this.m_vLength).Reverse().Skip(1));
+            encodedMessage.AddRange(BitConverter.GetBytes(this.m_vMessageVersion).Reverse());
             encodedMessage.AddRange(m_vData);
 
             return encodedMessage.ToArray();
@@ -77,14 +84,17 @@ namespace UCS.PacketProcessing
 
         public virtual void Encode()
         {
+            
         }
 
         public virtual void Decode()
         {
+
         }
 
         public virtual void Process(Level level)
         {
+
         }
 
         public ushort GetMessageType()

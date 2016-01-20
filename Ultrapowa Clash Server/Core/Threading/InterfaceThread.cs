@@ -1,4 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace UCS.Core.Threading
 {
@@ -8,7 +13,6 @@ namespace UCS.Core.Threading
         /// Enumeration holding important information
         /// </summary>
         public static string staticName = "Interface Thread";
-
         public static string Description = "User GUI";
         public static string Version = "1.0.0";
         public static string Author = "ADeltaX";
@@ -25,7 +29,7 @@ namespace UCS.Core.Threading
         {
             T = new Thread(() =>
             {
-                // @ADeltaX Code goes here
+               // @ADeltaX Code goes here
             });
             T.Start();
         }

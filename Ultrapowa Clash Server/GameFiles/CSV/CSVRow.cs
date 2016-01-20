@@ -1,4 +1,14 @@
-﻿namespace UCS.GameFiles
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
+using System.IO;
+using System.Reflection;
+
+namespace UCS.GameFiles
 {
     class CSVRow
     {
@@ -14,11 +24,12 @@
 
         public int GetArraySize(string name)
         {
-            var columnIndex = m_vCSVTable.GetColumnIndexByName(name);
-            var result = 0;
+            int columnIndex = m_vCSVTable.GetColumnIndexByName(name);
+            int result = 0;
             if (columnIndex != -1)
                 result = m_vCSVTable.GetArraySizeAt(this, columnIndex);
             return result;
+
         }
 
         public int GetRowOffset()
@@ -36,4 +47,5 @@
             return m_vCSVTable.GetValue(name, level + m_vRowStart);
         }
     }
+
 }

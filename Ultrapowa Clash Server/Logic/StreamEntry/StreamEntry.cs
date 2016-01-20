@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using UCS.Helpers;
 
 namespace UCS.Logic
@@ -43,8 +43,8 @@ namespace UCS.Logic
 
         public int GetAgeSeconds()
         {
-            return (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds -
-                   (int) m_vMessageTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds -
+                   (int)m_vMessageTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
         public long GetHomeId()

@@ -63,7 +63,7 @@ namespace UCS.PacketProcessing
                 if (allianceId > 0)
                 {
                     var cm = new ChatStreamEntry();
-                    cm.SetId((int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
+                    cm.SetId((int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
                     cm.SetSenderId(0);
                     cm.SetHomeId(0);
                     cm.SetSenderLeagueId(22);

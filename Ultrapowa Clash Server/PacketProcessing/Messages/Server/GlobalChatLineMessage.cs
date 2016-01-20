@@ -1,22 +1,24 @@
-﻿using System.Collections.Generic;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
 using UCS.Logic;
+using UCS.Helpers;
 
 namespace UCS.PacketProcessing
 {
     //Packet 24715
     class GlobalChatLineMessage : Message
     {
-        private int m_vAllianceIcon;
-        private long m_vAllianceId;
-        private string m_vAllianceName;
-        private long m_vCurrentHomeId;
-        private bool m_vHasAlliance;
-        private long m_vHomeId;
-        private int m_vLeagueId;
         private string m_vMessage;
-        private int m_vPlayerLevel;
+        private long m_vHomeId;
+        private long m_vCurrentHomeId;
         private string m_vPlayerName;
+        private int m_vLeagueId;
+        private bool m_vHasAlliance;
+        private int m_vAllianceIcon;
+        private string m_vAllianceName;
+        private long m_vAllianceId;
+        private int m_vPlayerLevel;
+
 
         public GlobalChatLineMessage(Client client) : base(client)
         {
@@ -32,7 +34,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            var pack = new List<byte>();
+            List<Byte> pack = new List<Byte>();
 
             pack.AddString(m_vMessage);
             pack.AddString(m_vPlayerName);
@@ -43,11 +45,11 @@ namespace UCS.PacketProcessing
 
             if (!m_vHasAlliance)
             {
-                pack.Add(0);
+                pack.Add((Byte)0);
             }
             else
             {
-                pack.Add(1);
+                pack.Add((Byte)1);
                 pack.AddInt64(m_vAllianceId);
                 pack.AddString(m_vAllianceName);
                 pack.AddInt32(m_vAllianceIcon);

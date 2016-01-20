@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace UCS.GameFiles
 {
@@ -15,7 +19,7 @@ namespace UCS.GameFiles
 
             if (File.Exists(filePath))
             {
-                using (var sr = new StreamReader(filePath))
+                using (StreamReader sr = new StreamReader(filePath))
                 {
                     fpstring = sr.ReadToEnd();
                 }
@@ -34,27 +38,27 @@ namespace UCS.GameFiles
 
         public void LoadFromJson(string jsonString)
         {
-            var jsonObject = JObject.Parse(jsonString);
+            JObject jsonObject = JObject.Parse(jsonString);
 
-            var jsonFilesArray = (JArray) jsonObject["files"];
+            JArray jsonFilesArray = (JArray)jsonObject["files"];
             foreach (JObject jsonFile in jsonFilesArray)
             {
-                var gf = new GameFile();
+                GameFile gf = new GameFile();
                 gf.Load(jsonFile);
                 files.Add(gf);
             }
             sha = jsonObject["sha"].ToObject<string>();
-            version = jsonObject["version"].ToObject<string>();
+            version = jsonObject["version"].ToObject<string>();       
         }
 
         public string SaveToJson()
         {
-            var jsonData = new JObject();
+            JObject jsonData = new JObject();
 
-            var jsonFilesArray = new JArray();
+            JArray jsonFilesArray = new JArray();
             foreach (var file in files)
             {
-                var jsonObject = new JObject();
+                JObject jsonObject = new JObject();
                 file.SaveToJson(jsonObject);
                 jsonFilesArray.Add(jsonObject);
             }
@@ -68,8 +72,9 @@ namespace UCS.GameFiles
 
     class GameFile
     {
-        public string sha { get; set; }
-        public string file { get; set; }
+        public GameFile() { }
+        public String sha { get; set; }
+        public String file { get; set; }
 
         public void Load(JObject jsonObject)
         {

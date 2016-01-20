@@ -1,8 +1,13 @@
-﻿using System.IO;
-using UCS.Core;
-using UCS.GameFiles;
-using UCS.Helpers;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
@@ -26,26 +31,28 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            var go = level.GameObjectManager.GetGameObjectByID(BuildingId);
-            if (Count > 0)
+            GameObject go = level.GameObjectManager.GetGameObjectByID(BuildingId);
+            if(Count > 0)
             {
-                var b = (Building) go;
-                var c = b.GetUnitProductionComponent();
-                var cid = (CombatItemData) ObjectManager.DataTables.GetDataById(UnitType);
+                Building b = (Building)go;
+                UnitProductionComponent c = b.GetUnitProductionComponent();
+                CombatItemData cid = (CombatItemData)ObjectManager.DataTables.GetDataById(UnitType);
                 do
                 {
                     if (!c.CanAddUnitToQueue(cid))
                         break;
-                    var trainingResource = cid.GetTrainingResource();
-                    var ca = level.GetHomeOwnerAvatar();
-                    var trainingCost = cid.GetTrainingCost(ca.GetUnitUpgradeLevel(cid));
+                    ResourceData trainingResource = cid.GetTrainingResource();
+                    ClientAvatar ca = level.GetHomeOwnerAvatar();
+                    int trainingCost = cid.GetTrainingCost(ca.GetUnitUpgradeLevel(cid));
                     if (!ca.HasEnoughResources(trainingResource, trainingCost))
                         break;
                     ca.SetResourceCount(trainingResource, ca.GetResourceCount(trainingResource) - trainingCost);
                     c.AddUnitToProductionQueue(cid);
                     Count--;
-                } while (Count > 0);
+                }
+                while (Count > 0);
             }
         }
+
     }
 }

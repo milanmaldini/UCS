@@ -1,7 +1,18 @@
-﻿namespace UCS.Logic
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Configuration;
+using UCS.PacketProcessing;
+using Newtonsoft.Json;
+
+namespace UCS.Logic
 {
     class Village
     {
+
         public Village()
         {
             //Deserialization
@@ -11,7 +22,7 @@
         {
             android_client = true;
 
-            respawnVars = new RespawnVars
+            respawnVars = new RespawnVars()
             {
                 secondsFromLastRespawn = 10,
                 respawnSeed = 10,
@@ -19,14 +30,9 @@
                 time_to_gembox_drop = 10,
                 time_in_gembox_period = 10
             };
-            newShopBuildings = new uint[]
-            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            newShopTraps = new uint[] {0, 0, 0, 0, 0, 0, 0, 0};
-            newShopDecos = new uint[]
-            {
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0
-            };
+            newShopBuildings = new uint[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            newShopTraps = new uint[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            newShopDecos = new uint[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             last_league_rank = 0;
             last_league_shuffle = 0;
             last_news_seen = 10;
@@ -51,6 +57,7 @@
 
     class RespawnVars
     {
+        public RespawnVars() { }
         public uint secondsFromLastRespawn { get; set; }
         public uint respawnSeed { get; set; }
         public uint obstacleClearCounter { get; set; }

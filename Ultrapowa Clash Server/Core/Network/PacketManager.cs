@@ -1,22 +1,31 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Net.Sockets;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Threading;
-using UCS.Core;
+using System.Net;
+using System.Net.Sockets;
+using System.Collections.Concurrent;
 using UCS.PacketProcessing;
+using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.Network
 {
     class PacketManager
     {
+        
+        private delegate void IncomingProcessingDelegate();
         private static EventWaitHandle m_vIncomingWaitHandle = new AutoResetEvent(false);
+        private delegate void OutgoingProcessingDelegate();
         private static EventWaitHandle m_vOutgoingWaitHandle = new AutoResetEvent(false);
 
         private static ConcurrentQueue<Message> m_vIncomingPackets;
         private static ConcurrentQueue<Message> m_vOutgoingPackets;
 
         private bool m_vIsRunning;
-
+    
         public PacketManager()
         {
             m_vIncomingPackets = new ConcurrentQueue<Message>();
@@ -29,10 +38,10 @@ namespace UCS.Network
         {
             m_vIsRunning = true;
 
-            IncomingProcessingDelegate incomingProcessing = IncomingProcessing;
+            IncomingProcessingDelegate incomingProcessing = new IncomingProcessingDelegate(IncomingProcessing);
             incomingProcessing.BeginInvoke(null, null);
 
-            OutgoingProcessingDelegate outgoingProcessing = OutgoingProcessing;
+            OutgoingProcessingDelegate outgoingProcessing = new OutgoingProcessingDelegate(OutgoingProcessing);
             outgoingProcessing.BeginInvoke(null, null);
 
             Console.WriteLine("Packet Manager started");
@@ -40,7 +49,7 @@ namespace UCS.Network
 
         private void IncomingProcessing()
         {
-            while (m_vIsRunning)
+            while(this.m_vIsRunning)
             {
                 m_vIncomingWaitHandle.WaitOne();
                 Message p;
@@ -56,28 +65,34 @@ namespace UCS.Network
 
         private void OutgoingProcessing()
         {
-            while (m_vIsRunning)
+            while (this.m_vIsRunning)
             {
                 m_vOutgoingWaitHandle.WaitOne();
                 Message p;
                 while (m_vOutgoingPackets.TryDequeue(out p))
-                {
+                {  
                     Logger.WriteLine(p, "S");
                     if (p.GetMessageType() == 20000)
                     {
-                        var sessionKey = ((SessionKeyMessage) p).Key;
+                        byte[] sessionKey = ((SessionKeyMessage)p).Key;
                         p.Client.Encrypt(p.GetData());
                         p.Client.UpdateKey(sessionKey);
                     }
                     else
+                    {
                         p.Client.Encrypt(p.GetData());
+                    }
 
                     try
                     {
-                        if (p.Client.Socket != null)
+                        if(p.Client.Socket != null)
+                        {
                             p.Client.Socket.Send(p.GetRawData());
+                        }
                         else
+                        {
                             ResourcesManager.DropClient(p.Client.GetSocketHandle());
+                        }
                     }
                     catch (Exception)
                     {
@@ -108,8 +123,8 @@ namespace UCS.Network
             p.Encode();
             try
             {
-                var pl = p.Client.GetLevel();
-                var player = "";
+                Level pl = p.Client.GetLevel();
+                string player = "";
                 if (pl != null)
                     player += " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() + ")";
                 Debugger.WriteLine("[S] " + p.GetMessageType() + " " + p.GetType().Name + player);
@@ -122,8 +137,5 @@ namespace UCS.Network
             }
         }
 
-        private delegate void IncomingProcessingDelegate();
-
-        private delegate void OutgoingProcessingDelegate();
     }
 }

@@ -1,44 +1,47 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using UCS.Core;
+using System.Threading.Tasks;
+using System.IO;
+using System.Collections.Concurrent;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UCS.GameFiles;
+using UCS.Core;
 using UCS.Logic;
 
 namespace UCS.Helpers
 {
     static class Helpers
     {
-        public static uint ReadUInt32WithEndian(this BinaryReader br)
+        public static UInt32 ReadUInt32WithEndian(this BinaryReader br)
         {
-            var a32 = br.ReadBytes(4);
+            byte[] a32 = br.ReadBytes(4);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(a32);
-            return BitConverter.ToUInt32(a32, 0);
+            return BitConverter.ToUInt32(a32,0);
         }
 
-        public static long ReadInt64WithEndian(this BinaryReader br)
+        public static Int64 ReadInt64WithEndian(this BinaryReader br)
         {
-            var a64 = br.ReadBytes(8);
+            byte[] a64 = br.ReadBytes(8);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(a64);
             return BitConverter.ToInt64(a64, 0);
         }
 
-        public static int ReadInt32WithEndian(this BinaryReader br)
+        public static Int32 ReadInt32WithEndian(this BinaryReader br)
         {
-            var a32 = br.ReadBytes(4);
+            byte[] a32 = br.ReadBytes(4);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(a32);
             return BitConverter.ToInt32(a32, 0);
         }
 
-        public static ushort ReadUInt16WithEndian(this BinaryReader br)
+        public static UInt16 ReadUInt16WithEndian(this BinaryReader br)
         {
-            var a16 = br.ReadBytes(2);
+            byte[] a16 = br.ReadBytes(2);
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(a16);
             return BitConverter.ToUInt16(a16, 0);
@@ -53,9 +56,9 @@ namespace UCS.Helpers
         public static byte[] ReadAllBytes(this BinaryReader br)
         {
             const int bufferSize = 4096;
-            using (var ms = new MemoryStream())
+            using(var ms = new MemoryStream())
             {
-                var buffer = new byte[bufferSize];
+                byte[] buffer = new byte[bufferSize];
                 int count;
                 while ((count = br.Read(buffer, 0, buffer.Length)) != 0)
                     ms.Write(buffer, 0, count);
@@ -63,19 +66,23 @@ namespace UCS.Helpers
             }
         }
 
-        public static string ReadScString(this BinaryReader br)
+        public static String ReadScString(this BinaryReader br)
         {
             int stringLength = br.ReadInt32WithEndian();
             string result;
 
             if (stringLength > -1)
+            {
                 if (stringLength > 0)
                 {
-                    var astr = br.ReadBytes(stringLength);
-                    result = Encoding.UTF8.GetString(astr);
+                    byte[] astr = br.ReadBytes(stringLength);
+                    result = System.Text.Encoding.UTF8.GetString(astr);
                 }
                 else
+                {
                     result = string.Empty;
+                }
+            }
             else
                 result = null;
             return result;
@@ -93,19 +100,22 @@ namespace UCS.Helpers
 
         public static void AddString(this List<byte> list, string data)
         {
-            if (string.IsNullOrEmpty(data))
-                list.AddRange(BitConverter.GetBytes(-1).Reverse());
+            if (data == null)
+                list.AddRange(BitConverter.GetBytes((int)-1).Reverse());
             else
             {
                 list.AddRange(BitConverter.GetBytes(Encoding.UTF8.GetByteCount(data)).Reverse());
-                list.AddRange(Encoding.UTF8.GetBytes(data));
+                list.AddRange(System.Text.Encoding.UTF8.GetBytes(data));
             }
         }
 
         public static void AddDataSlots(this List<byte> list, List<DataSlot> data)
         {
             list.AddInt32(data.Count);
-            data.ForEach(dataSlot => list.AddRange(dataSlot.Encode()));
+            foreach (DataSlot dataSlot in data)
+            {
+                list.AddRange(dataSlot.Encode());
+            }
         }
 
         public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> self, TKey key)
@@ -115,26 +125,4 @@ namespace UCS.Helpers
         }
     }
 
-    class PrefixedWriter : TextWriter
-    {
-        private TextWriter originalOut;
-
-        public PrefixedWriter()
-        {
-            originalOut = Console.Out;
-        }
-
-        public override Encoding Encoding
-        {
-            get { return new System.Text.ASCIIEncoding(); }
-        }
-        public override void WriteLine(string message)
-        {
-            originalOut.WriteLine(string.Format("[ {0} ] - {1}", DateTime.Now, message));
-        }
-        public override void Write(string message)
-        {
-            originalOut.Write(String.Format("[ {0} ] - {1}", DateTime.Now, message));
-        }
-    }
 }

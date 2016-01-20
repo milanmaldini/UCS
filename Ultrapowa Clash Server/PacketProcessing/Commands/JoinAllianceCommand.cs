@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.IO;
-using UCS.Helpers;
+using System.Threading.Tasks;
 using UCS.Logic;
+using UCS.Helpers;
+using UCS.GameFiles;
+using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
@@ -33,19 +39,18 @@ namespace UCS.PacketProcessing
 
         public override byte[] Encode()
         {
-            var data = new List<byte>();
+            List<Byte> data = new List<Byte>();
             data.AddRange(m_vAlliance.EncodeHeader());
             return data.ToArray();
         }
 
-        //00
-        //5E 00 2C 5A
-        //4C 61 20 54 65 61 6D 20 54 44 41
-        //00 00 00 0B
-
-        //00 00 00 46 00 03 46 FE
-        //00 00 00 02
-        //00 00 00 01
+        //00 00 00 46 00 03 46 FE 
+        //00 00 00 0B 
+        //4C 61 20 54 65 61 6D 20 54 44 41 
+        //5E 00 2C 5A 
+        //00 
+        //00 00 00 02 
+        //00 00 00 01 
         //00 00 1C 35
     }
 }

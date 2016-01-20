@@ -1,8 +1,14 @@
-﻿using System.IO;
-using UCS.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.Configuration;
 using UCS.Helpers;
-using UCS.Logic;
+using UCS.Core;
 using UCS.Network;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
@@ -14,8 +20,6 @@ namespace UCS.PacketProcessing
         {
         }
 
-        public long AvatarId { get; set; }
-
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
@@ -24,12 +28,14 @@ namespace UCS.PacketProcessing
             }
         }
 
+        public long AvatarId { get; set; }
+
         public override void Process(Level level)
         {
-            var targetLevel = ResourcesManager.GetPlayer(AvatarId);
+            Level targetLevel = ResourcesManager.GetPlayer(AvatarId);
             targetLevel.Tick();
             //Clan clan;
-            PacketManager.ProcessOutgoingPacket(new VisitedHomeDataMessage(Client, targetLevel, level));
+            PacketManager.ProcessOutgoingPacket(new VisitedHomeDataMessage(this.Client, targetLevel, level));
             //if (clan != null)
             //    PacketHandler.ProcessOutgoingPacket(new ServerAllianceChatHistory(this.Client, clan));
         }

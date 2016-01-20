@@ -1,11 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Configuration;
+using UCS.PacketProcessing;
+using UCS.Core;
+using UCS.GameFiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
     class Timer
     {
-        private int m_vSeconds;
         private DateTime m_vStartTime;
+        private int m_vSeconds;
 
         public Timer()
         {
@@ -20,7 +31,7 @@ namespace UCS.Logic
 
         public int GetRemainingSeconds(DateTime time)
         {
-            var result = m_vSeconds - (int) time.Subtract(m_vStartTime).TotalSeconds;
+            int result = m_vSeconds - (int)time.Subtract(m_vStartTime).TotalSeconds;
             if (result <= 0)
                 result = 0;
             return result;

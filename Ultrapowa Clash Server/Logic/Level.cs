@@ -1,19 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
+using UCS.Core;
 using UCS.PacketProcessing;
+using UCS.GameFiles;
 
 namespace UCS.Logic
 {
     class Level
     {
-        public GameObjectManager GameObjectManager; //a1 + 44
-        private byte m_vAccountPrivileges;
-        private byte m_vAccountStatus;
+
+        public GameObjectManager GameObjectManager;//a1 + 44
+        public WorkerManager WorkerManager;
         private Client m_vClient;
         private ClientAvatar m_vClientAvatar;
-        private DateTime m_vTime; //a1 + 40
-        public WorkerManager WorkerManager;
+        private DateTime m_vTime;//a1 + 40
+        private byte m_vAccountPrivileges;
+        private byte m_vAccountStatus;
         //MissionManager
         //AchievementManager
         //CooldownManager
@@ -44,7 +53,7 @@ namespace UCS.Logic
 
         public void LoadFromJSON(string jsonString)
         {
-            var jsonObject = JObject.Parse(jsonString);
+            JObject jsonObject = JObject.Parse(jsonString);
             GameObjectManager.Load(jsonObject);
         }
 
@@ -65,7 +74,7 @@ namespace UCS.Logic
 
         public ClientAvatar GetHomeOwnerAvatar()
         {
-            return m_vClientAvatar;
+            return this.m_vClientAvatar;
         }
 
         public ComponentManager GetComponentManager()
@@ -75,7 +84,7 @@ namespace UCS.Logic
 
         public ClientAvatar GetPlayerAvatar()
         {
-            return m_vClientAvatar;
+            return this.m_vClientAvatar;
         }
 
         public DateTime GetTime()

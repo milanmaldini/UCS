@@ -1,6 +1,12 @@
 ﻿using System;
-using System.Net;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using UCS.PacketProcessing;
 
 namespace UCS.Core
 {
@@ -20,9 +26,10 @@ namespace UCS.Core
 
         private void StartListener(object data)
         {
-            // Note: The GetContext method blocks while waiting for a request.
-            var context = m_vListener.GetContext();
-
+            
+            // Note: The GetContext method blocks while waiting for a request. 
+            HttpListenerContext context = m_vListener.GetContext();
+            
             m_vListener.Stop();
         }
 
@@ -30,21 +37,22 @@ namespace UCS.Core
         {
             while (m_vListener.IsListening)
             {
-                var result = m_vListener.BeginGetContext(Handle, m_vListener);
+                IAsyncResult result = m_vListener.BeginGetContext(Handle, m_vListener);
                 result.AsyncWaitHandle.WaitOne();
             }
         }
 
         private void Handle(IAsyncResult result)
         {
-            var listener = (HttpListener) result.AsyncState;
-            var context = listener.EndGetContext(result);
+            HttpListener listener = (HttpListener)result.AsyncState;
+            HttpListenerContext context = listener.EndGetContext(result);
 
-            var request = context.Request;
+
+            HttpListenerRequest request = context.Request;
             // Obtain a response object.
-            var response = context.Response;
+            HttpListenerResponse response = context.Response;
             // Construct a response.
-            var responseString = "<HTML><BODY><PRE>";
+            string responseString = "<HTML><BODY><PRE>";
             /*
             responseString += "Active Connections: ";
             int connectedUsers = 0;
@@ -71,8 +79,7 @@ namespace UCS.Core
             responseString += "In Memory Levels: " + ResourcesManager.GetInMemoryLevels().Count + "</summary>";
             foreach (var account in ResourcesManager.GetInMemoryLevels())
             {
-                responseString += "    " + account.GetPlayerAvatar().GetId() + ", " +
-                                  account.GetPlayerAvatar().GetAvatarName() + " \n";
+                responseString += "    " + account.GetPlayerAvatar().GetId() + ", " + account.GetPlayerAvatar().GetAvatarName() + " \n";
             }
             responseString += "</details>";
 
@@ -80,8 +87,7 @@ namespace UCS.Core
             responseString += "Online Players: " + ResourcesManager.GetOnlinePlayers().Count + "</summary>";
             foreach (var account in ResourcesManager.GetOnlinePlayers())
             {
-                responseString += "    " + account.GetPlayerAvatar().GetId() + ", " +
-                                  account.GetPlayerAvatar().GetAvatarName() + " \n";
+                responseString += "    " + account.GetPlayerAvatar().GetId() + ", " + account.GetPlayerAvatar().GetAvatarName() + " \n";
             }
             responseString += "</details>";
 
@@ -94,10 +100,10 @@ namespace UCS.Core
             responseString += "</details>";
 
             responseString += "</PRE></BODY></HTML>";
-            var buffer = Encoding.UTF8.GetBytes(responseString);
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
             // Get a response stream and write the response to it.
             response.ContentLength64 = buffer.Length;
-            var output = response.OutputStream;
+            System.IO.Stream output = response.OutputStream;
             output.Write(buffer, 0, buffer.Length);
             // You must close the output stream.
             output.Close();
@@ -107,7 +113,7 @@ namespace UCS.Core
         {
             try
             {
-                var target = (Action) ar.AsyncState;
+                Action target = (Action)ar.AsyncState;
                 target.EndInvoke(ar);
             }
             catch (Exception ex)
@@ -120,6 +126,6 @@ namespace UCS.Core
         {
             m_vListener.Stop();
             m_vListener.Close();
-        }
+        }    
     }
 }

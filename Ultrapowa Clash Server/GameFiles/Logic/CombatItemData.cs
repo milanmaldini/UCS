@@ -1,7 +1,19 @@
-﻿namespace UCS.GameFiles
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.ComponentModel;
+using System.IO;
+using System.Reflection;
+using UCS.Core;
+
+namespace UCS.GameFiles
 {
     class CombatItemData : Data
     {
+
         public CombatItemData(CSVRow row, DataTable dt)
             : base(row, dt)
         {
@@ -61,5 +73,6 @@
         {
             return -1;
         }
+
     }
 }

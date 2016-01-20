@@ -48,7 +48,7 @@ namespace UCS.Logic
 
         public BuildingData GetBuildingData()
         {
-            return (BuildingData) GetData();
+            return (BuildingData)GetData();
         }
     }
 }

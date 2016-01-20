@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UCS.GameFiles
 {
     class LeagueData : Data
     {
+
         public LeagueData(CSVRow row, DataTable dt)
             : base(row, dt)
         {
-            LoadData(this, GetType(), row);
+            LoadData(this, this.GetType(), row);
         }
 
-        public string TID { get; set; }
-        public string TIDShort { get; set; }
-        public string IconSWF { get; set; }
-        public string IconExportName { get; set; }
-        public string LeagueBannerIcon { get; set; }
-        public string LeagueBannerIconNum { get; set; }
+        public String TID { get; set; }
+        public String TIDShort { get; set; }
+        public String IconSWF { get; set; }
+        public String IconExportName { get; set; }
+        public String LeagueBannerIcon { get; set; }
+        public String LeagueBannerIconNum { get; set; }
         public int GoldReward { get; set; }
         public int ElixirReward { get; set; }
         public int DarkElixirReward { get; set; }

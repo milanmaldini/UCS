@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Configuration;
 using UCS.Core.Threading;
-using UCS.Helpers;
 
 namespace UCS
 {
     class Program
     {
-        private static void Main()
+        /// <summary>
+        /// Entry point of UCS
+        /// </summary>
+        /// <param name="args">Arguments</param>
+        static void Main(string[] args)
         {
             if (!Convert.ToBoolean(ConfigurationManager.AppSettings["guiMode"]))
                 ConsoleThread.Start();

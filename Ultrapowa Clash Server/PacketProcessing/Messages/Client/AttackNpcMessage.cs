@@ -1,4 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
@@ -12,8 +17,6 @@ namespace UCS.PacketProcessing
         {
         }
 
-        public int LevelId { get; set; }
-
         public override void Decode()
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
@@ -22,9 +25,11 @@ namespace UCS.PacketProcessing
             }
         }
 
+        public int LevelId { get; set; }
+
         public override void Process(Level level)
         {
-            var san = new NpcDataMessage(Client, level, this);
+            NpcDataMessage san = new NpcDataMessage(this.Client, level, this);
             PacketManager.ProcessOutgoingPacket(san);
         }
     }

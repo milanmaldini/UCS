@@ -1,5 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
+using UCS.Logic;
+using UCS.Helpers;
 
 namespace UCS.PacketProcessing
 {
@@ -25,15 +32,15 @@ namespace UCS.PacketProcessing
 
         public static object Parse(string command)
         {
-            var commandArgs = command.Split(' ');
+            string[] commandArgs = command.Split(' ');
             object result = null;
-            if (commandArgs.Length > 0)
+            if(commandArgs.Length > 0)
             {
                 if (m_vCommands.ContainsKey(commandArgs[0]))
                 {
-                    var type = m_vCommands[commandArgs[0]];
-                    var ctor = type.GetConstructor(new[] {typeof (string[])});
-                    result = ctor.Invoke(new object[] {commandArgs});
+                    Type type = m_vCommands[commandArgs[0]];
+                    ConstructorInfo ctor = type.GetConstructor(new[] { typeof(string[]) });
+                    result = ctor.Invoke(new object[] { commandArgs });
                 }
             }
             return result;
