@@ -248,6 +248,7 @@
     <Compile Include="PacketProcessing\Commands\CastSpellCommand.cs" />
     <Compile Include="PacketProcessing\Commands\PlaceAttackerCommand.cs" />
     <Compile Include="PacketProcessing\Commands\RemoveUnitsCommand.cs" />
+    <Compile Include="PacketProcessing\GameOpCommands\GetIdGameOpCommand.cs" />
     <Compile Include="PacketProcessing\GameOpCommands\SystemMessageGameOpCommand.cs" />
     <Compile Include="PacketProcessing\GameOpCommands\UnbanGameOpCommand.cs" />
     <Compile Include="PacketProcessing\GameOpCommands\BanGameOpCommand.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="PacketProcessing\MessageFactory.cs" />
     <Compile Include="PacketProcessing\CommandFactory.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AskForAvatarProfileMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\EditClanSettingsMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\KeepAliveMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AttackNpcMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\VisitHomeMessage.cs" />

@@ -46,20 +46,53 @@ namespace UCS.PacketProcessing
                 }
                 else
                 {
-                    long senderId = level.GetPlayerAvatar().GetId();
-                    string senderName = level.GetPlayerAvatar().GetAvatarName();
-                    foreach(var onlinePlayer in ResourcesManager.GetOnlinePlayers())
+                    if (File.Exists(@"filter.ucs")) //If you rename filter.ucs, you can simply deactivate with it the global Chat and send a Message to the player.
                     {
-                        var p = new GlobalChatLineMessage(onlinePlayer.GetClient());
-                        if(onlinePlayer.GetAccountPrivileges() > 0)
-                            p.SetPlayerName(senderName + " #" + senderId);
-                        else
-                            p.SetPlayerName(senderName);
-                        p.SetChatMessage(this.Message);
-                        p.SetPlayerId(senderId);
-                        p.SetLeagueId(level.GetPlayerAvatar().GetLeagueId());
-                        p.SetAlliance(ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId()));
+                        long senderId = level.GetPlayerAvatar().GetId();
+                        string senderName = level.GetPlayerAvatar().GetAvatarName();
+
+                        List<string> badwords = new List<string>();
+                        StreamReader r = new StreamReader(@"filter.ucs");
+                        string line = "";
+                        while ((line = r.ReadLine()) != null)
+                        {
+                            badwords.Add(line);
+                        }
+                        bool badword = badwords.Any(s => Message.Contains(s));
+
+                        if (badword)
+                        {
+                            var p = new GlobalChatLineMessage(level.GetClient());
+                            p.SetPlayerId(0);
+                            p.SetPlayerName("UCS Chat Filter System");
+                            p.SetChatMessage("DETECTED BAD WORD! PLEASE AVOID USING BAD WORDS!");
+                            PacketManager.ProcessOutgoingPacket(p);
+                            return;
+                        }
+
+                        foreach (var onlinePlayer in ResourcesManager.GetOnlinePlayers())
+                        {
+                            var p = new GlobalChatLineMessage(onlinePlayer.GetClient());
+                            if (onlinePlayer.GetAccountPrivileges() > 0)
+                                p.SetPlayerName(senderName + " #" + senderId);
+                            else
+                                p.SetPlayerName(senderName);
+
+                            p.SetChatMessage(Message);
+                            p.SetPlayerId(senderId);
+                            p.SetLeagueId(level.GetPlayerAvatar().GetLeagueId());
+                            p.SetAlliance(ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId()));
+                            PacketManager.ProcessOutgoingPacket(p);
+                        }
+                    }
+                    else
+                    {
+                        var p = new GlobalChatLineMessage(level.GetClient());
+                        p.SetPlayerId(0);
+                        p.SetPlayerName("UCS Chat System");
+                        p.SetChatMessage("The Global Chat is currently disabled. Please try again later! For more Informations, check the Server Status!");
                         PacketManager.ProcessOutgoingPacket(p);
+                        return;
                     }
                 }
             }    

@@ -40,6 +40,7 @@ namespace UCS.Logic
 
         public ClientAvatar(long id) : this()
         {
+            Random rnd = new Random();
             this.LastUpdate = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
             this.Login = id.ToString() + ((int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
             this.m_vId = id;
@@ -50,7 +51,12 @@ namespace UCS.Logic
             m_vExperience = 115;
             this.EndShieldTime = (int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds + Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
             m_vCurrentGems = Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]);
-            m_vScore = Convert.ToInt32(ConfigurationManager.AppSettings["startingTrophies"]);
+
+            if (ConfigurationManager.AppSettings["startingTrophies"] == "random")
+                m_vScore = rnd.Next(500, 4000);
+            else
+                m_vScore = Convert.ToInt32(ConfigurationManager.AppSettings["startingTrophies"]);
+
             this.TutorialStepsCount = 0x0A;
             m_vAvatarName = "NoNameYet";
             SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gold"), Convert.ToInt32(ConfigurationManager.AppSettings["startingGold"]));
@@ -183,6 +189,26 @@ namespace UCS.Logic
         public long GetAllianceId()
         {
             return m_vAllianceId;
+        }
+
+        public AllianceMemberEntry GetAllianceMemberEntry()
+        {
+            var alliance = ObjectManager.GetAlliance(m_vAllianceId);
+            if (alliance != null)
+            {
+                return alliance.GetAllianceMember(m_vId);
+            }
+            return null;
+        }
+
+        public int GetAllianceRole()
+        {
+            var ame = GetAllianceMemberEntry();
+            if (ame != null)
+            {
+                return ame.GetRole();
+            }
+            return -1;
         }
 
         public int GetAvatarLevel()

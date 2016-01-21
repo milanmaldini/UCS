@@ -21,6 +21,7 @@ namespace UCS.PacketProcessing
 
         public EditClanSettingsMessage(Client client, BinaryReader br) : base(client, br)
         {
+            //Not sure if there should be something here o.O
         }
 
         public override void Decode()
@@ -66,9 +67,9 @@ namespace UCS.PacketProcessing
                     cm.SetSenderId(0);
                     cm.SetHomeId(0);
                     cm.SetSenderLeagueId(22);
-                    cm.SetSenderName("Clan Manager");
+                    cm.SetSenderName("System Manager");
                     cm.SetSenderRole(2);
-                    cm.SetMessage("Clan settings were updated!");
+                    cm.SetMessage("Clan settings updated!");
 
                     var alliance1 = ObjectManager.GetAlliance(allianceId);
                     if (alliance != null)
