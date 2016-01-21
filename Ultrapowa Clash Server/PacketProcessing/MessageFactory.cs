@@ -37,6 +37,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(14324, typeof(SearchAlliancesMessage));
             m_vMessages.Add(14325, typeof(AskForAvatarProfileMessage));
             m_vMessages.Add(14715, typeof(SendGlobalChatLineMessage));
+            m_vMessages.Add(10100, typeof(FirstAuthentication));
         }
 
         public static object Read(Client c, BinaryReader br, int packetType)

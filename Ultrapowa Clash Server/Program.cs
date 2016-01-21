@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Configuration;
 using UCS.Core.Threading;
+using UCS.EncryptionTesting;
+
 
 namespace UCS
 {
     class Program
     {
+
         /// <summary>
         /// Entry point of UCS
         /// </summary>

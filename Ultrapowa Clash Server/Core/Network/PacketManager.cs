@@ -15,7 +15,7 @@ namespace UCS.Network
 {
     class PacketManager
     {
-        
+
         private delegate void IncomingProcessingDelegate();
         private static EventWaitHandle m_vIncomingWaitHandle = new AutoResetEvent(false);
         private delegate void OutgoingProcessingDelegate();
@@ -25,7 +25,7 @@ namespace UCS.Network
         private static ConcurrentQueue<Message> m_vOutgoingPackets;
 
         private bool m_vIsRunning;
-    
+
         public PacketManager()
         {
             m_vIncomingPackets = new ConcurrentQueue<Message>();
@@ -49,7 +49,7 @@ namespace UCS.Network
 
         private void IncomingProcessing()
         {
-            while(this.m_vIsRunning)
+            while (this.m_vIsRunning)
             {
                 m_vIncomingWaitHandle.WaitOne();
                 Message p;
@@ -70,7 +70,7 @@ namespace UCS.Network
                 m_vOutgoingWaitHandle.WaitOne();
                 Message p;
                 while (m_vOutgoingPackets.TryDequeue(out p))
-                {  
+                {
                     Logger.WriteLine(p, "S");
                     if (p.GetMessageType() == 20000)
                     {
@@ -80,12 +80,15 @@ namespace UCS.Network
                     }
                     else
                     {
-                        p.Client.Encrypt(p.GetData());
+                        if (p.GetMessageType() != 20100)
+                        {
+                            p.Client.Encrypt(p.GetData());
+                        }
                     }
 
                     try
                     {
-                        if(p.Client.Socket != null)
+                        if (p.Client.Socket != null)
                         {
                             p.Client.Socket.Send(p.GetRawData());
                         }
@@ -120,7 +123,9 @@ namespace UCS.Network
 
         public static void ProcessOutgoingPacket(Message p)
         {
+
             p.Encode();
+
             try
             {
                 Level pl = p.Client.GetLevel();

@@ -52,6 +52,8 @@ namespace UCS.Core.Threading
                 Console.WriteLine("Visit www.ultrapowa.com | www.shard.site");
                 Console.WriteLine("Starting the server...");
                 Console.WriteLine("");
+                if(!System.IO.Directory.Exists("logs"))
+                    System.IO.Directory.CreateDirectory("logs");
                 Debugger.SetLogLevel(Int32.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
                 Logger.SetLogLevel(Int32.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
                 NetworkThread.Start();

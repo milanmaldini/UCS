@@ -299,6 +299,7 @@ namespace UCS.PacketProcessing
 
                     using (var br = new BinaryReader(new MemoryStream(packet)))
                     {
+                        Console.WriteLine(Encoding.UTF8.GetString(packet));
                         obj = MessageFactory.Read(this, br, type);
                     }
 

@@ -43,6 +43,11 @@ namespace UCS.PacketProcessing
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
             {
+                
+                //byte[] pubKeyFrom10101 = br.ReadAllBytes().Take(32).ToArray();
+
+
+                
                 m_vAccountId = br.ReadInt64WithEndian();
                 m_vPassToken = br.ReadScString();
                 m_vClientMajorVersion = br.ReadInt32WithEndian();
@@ -71,6 +76,7 @@ namespace UCS.PacketProcessing
                     br.ReadUInt32WithEndian();
                     br.ReadUInt32WithEndian();
                 }
+                 
             }
         }
 

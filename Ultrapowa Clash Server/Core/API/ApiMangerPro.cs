@@ -38,7 +38,7 @@ namespace UCS.Core
             }
             catch (Exception e)
             {
-                Debugger.WriteLine("Exception at ApiManagerPro", e, 4);
+                Debugger.WriteLine("Exception at ApiManagerPro: ", e, 4);
             }
         }
 
@@ -47,9 +47,9 @@ namespace UCS.Core
         {
         }
 
-        public HttpListenerTimeoutManager TimeoutManager { get; }
+        public HttpListenerTimeoutManager TimeoutManager { get; set; }
 
-        public IPEndPoint RemoteEndPoint { get; }
+        public IPEndPoint RemoteEndPoint { get; set; }
 
         public static void JsonMain()
         {
@@ -61,7 +61,7 @@ namespace UCS.Core
                     Ucs = new Dictionary<string, string>
                 {
                     /* 
-                    Only disabled Till it's implemented
+                    Only disabled til it's implemented
 
                     {"StartingLevel", ConfigurationManager.AppSettings["startingLevel"]},
                     {"StartingExperience", ConfigurationManager.AppSettings["startingExperience"]},
@@ -140,7 +140,7 @@ namespace UCS.Core
                 {
                     try
                     {
-                        Console.WriteLine("Pro API Manager : Online");
+                        Console.WriteLine("API Manager Pro initialized");
                         while (_listener.IsListening)
                         {
                             ThreadPool.QueueUserWorkItem(c =>
