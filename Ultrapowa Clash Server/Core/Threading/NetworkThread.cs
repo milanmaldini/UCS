@@ -50,6 +50,7 @@ namespace UCS.Core.Threading
                     g.Start();
                     ws.Run();
                     ApiManager api = new ApiManager();
+                    UCSList listapi = new UCSList();
                     Console.WriteLine("Server started, let's play Clash of Clans!");
                 });
             T.Start();
