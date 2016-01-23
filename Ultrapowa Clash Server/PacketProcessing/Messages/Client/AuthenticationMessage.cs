@@ -9,7 +9,7 @@ using UCS.Network;
 using UCS.PacketProcessing.Messages.Server;
 namespace UCS.PacketProcessing
 {
-    class FirstAuthentication : Message
+    class AuthenticationMessage : Message
     {
         public int Data1;
         public int Data2;
@@ -18,7 +18,7 @@ namespace UCS.PacketProcessing
         public int Data4;
         public int Data5;
 
-        public FirstAuthentication(Client client, BinaryReader br) : base(client, br)
+        public AuthenticationMessage(Client client, BinaryReader br) : base(client, br)
         {
         }
 
@@ -31,7 +31,7 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            PacketManager.ProcessOutgoingPacket(new FirstAuthenticationOk(this.Client));
+            PacketManager.ProcessOutgoingPacket(new AuthenticationMessageOk(this.Client));
         }
        
     }

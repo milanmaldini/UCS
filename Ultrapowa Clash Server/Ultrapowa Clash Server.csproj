@@ -243,7 +243,7 @@
     <Compile Include="PacketProcessing\Commands\LeaveAllianceCommand.cs" />
     <Compile Include="PacketProcessing\Commands\JoinAllianceCommand.cs" />
     <Compile Include="PacketProcessing\Commands\SearchOpponentCommand.cs" />
-    <Compile Include="PacketProcessing\Messages\Client\FirstAuthentication.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\AuthenticationMessage.cs" />
     <Compile Include="PacketProcessing\GameOpCommandFactory.cs" />
     <Compile Include="PacketProcessing\Commands\CastSpellCommand.cs" />
     <Compile Include="PacketProcessing\Commands\PlaceAttackerCommand.cs" />
@@ -317,7 +317,7 @@
     <Compile Include="PacketProcessing\Commands\UpgradeBuildingCommand.cs" />
     <Compile Include="PacketProcessing\Commands\BuyBuildingCommand.cs" />
     <Compile Include="PacketProcessing\Commands\MoveBuildingCommand.cs" />
-    <Compile Include="PacketProcessing\Messages\Server\FirstAuthenticationOk.cs" />
+    <Compile Include="PacketProcessing\Messages\Server\AuthenticationMessageOk.cs" />
     <Compile Include="PacketProcessing\Messages\Server\AvailableServerCommandMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\AllianceJoinOkMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\AvatarStreamEntryMessage.cs" />
@@ -406,13 +406,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.94.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.94.0\build\net451\System.Data.SQLite.Core.targets')" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.99.0\build\net451\System.Data.SQLite.Core.targets'))" />
-    <Error Condition="!Exists('..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets'))" />
-  </Target>
   <Import Project="..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets" Condition="Exists('..\packages\Baseclass.Contrib.Nuget.Output.2.1.0\build\net40\Baseclass.Contrib.Nuget.Output.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
