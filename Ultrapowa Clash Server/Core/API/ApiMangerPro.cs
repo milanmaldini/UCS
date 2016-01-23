@@ -20,16 +20,6 @@ namespace UCS.Core
         {
             try
             {
-                if (!HttpListener.IsSupported)
-                    throw new NotSupportedException(
-                        "Windows XP SP2, Server 2003 or higher needed.Please Disable Api Manager");
-
-                if (prefixes == null || prefixes.Length == 0)
-                    throw new ArgumentException("prefixes");
-
-                if (method == null)
-                    throw new ArgumentException("method");
-
                 foreach (var s in prefixes)
                     _listener.Prefixes.Add(s);
 
@@ -112,16 +102,9 @@ namespace UCS.Core
             {
                 JsonMain();
             }
-            catch
+            catch (Exception ex)
             {
-                try
-                {
-                    JsonMain();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Exception happend in API Manager PRO Respone : " + ex);
-                }
+                Console.WriteLine("Exception happend in API Manager PRO Respone : " + ex);
             }
             return jsonapp;
         }

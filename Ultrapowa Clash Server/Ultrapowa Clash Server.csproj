@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Clash8Encryption\SodiumHelper.cs" />
     <Compile Include="Core\API\ApiMangerPro.cs" />
+    <Compile Include="Core\API\UCSList.cs" />
     <Compile Include="Core\ResourcesManager.cs" />
     <Compile Include="Core\API\ApiManager.cs" />
     <Compile Include="Core\DatabaseManager.cs" />
