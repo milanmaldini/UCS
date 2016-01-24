@@ -55,7 +55,10 @@ namespace UCS.Network
                 Message p;
                 while (m_vIncomingPackets.TryDequeue(out p))
                 {
-                    p.Client.Decrypt(p.GetData());
+                    if (p.GetMessageType() != 10100 && p.GetMessageType() != 10101)
+                    {
+                        p.Client.Decrypt(p.GetData());
+                    }
                     //Console.WriteLine("R " + p.GetMessageType().ToString() + " (" + p.GetLength().ToString() + ")");
                     Logger.WriteLine(p, "R");
                     MessageManager.ProcessPacket(p);

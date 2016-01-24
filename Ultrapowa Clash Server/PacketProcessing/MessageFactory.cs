@@ -18,7 +18,7 @@ namespace UCS.PacketProcessing
         static MessageFactory()
         {
             m_vMessages = new Dictionary<int, Type>();
-            m_vMessages.Add(10100, typeof(AuthenticationMessage));
+            m_vMessages.Add(10100, typeof(FirstAuthentication));
             m_vMessages.Add(10101, typeof(LoginMessage));
             m_vMessages.Add(10108, typeof(KeepAliveMessage));
             m_vMessages.Add(10212, typeof(ChangeAvatarNameMessage));

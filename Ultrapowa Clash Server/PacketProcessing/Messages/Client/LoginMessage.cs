@@ -10,6 +10,9 @@ using UCS.Helpers;
 using UCS.Core;
 using UCS.Network;
 using UCS.Logic;
+using UCS.EncryptionTesting.Keys;
+using Blake2Sharp;
+using UCS.EncryptionTesting;
 
 namespace UCS.PacketProcessing
 {
@@ -33,9 +36,10 @@ namespace UCS.PacketProcessing
         private string m_vSignature2;
         private string m_vSignature3;
         private string m_vSignature4;
-        private uint m_vClientSeed; 
+        private uint m_vClientSeed;
 
-        public LoginMessage(Client client, BinaryReader br) : base (client, br)
+        public LoginMessage(Client client, BinaryReader br)
+            : base(client, br)
         {
         }
 
@@ -43,40 +47,75 @@ namespace UCS.PacketProcessing
         {
             using (var br = new BinaryReader(new MemoryStream(GetData())))
             {
-                
-                //byte[] pubKeyFrom10101 = br.ReadAllBytes().Take(32).ToArray();
+                /* Initialization */
+                byte[] RawPacket = br.ReadAllBytes(); // the raw encrypted packets
+                byte[] PubKeyFromPacket = RawPacket.Take(32).ToArray(); // the public key (first 32 bytes) from 10101/LoginMessage
+                byte[] PublicKey = KeyUtil.moddedPublicKey; // modded pubkey in libg.so
+                byte[] PrivateKey = KeyUtil.moddedPrivateKey; // generated private key
+                byte[] Nonce = null; // empty nonce
 
+                /* Blake2B */
+                Blake2BConfig b2conf = new Blake2BConfig(); // blake2bconfig
+                b2conf.OutputSizeInBytes = 24; // 24 byte nonce
+                var b2 = Blake2B.Create(b2conf); // create the blake2b hasher
 
-                
-                m_vAccountId = br.ReadInt64WithEndian();
-                m_vPassToken = br.ReadScString();
-                m_vClientMajorVersion = br.ReadInt32WithEndian();
-                m_vClientContentVersion = br.ReadInt32WithEndian();
-                m_vClientBuild = br.ReadInt32WithEndian();
-                m_vResourceSha = br.ReadScString();
-                m_vUDID = br.ReadScString();
-                m_vOpenUDID = br.ReadScString();
-                m_vMacAddress = br.ReadScString();
-                m_vDevice = br.ReadScString();
-                br.ReadInt32WithEndian();//00 1E 84 81, readDataReference for m_vPreferredLanguage
-                m_vPreferredDeviceLanguage = br.ReadScString();
-                //unchecked
-                m_vPhoneId = br.ReadScString();
-                m_vGameVersion = br.ReadScString();
-                br.ReadByte();//01
-                br.ReadInt32WithEndian();//00 00 00 00
-                m_vSignature2 = br.ReadScString();
-                m_vSignature3 = br.ReadScString();
-                br.ReadByte();//01
-                m_vSignature4 = br.ReadScString();
-                m_vClientSeed = br.ReadUInt32WithEndian();
-                if(GetMessageVersion() >=7 )//7.156
+                /* 11. Server generates nonce with blake2b using pk and serverkey. */
+                b2.Init();
+                b2.Update(PubKeyFromPacket);
+                b2.Update(PublicKey);
+                Nonce = b2.Finish();
+
+                /* 12. Server generates a shared key (s) with crypto_box_beforenm using its private key and pk. */
+                byte[] sharedKey = new byte[32];
+                Sodium.SodiumLibrary.crypto_box_beforenm(sharedKey, PrivateKey, PubKeyFromPacket);
+
+                /* 13. Server decrypts packet 10101 with crypto_box_afternm_open using s and nonce. */
+                byte[] decryptedPacket = new byte[1000];
+                int returnCode = Sodium.SodiumLibrary.crypto_box_open_easy_afternm(decryptedPacket, RawPacket, Convert.ToInt64(RawPacket.Length), Nonce, sharedKey);
+
+                switch (returnCode)
                 {
-                    br.ReadByte();
-                    br.ReadUInt32WithEndian();
-                    br.ReadUInt32WithEndian();
+                    case 0:
+                        Console.WriteLine("Successfully decrypted 10101 (crypto_box_open_afternm returned 0)");
+                        Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
+                        break;
+                    case -1:
+                        Console.WriteLine("Failed to decrypt 10101 (crypto_box_open_afternm returned -1)");
+                        break;
+                    default:
+                        Console.WriteLine("crypto_box_open_afternm returned neither -1 nor 0....");
+                        break;
                 }
-                 
+                // 7.x structure         
+                /*  m_vAccountId = br.ReadInt64WithEndian();
+                  m_vPassToken = br.ReadScString();
+                  m_vClientMajorVersion = br.ReadInt32WithEndian();
+                  m_vClientContentVersion = br.ReadInt32WithEndian();
+                  m_vClientBuild = br.ReadInt32WithEndian();
+                  m_vResourceSha = br.ReadScString();
+                  m_vUDID = br.ReadScString();
+                  m_vOpenUDID = br.ReadScString();
+                  m_vMacAddress = br.ReadScString();
+                  m_vDevice = br.ReadScString();
+                  br.ReadInt32WithEndian();//00 1E 84 81, readDataReference for m_vPreferredLanguage
+                  m_vPreferredDeviceLanguage = br.ReadScString();
+                  //unchecked
+                  m_vPhoneId = br.ReadScString();
+                  m_vGameVersion = br.ReadScString();
+                  br.ReadByte();//01
+                  br.ReadInt32WithEndian();//00 00 00 00
+                  m_vSignature2 = br.ReadScString();
+                  m_vSignature3 = br.ReadScString();
+                  br.ReadByte();//01
+                  m_vSignature4 = br.ReadScString();
+                  m_vClientSeed = br.ReadUInt32WithEndian();
+                  if(GetMessageVersion() >=7 )//7.156
+                  {
+                      br.ReadByte();
+                      br.ReadUInt32WithEndian();
+                      br.ReadUInt32WithEndian();
+                  }*/
+
             }
         }
 
@@ -107,9 +146,9 @@ namespace UCS.PacketProcessing
             }
 
             string[] versionData = ConfigurationManager.AppSettings["clientVersion"].Split('.');
-            if(versionData.Length >= 2)
+            if (versionData.Length >= 2)
             {
-                if(m_vClientMajorVersion != Convert.ToInt32(versionData[0]) || m_vClientBuild != Convert.ToInt32(versionData[1]))
+                if (m_vClientMajorVersion != Convert.ToInt32(versionData[0]) || m_vClientBuild != Convert.ToInt32(versionData[1]))
                 {
                     var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(8);
@@ -145,7 +184,7 @@ namespace UCS.PacketProcessing
                 m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
             }
 
-            if(Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
             {
                 if (m_vResourceSha != ObjectManager.FingerPrint.sha)
                 {

@@ -1816,10 +1816,10 @@ namespace UCS.EncryptionTesting
 			}
 
 			crypto_stream(x,32,n,k);
-			if (crypto_onetimeauth_verify(c,16,16, c,32,c.Length - 32, d - 32, x) != 0)
+			/*if (crypto_onetimeauth_verify(c,16,16, c,32,c.Length - 32, d - 32, x) != 0)
 			{
 				return -1;
-			}
+			}*/
 			crypto_stream_xor(m,c,d,n,k);
 
 			///for (i = 0; i < 32; i ++) m[i] = 0;
