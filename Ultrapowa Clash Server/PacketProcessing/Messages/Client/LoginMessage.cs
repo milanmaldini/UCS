@@ -10,12 +10,69 @@ using UCS.Helpers;
 using UCS.Core;
 using UCS.Network;
 using UCS.Logic;
-using UCS.EncryptionTesting.Keys;
 using Blake2Sharp;
 using UCS.EncryptionTesting;
 
 namespace UCS.PacketProcessing
 {
+    class LoginMessageHelper
+    {
+        private static int GetHexVal(char hex)
+        {
+            int val = (int)hex;
+            //For uppercase A-F letters:
+            return val - (val < 58 ? 48 : 55);
+        }
+
+        /// <summary>
+        /// Converts a hex string to a byte array (DEADBEEF becomes 0xDE, 0xAD, 0xBE, 0xEF)
+        /// </summary>
+        /// <param name="hexStr">The hex string</param>
+        /// <returns></returns>
+        public static byte[] StringToByteArray(string hexStr)
+        {
+            if (hexStr.Length % 2 == 1)
+                throw new FormatException("HexStr Length is not odd (2,4,6,8,16,32,64 [...])!");
+
+            byte[] arr = new byte[hexStr.Length >> 1];
+
+            for (int i = 0; i < hexStr.Length >> 1; ++i)
+                arr[i] = (byte)((GetHexVal(hexStr[i << 1]) << 4) + (GetHexVal(hexStr[(i << 1) + 1])));
+
+            return arr;
+        }
+        
+        private static byte[] Server_PK = null;
+        /// <summary>
+        /// Returns the generated public key in libg.so (Offset 0x
+        /// </summary>
+        public static byte[] ServerPublicKey
+        {
+            get
+            {
+                Server_PK = StringToByteArray("72f1a4a4c48e44da0c42310f800e96624e6dc6a641a9d41c3b5039d8dfadc27e".ToUpper());
+                return Server_PK;
+            }
+            set
+            {
+                Server_PK = value;
+            }
+        }
+
+        private static byte[] Server_SK = null;
+        public static byte[] ServerSecretKey
+        {
+            get
+            {
+                Server_SK = StringToByteArray("1891d401fadb51d25d3a9174d472a9f691a45b974285d47729c45c6538070d85".ToUpper());
+                return Server_SK;
+            }
+            set
+            {
+                Server_SK = value;
+            }
+        }
+    }
     //Packet 10101
     class LoginMessage : Message
     {
@@ -30,7 +87,6 @@ namespace UCS.PacketProcessing
         private string m_vMacAddress;
         private string m_vDevice;
         private string m_vPreferredDeviceLanguage;
-        //unchecked
         private string m_vPhoneId;
         private string m_vGameVersion;
         private string m_vSignature2;
@@ -43,23 +99,22 @@ namespace UCS.PacketProcessing
         {
         }
 
+
+
         public override void Decode()
         {
-            using (var br = new BinaryReader(new MemoryStream(GetData())))
-            {
-                /* Initialization */
-                byte[] RawPacket = br.ReadAllBytes(); // the raw encrypted packets
-                byte[] PubKeyFromPacket = RawPacket.Take(32).ToArray(); // the public key (first 32 bytes) from 10101/LoginMessage
-                byte[] PublicKey = KeyUtil.moddedPublicKey; // modded pubkey in libg.so
-                byte[] PrivateKey = KeyUtil.moddedPrivateKey; // generated private key
-                byte[] Nonce = null; // empty nonce
-
-                /* Blake2B */
-                Blake2BConfig b2conf = new Blake2BConfig(); // blake2bconfig
-                b2conf.OutputSizeInBytes = 24; // 24 byte nonce
-                var b2 = Blake2B.Create(b2conf); // create the blake2b hasher
+                byte[] RawPacket = GetData(); // Raw, encrypted packet;
+                byte[] RawPacketWithoutPK = GetData().Skip(32).ToArray();
+                byte[] PubKeyFromPacket = RawPacket.Take(32).ToArray(); // Public key from 10101
+                byte[] PublicKey = LoginMessageHelper.ServerPublicKey; // Public key from the server
+                byte[] PrivateKey = LoginMessageHelper.ServerSecretKey; // Private key from the server
+                byte[] Nonce = null; // Blake2b nonce
 
                 /* 11. Server generates nonce with blake2b using pk and serverkey. */
+                Blake2BConfig b2conf = new Blake2BConfig(); 
+                b2conf.OutputSizeInBytes = 24; 
+                Hasher b2 = Blake2B.Create(b2conf);
+
                 b2.Init();
                 b2.Update(PubKeyFromPacket);
                 b2.Update(PublicKey);
@@ -67,56 +122,20 @@ namespace UCS.PacketProcessing
 
                 /* 12. Server generates a shared key (s) with crypto_box_beforenm using its private key and pk. */
                 byte[] sharedKey = new byte[32];
-                Sodium.SodiumLibrary.crypto_box_beforenm(sharedKey, PrivateKey, PubKeyFromPacket);
+                Sodium.SodiumLibrary.crypto_box_beforenm(sharedKey, PubKeyFromPacket, PrivateKey);
 
-                /* 13. Server decrypts packet 10101 with crypto_box_afternm_open using s and nonce. */
-                byte[] decryptedPacket = new byte[1000];
-                int returnCode = Sodium.SodiumLibrary.crypto_box_open_easy_afternm(decryptedPacket, RawPacket, Convert.ToInt64(RawPacket.Length), Nonce, sharedKey);
+                /* 13. Server decrypts packet 10101 with crypto_box_open using s and nonce. */
+                byte[] decryptedPacket = Sodium.PublicKeyBox.Open(RawPacketWithoutPK, Nonce, PrivateKey, PubKeyFromPacket);
 
-                switch (returnCode)
+                byte[] decryptedPacketWithoutNonces = decryptedPacket.Skip(48).ToArray();
+                Console.WriteLine(Encoding.UTF8.GetString(decryptedPacketWithoutNonces));
+                Console.WriteLine(BitConverter.ToString(decryptedPacketWithoutNonces));
+
+                using (var br = new BinaryReader(new MemoryStream(decryptedPacket.Skip(48).ToArray())))
                 {
-                    case 0:
-                        Console.WriteLine("Successfully decrypted 10101 (crypto_box_open_afternm returned 0)");
-                        Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
-                        break;
-                    case -1:
-                        Console.WriteLine("Failed to decrypt 10101 (crypto_box_open_afternm returned -1)");
-                        break;
-                    default:
-                        Console.WriteLine("crypto_box_open_afternm returned neither -1 nor 0....");
-                        break;
+                   /* Process data */
                 }
-                // 7.x structure         
-                /*  m_vAccountId = br.ReadInt64WithEndian();
-                  m_vPassToken = br.ReadScString();
-                  m_vClientMajorVersion = br.ReadInt32WithEndian();
-                  m_vClientContentVersion = br.ReadInt32WithEndian();
-                  m_vClientBuild = br.ReadInt32WithEndian();
-                  m_vResourceSha = br.ReadScString();
-                  m_vUDID = br.ReadScString();
-                  m_vOpenUDID = br.ReadScString();
-                  m_vMacAddress = br.ReadScString();
-                  m_vDevice = br.ReadScString();
-                  br.ReadInt32WithEndian();//00 1E 84 81, readDataReference for m_vPreferredLanguage
-                  m_vPreferredDeviceLanguage = br.ReadScString();
-                  //unchecked
-                  m_vPhoneId = br.ReadScString();
-                  m_vGameVersion = br.ReadScString();
-                  br.ReadByte();//01
-                  br.ReadInt32WithEndian();//00 00 00 00
-                  m_vSignature2 = br.ReadScString();
-                  m_vSignature3 = br.ReadScString();
-                  br.ReadByte();//01
-                  m_vSignature4 = br.ReadScString();
-                  m_vClientSeed = br.ReadUInt32WithEndian();
-                  if(GetMessageVersion() >=7 )//7.156
-                  {
-                      br.ReadByte();
-                      br.ReadUInt32WithEndian();
-                      br.ReadUInt32WithEndian();
-                  }*/
-
-            }
+            
         }
 
         public override void Process(Level level)
