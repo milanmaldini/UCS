@@ -10,10 +10,7 @@ namespace UCS.Database
     class ucsdbEntities : DbContext
     {
 
-        public ucsdbEntities(string connectionString)
-            : base("name=" + connectionString)
-        {
-        }
+        public ucsdbEntities(string connectionString) : base("name=" + connectionString) {}
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

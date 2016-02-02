@@ -12,48 +12,47 @@ namespace UCS.Core
 {
     class UCSList
     {
-        string APIKey = ConfigurationManager.AppSettings["UCSList - APIKey"];
-        int Status = CheckStatus();
-        string UCSPanel = "https://www.ucspanel.tk/api/";
+        static string APIKey = ConfigurationManager.AppSettings["UCSList - APIKey"];
+        static int Status = CheckStatus();
+        static string UCSPanel = "https://www.ucspanel.tk/api/";
 
         public UCSList()
         {
             if (!string.IsNullOrEmpty(APIKey) && APIKey.Length == 25)
             {
-                new Timer((Object stateInfo) => {
+                new Timer((Object stateInfo) =>
+                {
                     SendData();
-                }, new AutoResetEvent(false), 0, 600000);
+                }, new AutoResetEvent(false), 0, 300000);
             }
             else
-                Console.WriteLine("[UCSList] UCSList API is disabled - Visit www.ucslist.tk for more info.");
+                Console.WriteLine("[UCSList] UCSList API is disabled - Visit www.ucspanel.tk for more info.");
         }
 
-        public void SendData()
+        public static void SendData()
         {
-            var response = Http.Post(UCSPanel, new NameValueCollection() {
+            string result = Http.Post(UCSPanel, new NameValueCollection() {
                 { "ApiKey", APIKey },
                 { "OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count) },
                 { "Status", Convert.ToString(Status) }
-            });
+            }).Remove(0, 1);
 
-            string result = System.Text.Encoding.UTF8.GetString(response);
-            
-            if (result == "true")
-                Console.Write("[UCSList] UCS Sent data successfully.");
+            if (result == "OK")
+                Console.WriteLine("[UCSList] UCS Sent data successfully.");
             else
-                Console.WriteLine("[UCSList] UCSList Server answer uncorrectly, maybe wrong API Key ?");
+                Console.WriteLine("[UCSList] UCSList Server answer uncorrectly : " + result);
         }
 
         public static class Http
         {
-            public static byte[] Post(string uri, NameValueCollection pairs)
+            public static string Post(string uri, NameValueCollection pairs)
             {
                 byte[] response = null;
                 using (WebClient client = new WebClient())
                 {
                     response = client.UploadValues(uri, pairs);
                 }
-                return response;
+                return System.Text.Encoding.UTF8.GetString(response);
             }
         }
 
@@ -61,9 +60,9 @@ namespace UCS.Core
         {
             bool stat = Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]);
             if (stat)
-                return 1;
-            else
                 return 2;
+            else
+                return 1;
         }
     }
 }

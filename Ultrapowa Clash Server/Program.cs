@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using UCS.Core.Threading;
-using UCS.EncryptionTesting;
 
 namespace UCS
 {
