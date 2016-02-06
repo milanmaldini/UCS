@@ -1,12 +1,13 @@
-﻿using System;
-using System.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
-using System.Threading;
 using System.Collections.Specialized;
+using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace UCS.Core
 {
@@ -14,16 +15,22 @@ namespace UCS.Core
     {
         static string APIKey = ConfigurationManager.AppSettings["UCSList - APIKey"];
         static int Status = CheckStatus();
+        private static Thread T { get; set; }
         static string UCSPanel = "https://www.ucspanel.tk/api/";
 
         public UCSList()
         {
             if (!string.IsNullOrEmpty(APIKey) && APIKey.Length == 25)
             {
-                new Timer((Object stateInfo) =>
+                T = new Thread(() =>
+                {
+                    while (true)
                 {
                     SendData();
-                }, new AutoResetEvent(false), 0, 300000);
+                    Thread.Sleep(60000);
+                }
+                });
+                T.Start();
             }
             else
                 Console.WriteLine("[UCSList] UCSList API is disabled - Visit www.ucspanel.tk for more info.");
