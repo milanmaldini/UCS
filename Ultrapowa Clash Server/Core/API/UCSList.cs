@@ -1,22 +1,17 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace UCS.Core
 {
-    class UCSList
+    internal class UCSList
     {
-        static string APIKey = ConfigurationManager.AppSettings["UCSList - APIKey"];
-        static int Status = CheckStatus();
-        private static Thread T { get; set; }
-        static string UCSPanel = "https://www.ucspanel.tk/api/";
+        private static readonly string APIKey = ConfigurationManager.AppSettings["UCSList - APIKey"];
+        private static readonly int Status = CheckStatus();
+        private static readonly string UCSPanel = "https://www.ucspanel.tk/api/";
 
         public UCSList()
         {
@@ -25,10 +20,10 @@ namespace UCS.Core
                 T = new Thread(() =>
                 {
                     while (true)
-                {
-                    SendData();
-                    Thread.Sleep(60000);
-                }
+                    {
+                        SendData();
+                        Thread.Sleep(60000);
+                    }
                 });
                 T.Start();
             }
@@ -36,12 +31,23 @@ namespace UCS.Core
                 Console.WriteLine("[UCSList] UCSList API is disabled - Visit www.ucspanel.tk for more info.");
         }
 
+        private static Thread T { get; set; }
+
+        public static int CheckStatus()
+        {
+            var stat = Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]);
+            if (stat)
+                return 2;
+            return 1;
+        }
+
         public static void SendData()
         {
-            string result = Http.Post(UCSPanel, new NameValueCollection() {
-                { "ApiKey", APIKey },
-                { "OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count) },
-                { "Status", Convert.ToString(Status) }
+            var result = Http.Post(UCSPanel, new NameValueCollection
+            {
+                {"ApiKey", APIKey},
+                {"OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count)},
+                {"Status", Convert.ToString(Status)}
             }).Remove(0, 1);
 
             if (result == "OK")
@@ -55,21 +61,12 @@ namespace UCS.Core
             public static string Post(string uri, NameValueCollection pairs)
             {
                 byte[] response = null;
-                using (WebClient client = new WebClient())
+                using (var client = new WebClient())
                 {
                     response = client.UploadValues(uri, pairs);
                 }
-                return System.Text.Encoding.UTF8.GetString(response);
+                return Encoding.UTF8.GetString(response);
             }
-        }
-
-        public static int CheckStatus()
-        {
-            bool stat = Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]);
-            if (stat)
-                return 2;
-            else
-                return 1;
         }
     }
 }

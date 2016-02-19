@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
-using UCS.GameFiles;
+﻿using System.IO;
 using UCS.Core;
+using UCS.GameFiles;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x206
-    class BuyResourcesCommand : Command
+    internal class BuyResourcesCommand : Command
     {
-        private int m_vResourceId;
-        private int m_vResourceCount;
-        private byte m_vIsCommandEmbedded;
-        private object m_vCommand;
+        private readonly object m_vCommand;
+        private readonly byte m_vIsCommandEmbedded;
+        private readonly int m_vResourceCount;
+        private readonly int m_vResourceId;
 
         public BuyResourcesCommand(BinaryReader br)
         {
@@ -28,33 +23,33 @@ namespace UCS.PacketProcessing
             {
                 m_vCommand = CommandFactory.Read(br);
             }
-            br.ReadInt32WithEndian();//Unknown1 
+            br.ReadInt32WithEndian(); //Unknown1
         }
 
         public override void Execute(Level level)
         {
-            ResourceData rd = (ResourceData)ObjectManager.DataTables.GetDataById(m_vResourceId);
-            if(rd != null)
+            var rd = (ResourceData) ObjectManager.DataTables.GetDataById(m_vResourceId);
+            if (rd != null)
             {
                 if (m_vResourceCount >= 1)
                 {
                     if (!rd.PremiumCurrency)
                     {
                         var avatar = level.GetPlayerAvatar();
-                        int diamondCost = GamePlayUtil.GetResourceDiamondCost(m_vResourceCount, rd);
-                        int unusedResourceCap = avatar.GetUnusedResourceCap(rd);
-                        if(m_vResourceCount <= unusedResourceCap)
+                        var diamondCost = GamePlayUtil.GetResourceDiamondCost(m_vResourceCount, rd);
+                        var unusedResourceCap = avatar.GetUnusedResourceCap(rd);
+                        if (m_vResourceCount <= unusedResourceCap)
                         {
-                            if(avatar.HasEnoughDiamonds(diamondCost))
+                            if (avatar.HasEnoughDiamonds(diamondCost))
                             {
                                 avatar.UseDiamonds(diamondCost);
                                 avatar.CommodityCountChangeHelper(0, rd, m_vResourceCount);
-                                if(m_vIsCommandEmbedded >= 1)
-                                    ((Command)m_vCommand).Execute(level);
+                                if (m_vIsCommandEmbedded >= 1)
+                                    ((Command) m_vCommand).Execute(level);
                             }
                         }
                     }
-                }   
+                }
             }
         }
     }

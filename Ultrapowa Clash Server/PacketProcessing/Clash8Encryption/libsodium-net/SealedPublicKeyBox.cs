@@ -1,8 +1,8 @@
-﻿using System.Security.Cryptography;
+﻿using Sodiumc.Exceptions;
+using System.Security.Cryptography;
 using System.Text;
-using Sodium.Exceptions;
 
-namespace Sodium
+namespace Sodiumc
 {
     /// <summary> Create and Open SealedPublicKeyBoxes. </summary>
     public static class SealedPublicKeyBox
@@ -55,7 +55,7 @@ namespace Sodium
             //validate the length of the recipient public key
             if (recipientPublicKey == null || recipientPublicKey.Length != RecipientPublicKeyBytes)
                 throw new KeyOutOfRangeException("recipientPublicKey",
-                    (recipientPublicKey == null) ? 0 : recipientPublicKey.Length,
+                    recipientPublicKey == null ? 0 : recipientPublicKey.Length,
                     string.Format("recipientPublicKey must be {0} bytes in length.", RecipientPublicKeyBytes));
 
             var buffer = new byte[message.Length + CryptoBoxSealbytes];
@@ -113,15 +113,14 @@ namespace Sodium
             //validate the length of the recipient secret key
             if (recipientSecretKey == null || recipientSecretKey.Length != RecipientSecretKeyBytes)
                 throw new KeyOutOfRangeException("recipientPublicKey",
-                    (recipientSecretKey == null) ? 0 : recipientSecretKey.Length,
+                    recipientSecretKey == null ? 0 : recipientSecretKey.Length,
                     string.Format("recipientSecretKey must be {0} bytes in length.", RecipientSecretKeyBytes));
 
             //validate the length of the recipient public key
             if (recipientPublicKey == null || recipientPublicKey.Length != RecipientPublicKeyBytes)
                 throw new KeyOutOfRangeException("recipientPublicKey",
-                    (recipientPublicKey == null) ? 0 : recipientPublicKey.Length,
+                    recipientPublicKey == null ? 0 : recipientPublicKey.Length,
                     string.Format("recipientPublicKey must be {0} bytes in length.", RecipientPublicKeyBytes));
-
 
             var buffer = new byte[cipherText.Length - CryptoBoxSealbytes];
             var ret = SodiumLibrary.crypto_box_seal_open(buffer, cipherText, cipherText.Length, recipientPublicKey,

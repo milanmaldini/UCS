@@ -12,7 +12,7 @@ namespace UCS.Logic
 
         public CombatComponent(ConstructionItem ci, Level level) : base(ci)
         {
-            var bd = (BuildingData)ci.GetData();
+            var bd = (BuildingData) ci.GetData();
 
             if (bd.AmmoCount != 0)
             {
@@ -28,7 +28,7 @@ namespace UCS.Logic
         public void FillAmmo()
         {
             var ca = GetParent().GetLevel().GetPlayerAvatar();
-            var bd = (BuildingData)GetParent().GetData();
+            var bd = (BuildingData) GetParent().GetData();
             var rd = ObjectManager.DataTables.GetResourceByName(bd.AmmoResource);
 
             if (ca.HasEnoughResources(rd, bd.AmmoCost))
@@ -44,7 +44,6 @@ namespace UCS.Logic
             {
                 m_vAmmo = jsonObject["ammo"].ToObject<int>();
             }
-
         }
 
         public override JObject Save(JObject jsonObject)

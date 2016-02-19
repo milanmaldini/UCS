@@ -1,74 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Configuration;
+using System.IO;
+using System.Reflection;
+using System.Threading;
 using UCS.Helpers;
+
 namespace UCS.Core.Threading
 {
-    class ConsoleThread
+    internal class ConsoleThread
     {
-        public static string Name = "Console Thread";
-        public static string Description = "Manages Console I/O";
-        public static string Version = "1.0.0";
         public static string Author = "ExPl0itR";
-
-        /// <summary>
-        /// Variable holding the thread itself
-        /// </summary>
-        private static Thread T { get; set; }
-
+        public static string Description = "Manages Console I/O";
+        public static string Name = "Console Thread";
+        public static string Version = "1.0.0";
         private static string Title, Tmp, Command;
-        /// <summary>
-        /// Starts the Thread
-        /// </summary>
+        private static Thread T { get; set; }
+        
         public static void Start()
         {
             T = new Thread(() =>
             {
-                /* Animated Console Title */
-                Title = "Ultrapowa Clash Server v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                for (int i = 0; i < Title.Length; i++)
+                Title = "Ultrapowa Clash Server v" + Assembly.GetExecutingAssembly().GetName().Version;
+                for (var i = 0; i < Title.Length; i++)
                 {
                     Tmp += Title[i];
                     Console.Title = Tmp;
-                    Thread.Sleep(35);
+                    Thread.Sleep(25);
                 }
-                /* ASCII Art centered */
                 Console.WriteLine(
-                      @"
-                    888     888  .d8888b.   .d8888b.  
-                    888     888 d88P  Y88b d88P  Y88b 
-                    888     888 888    888 Y88b.      
-                    888     888 888         ""Y888b.   
-                    888     888 888            ""Y88b. 
-                    888     888 888    888       ""888 
-                    Y88b. .d88P Y88b  d88P Y88b  d88P 
-                     ""Y88888P""   ""Y8888P""   ""Y8888P""  
+                    @"
+    888     888 888    88888888888 8888888b.         d8888 8888888b.   .d88888b.  888       888        d8888 
+    888     888 888        888     888   Y88b       d88888 888   Y88b d88P' 'Y88b 888   o   888       d88888 
+    888     888 888        888     888    888      d88P888 888    888 888     888 888  d8b  888      d88P888
+    888     888 888        888     888   d88P     d88P 888 888   d88P 888     888 888 d888b 888     d88P 888
+    888     888 888        888     8888888P'     d88P  888 8888888P'  888     888 888d88888b888    d88P  888
+    888     888 888        888     888 T88b     d88P   888 888        888     888 88888P Y88888   d88P   888
+    Y88b. .d88P 888        888     888  T88b   d8888888888 888        Y88b. .d88P 8888P   Y8888  d8888888888
+     'Y88888P'  88888888   888     888   T88b d88P     888 888         'Y88888P'  888P     Y888 d88P     888
                   ");
-                Console.WriteLine("Ultrapowa Clash Server");
-                Console.WriteLine("Visit www.ultrapowa.com | www.shard.site");
-                Console.WriteLine("Starting the server...");
+                Console.WriteLine("[UCS]    -> This program has need made by Ultrapowa Clash Server Team !");
+                Console.WriteLine("[UCS]    -> Don't forget to visit www.ultrapowa.com daily for news update !");
+                Console.WriteLine("[UCS]    -> UCS is now starting...");
                 Console.WriteLine("");
-                if(!System.IO.Directory.Exists("logs"))
-                    System.IO.Directory.CreateDirectory("logs");
-                Debugger.SetLogLevel(Int32.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
-                Logger.SetLogLevel(Int32.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
+                if (!Directory.Exists("logs"))
+                    Directory.CreateDirectory("logs");
+                Debugger.SetLogLevel(int.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
+                Logger.SetLogLevel(int.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
                 NetworkThread.Start();
                 MemoryThread.Start();
                 while ((Command = Console.ReadLine()) != null)
-                {
                     CommandParser.Parse(Command);
-                }
             });
             T.Start();
         }
 
-        /// <summary>
-        /// Stops the Thread
-        /// </summary>
         public static void Stop()
         {
             if (T.ThreadState == ThreadState.Running)

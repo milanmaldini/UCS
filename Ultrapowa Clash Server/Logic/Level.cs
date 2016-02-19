@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UCS.Core;
+using System;
 using UCS.PacketProcessing;
-using UCS.GameFiles;
 
 namespace UCS.Logic
 {
-    class Level
+    internal class Level
     {
-
-        public GameObjectManager GameObjectManager;//a1 + 44
-        public WorkerManager WorkerManager;
-        private Client m_vClient;
-        private ClientAvatar m_vClientAvatar;
-        private DateTime m_vTime;//a1 + 40
+        private readonly ClientAvatar m_vClientAvatar;
+        public GameObjectManager GameObjectManager; //a1 + 44
         private byte m_vAccountPrivileges;
         private byte m_vAccountStatus;
+        private Client m_vClient;
+        private DateTime m_vTime; //a1 + 40
+        public WorkerManager WorkerManager;
         //MissionManager
         //AchievementManager
         //CooldownManager
@@ -46,17 +37,6 @@ namespace UCS.Logic
             m_vAccountStatus = 0;
         }
 
-        public string SaveToJSON()
-        {
-            return JsonConvert.SerializeObject(GameObjectManager.Save());
-        }
-
-        public void LoadFromJSON(string jsonString)
-        {
-            JObject jsonObject = JObject.Parse(jsonString);
-            GameObjectManager.Load(jsonObject);
-        }
-
         public byte GetAccountPrivileges()
         {
             return m_vAccountPrivileges;
@@ -72,19 +52,19 @@ namespace UCS.Logic
             return m_vClient;
         }
 
-        public ClientAvatar GetHomeOwnerAvatar()
-        {
-            return this.m_vClientAvatar;
-        }
-
         public ComponentManager GetComponentManager()
         {
             return GameObjectManager.GetComponentManager();
         }
 
+        public ClientAvatar GetHomeOwnerAvatar()
+        {
+            return m_vClientAvatar;
+        }
+
         public ClientAvatar GetPlayerAvatar()
         {
-            return this.m_vClientAvatar;
+            return m_vClientAvatar;
         }
 
         public DateTime GetTime()
@@ -97,14 +77,25 @@ namespace UCS.Logic
             return WorkerManager.GetFreeWorkers() > 0;
         }
 
-        public void SetAccountStatus(byte status)
+        public void LoadFromJSON(string jsonString)
         {
-            m_vAccountStatus = status;
+            var jsonObject = JObject.Parse(jsonString);
+            GameObjectManager.Load(jsonObject);
+        }
+
+        public string SaveToJSON()
+        {
+            return JsonConvert.SerializeObject(GameObjectManager.Save());
         }
 
         public void SetAccountPrivileges(byte privileges)
         {
             m_vAccountPrivileges = privileges;
+        }
+
+        public void SetAccountStatus(byte status)
+        {
+            m_vAccountStatus = status;
         }
 
         public void SetClient(Client client)

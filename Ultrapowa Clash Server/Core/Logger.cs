@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using UCS.PacketProcessing;
 
 namespace UCS.Core
 {
-    static class Logger
+    internal static class Logger
     {
         private static readonly object m_vSyncObject = new object();
         private static readonly TextWriter m_vTextWriter;
@@ -26,9 +22,9 @@ namespace UCS.Core
             m_vLogLevel = level;
         }
 
-        public static void WriteLine(Message p, String prefix = null, int logLevel = 4)
+        public static void WriteLine(Message p, string prefix = null, int logLevel = 4)
         {
-            if(logLevel <= m_vLogLevel)
+            if (logLevel <= m_vLogLevel)
             {
                 lock (m_vSyncObject)
                 {
@@ -42,8 +38,7 @@ namespace UCS.Core
                     m_vTextWriter.Write(p.GetMessageType().ToString());
                     m_vTextWriter.Write("(");
                     m_vTextWriter.Write(p.GetMessageVersion().ToString());
-                    m_vTextWriter.Write(")");
-                    m_vTextWriter.Write(";");
+                    m_vTextWriter.Write(");");
                     m_vTextWriter.Write(p.GetLength().ToString());
                     m_vTextWriter.Write(";");
                     m_vTextWriter.WriteLine(p.ToHexString());
@@ -53,7 +48,7 @@ namespace UCS.Core
             }
         }
 
-        public static void WriteLine (String s, String prefix = null, int logLevel = 4)
+        public static void WriteLine(string s, string prefix = null, int logLevel = 4)
         {
             if (logLevel <= m_vLogLevel)
             {
@@ -69,7 +64,7 @@ namespace UCS.Core
                     m_vTextWriter.WriteLine(s);
                     m_vTextWriter.Flush();
                 }
-            }     
+            }
         }
     }
 }

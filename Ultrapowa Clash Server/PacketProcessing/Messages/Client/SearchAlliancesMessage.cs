@@ -1,41 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
+using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
-using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Packet 14324
-    class SearchAlliancesMessage : Message
+    internal class SearchAlliancesMessage : Message
     {
         private const int m_vAllianceLimit = 40;
-        private string m_vSearchString;
-        private int m_vWarFrequency;
         private int m_vAllianceOrigin;
-        private int m_vMinimumAllianceMembers;
-        private int m_vMaximumAllianceMembers;
         private int m_vAllianceScore;
-        private byte m_vShowOnlyJoinableAlliances;
+        private int m_vMaximumAllianceMembers;
         private int m_vMinimumAllianceLevel;
+        private int m_vMinimumAllianceMembers;
+        private string m_vSearchString;
+        private byte m_vShowOnlyJoinableAlliances;
+        private int m_vWarFrequency;
 
-        public SearchAlliancesMessage(Client client, BinaryReader br) : base (client, br)
+        public SearchAlliancesMessage(Client client, BinaryReader br) : base(client, br)
         {
         }
 
-        //00 00 00 03 
+        //00 00 00 03
         //61 61 61
-        //00 00 00 01 
-        //00 00 00 00 
-        //00 00 00 01 
-        //00 00 00 29 
-        //00 00 07 D0 
-        //01 
+        //00 00 00 01
+        //00 00 00 00
+        //00 00 00 01
+        //00 00 00 29
+        //00 00 07 D0
+        //01
         //00 00 00 00 //???
         //00 00 00 06
 
@@ -57,11 +54,10 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-
             var alliances = ObjectManager.GetInMemoryAlliances();
-            List<Alliance> joinableAlliances = new List<Alliance>();
-            int i = 0;
-            int j = 0;
+            var joinableAlliances = new List<Alliance>();
+            var i = 0;
+            var j = 0;
             while (j < m_vAllianceLimit && i < alliances.Count)
             {
                 if (alliances[i].GetAllianceMembers().Count != 0
@@ -74,7 +70,7 @@ namespace UCS.PacketProcessing
             }
             joinableAlliances = joinableAlliances.ToList();
 
-            var p = new AllianceListMessage(this.Client);
+            var p = new AllianceListMessage(Client);
             p.SetAlliances(joinableAlliances);
             p.SetSearchString(m_vSearchString);
             PacketManager.ProcessOutgoingPacket(p);

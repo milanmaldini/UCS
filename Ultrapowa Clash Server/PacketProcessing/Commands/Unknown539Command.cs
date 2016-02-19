@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x21B
-    class Unknown539Command : Command
+    internal class Unknown539Command : Command
     {
         public Unknown539Command(BinaryReader br)
         {

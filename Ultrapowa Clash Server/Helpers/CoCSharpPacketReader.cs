@@ -5,13 +5,13 @@ using System.Text;
 namespace UCS.Helpers
 {
     /// <summary>
-    /// Implements methods to read Clash of Clans packets.
+    ///     Implements methods to read Clash of Clans packets.
     /// </summary>
     public class CoCSharpPacketReader : BinaryReader
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="PacketReader"/> class with
-        /// the specified base <see cref="Stream"/>.
+        ///     Initializes a new instance of the <see cref="PacketReader" /> class with
+        ///     the specified base <see cref="Stream" />.
         /// </summary>
         /// <param name="stream">The base stream.</param>
         public CoCSharpPacketReader(Stream stream)
@@ -21,8 +21,8 @@ namespace UCS.Helpers
         }
 
         /// <summary>
-        /// Reads a sequence of bytes from the underlying stream and advances the 
-        /// position within the stream by the number of bytes read.
+        ///     Reads a sequence of bytes from the underlying stream and advances the
+        ///     position within the stream by the number of bytes read.
         /// </summary>
         /// <param name="buffer">The byte array which contains the read bytes from the underlying stream.</param>
         /// <param name="offset">The zero-based index at which to begin reading data.</param>
@@ -34,18 +34,9 @@ namespace UCS.Helpers
         }
 
         /// <summary>
-        /// Reads a <see cref="Byte"/> from the underlying stream.
+        ///     Reads a <see cref="bool" /> from the underlying stream.
         /// </summary>
-        /// <returns><see cref="Byte"/> read.</returns>
-        public override byte ReadByte()
-        {
-            return (byte)BaseStream.ReadByte();
-        }
-
-        /// <summary>
-        /// Reads a <see cref="Boolean"/> from the underlying stream.
-        /// </summary>
-        /// <returns><see cref="Boolean"/> read.</returns>
+        /// <returns><see cref="bool" /> read.</returns>
         public override bool ReadBoolean()
         {
             var state = ReadByte();
@@ -53,93 +44,28 @@ namespace UCS.Helpers
             {
                 case 1:
                     return true;
+
                 case 0:
                     return false;
+
                 default:
                     throw new Exception("Invalid.");
             }
         }
 
         /// <summary>
-        /// Reads an <see cref="Int16"/> from the underlying stream.
+        ///     Reads a <see cref="byte" /> from the underlying stream.
         /// </summary>
-        /// <returns><see cref="Int16"/> read.</returns>
-        public override short ReadInt16()
+        /// <returns><see cref="byte" /> read.</returns>
+        public override byte ReadByte()
         {
-            return (short)ReadUInt16();
+            return (byte) BaseStream.ReadByte();
         }
 
         /// <summary>
-        /// Reads a <see cref="UInt16"/> from the underlying stream.
+        ///     Reads an array of <see cref="byte" /> from the underlying stream.
         /// </summary>
-        /// <returns><see cref="UInt16"/> read.</returns>
-        public override ushort ReadUInt16()
-        {
-            var buffer = ReadBytesWithEndian(2);
-            return BitConverter.ToUInt16(buffer, 0);
-        }
-
-        /// <summary>
-        /// Reads a 3 bytes long int. Clash of Clans packets uses this to encode there length.
-        /// </summary>
-        /// <returns>3 bytes int.</returns>
-        public int ReadInt24()
-        {
-            var packetLengthBuffer = ReadBytesWithEndian(3, false);
-            return ((packetLengthBuffer[0] << 16) | (packetLengthBuffer[1] << 8)) | packetLengthBuffer[2];
-        }
-
-        /// <summary>
-        /// Reads a 3 bytes long uint.
-        /// </summary>
-        /// <returns>3 bytes int.</returns>
-        public uint ReadUInt24()
-        {
-            return (uint)ReadInt24();
-        }
-
-        /// <summary>
-        /// Reads an <see cref="Int32"/> from the underlying stream.
-        /// </summary>
-        /// <returns><see cref="Int32"/> read.</returns>
-        public override int ReadInt32()
-        {
-            return (int)ReadUInt32();
-        }
-
-        /// <summary>
-        /// Reads a <see cref="UInt32"/> from the underlying stream.
-        /// </summary>
-        /// <returns><see cref="UInt32"/> read.</returns>
-        public override uint ReadUInt32()
-        {
-            var buffer = ReadBytesWithEndian(4);
-            return BitConverter.ToUInt32(buffer, 0);
-        }
-
-        /// <summary>
-        /// Reads an <see cref="Int64"/> from the underlying stream.
-        /// </summary>
-        /// <returns><see cref="Int64"/> read.</returns>
-        public override long ReadInt64()
-        {
-            return (long)ReadUInt64();
-        }
-
-        /// <summary>
-        /// Reads a <see cref="UInt64"/> from the underlying stream.
-        /// </summary>
-        /// <returns><see cref="UInt64"/> read.</returns>
-        public override ulong ReadUInt64()
-        {
-            var buffer = ReadBytesWithEndian(8);
-            return BitConverter.ToUInt64(buffer, 0);
-        }
-
-        /// <summary>
-        /// Reads an array of <see cref="Byte"/> from the underlying stream.
-        /// </summary>
-        /// <returns>The array of <see cref="Byte"/> read.</returns>
+        /// <returns>The array of <see cref="byte" /> read.</returns>
         public byte[] ReadByteArray()
         {
             var length = ReadInt32();
@@ -148,13 +74,51 @@ namespace UCS.Helpers
             if (length < -1)
                 throw new Exception("A byte array length was incorrect: " + length + ".");
             if (length > BaseStream.Length - BaseStream.Position)
-                throw new Exception(string.Format("A byte array was larger than remaining bytes. {0} > {1}.", length, BaseStream.Length - BaseStream.Position));
+                throw new Exception(string.Format("A byte array was larger than remaining bytes. {0} > {1}.", length,
+                    BaseStream.Length - BaseStream.Position));
             var buffer = ReadBytesWithEndian(length, false);
             return buffer;
         }
 
         /// <summary>
-        /// Reads a <see cref="String"/> from the underlying stream.
+        ///     Reads an <see cref="short" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="short" /> read.</returns>
+        public override short ReadInt16()
+        {
+            return (short) ReadUInt16();
+        }
+
+        /// <summary>
+        ///     Reads a 3 bytes long int. Clash of Clans packets uses this to encode there length.
+        /// </summary>
+        /// <returns>3 bytes int.</returns>
+        public int ReadInt24()
+        {
+            var packetLengthBuffer = ReadBytesWithEndian(3, false);
+            return (packetLengthBuffer[0] << 16) | (packetLengthBuffer[1] << 8) | packetLengthBuffer[2];
+        }
+
+        /// <summary>
+        ///     Reads an <see cref="int" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="int" /> read.</returns>
+        public override int ReadInt32()
+        {
+            return (int) ReadUInt32();
+        }
+
+        /// <summary>
+        ///     Reads an <see cref="long" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="long" /> read.</returns>
+        public override long ReadInt64()
+        {
+            return (long) ReadUInt64();
+        }
+
+        /// <summary>
+        ///     Reads a <see cref="string" /> from the underlying stream.
         /// </summary>
         /// <returns></returns>
         public override string ReadString()
@@ -165,17 +129,59 @@ namespace UCS.Helpers
             if (length < -1)
                 throw new Exception("A string length was incorrect: " + length);
             if (length > BaseStream.Length - BaseStream.Position)
-                throw new Exception(string.Format("A string was larger than remaining bytes. {0} > {1}.", length, BaseStream.Length - BaseStream.Position));
+                throw new Exception(string.Format("A string was larger than remaining bytes. {0} > {1}.", length,
+                    BaseStream.Length - BaseStream.Position));
             var buffer = ReadBytesWithEndian(length, false);
             return Encoding.UTF8.GetString(buffer);
         }
 
         /// <summary>
-        /// Sets the position of the underlying stream.
+        ///     Reads a <see cref="ushort" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="ushort" /> read.</returns>
+        public override ushort ReadUInt16()
+        {
+            var buffer = ReadBytesWithEndian(2);
+            return BitConverter.ToUInt16(buffer, 0);
+        }
+
+        /// <summary>
+        ///     Reads a 3 bytes long uint.
+        /// </summary>
+        /// <returns>3 bytes int.</returns>
+        public uint ReadUInt24()
+        {
+            return (uint) ReadInt24();
+        }
+
+        /// <summary>
+        ///     Reads a <see cref="uint" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="uint" /> read.</returns>
+        public override uint ReadUInt32()
+        {
+            var buffer = ReadBytesWithEndian(4);
+            return BitConverter.ToUInt32(buffer, 0);
+        }
+
+        /// <summary>
+        ///     Reads a <see cref="ulong" /> from the underlying stream.
+        /// </summary>
+        /// <returns><see cref="ulong" /> read.</returns>
+        public override ulong ReadUInt64()
+        {
+            var buffer = ReadBytesWithEndian(8);
+            return BitConverter.ToUInt64(buffer, 0);
+        }
+
+        /// <summary>
+        ///     Sets the position of the underlying stream.
         /// </summary>
         /// <param name="offset">A byte offset relative to the origin parameter.</param>
-        /// <param name="origin">A value of type <see cref="SeekOrigin"/> indicating the reference point
-        ///                      used to obtain the new position.</param>
+        /// <param name="origin">
+        ///     A value of type <see cref="SeekOrigin" /> indicating the reference point
+        ///     used to obtain the new position.
+        /// </param>
         /// <returns>The new position of the underlying stream.</returns>
         public long Seek(long offset, SeekOrigin origin)
         {

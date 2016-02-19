@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x0212
-    class SpeedUpHeroHealthCommand : Command
+    internal class SpeedUpHeroHealthCommand : Command
     {
         private int m_vBuildingId;
 
@@ -21,6 +13,5 @@ namespace UCS.PacketProcessing
             m_vBuildingId = br.ReadInt32WithEndian();
             br.ReadInt32WithEndian();
         }
-
     }
 }

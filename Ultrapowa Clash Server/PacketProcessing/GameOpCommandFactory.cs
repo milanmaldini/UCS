@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Reflection;
-using UCS.Logic;
-using UCS.Helpers;
 
 namespace UCS.PacketProcessing
 {
-    static class GameOpCommandFactory
+    internal static class GameOpCommandFactory
     {
-        private static Dictionary<string, Type> m_vCommands;
+        private static readonly Dictionary<string, Type> m_vCommands;
 
         static GameOpCommandFactory()
         {
@@ -31,15 +24,15 @@ namespace UCS.PacketProcessing
 
         public static object Parse(string command)
         {
-            string[] commandArgs = command.Split(' ');
+            var commandArgs = command.Split(' ');
             object result = null;
-            if(commandArgs.Length > 0)
+            if (commandArgs.Length > 0)
             {
                 if (m_vCommands.ContainsKey(commandArgs[0]))
                 {
-                    Type type = m_vCommands[commandArgs[0]];
-                    ConstructorInfo ctor = type.GetConstructor(new[] { typeof(string[]) });
-                    result = ctor.Invoke(new object[] { commandArgs });
+                    var type = m_vCommands[commandArgs[0]];
+                    var ctor = type.GetConstructor(new[] {typeof (string[])});
+                    result = ctor.Invoke(new object[] {commandArgs});
                 }
             }
             return result;

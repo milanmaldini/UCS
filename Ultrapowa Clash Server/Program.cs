@@ -8,10 +8,7 @@ namespace UCS
     {
         static void Main()
         {
-            if (!Convert.ToBoolean(ConfigurationManager.AppSettings["guiMode"]))
-                ConsoleThread.Start();
-            else
-                InterfaceThread.Start();
+            ConsoleThread.Start();
         }
     }
 }

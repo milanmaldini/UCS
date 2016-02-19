@@ -1,33 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
+using UCS.Logic;
 using UCS.Network;
 
 namespace UCS.PacketProcessing
 {
-    class FirstAuthentication : Message
+    internal class FirstAuthentication : Message
     {
         //Packet 10100
+
+        public int Data1;
+
+        public int Data2;
+
+        public int Data4;
+
+        public int Data5;
+
+        public string MasterHash;
+
+        public byte[] SomeData;
 
         public FirstAuthentication(Client client, BinaryReader br)
             : base(client, br)
         {
         }
 
-        public int Data1;
-        public int Data2;
-        public byte[] SomeData;
-        public string MasterHash;
-        public int Data4;
-        public int Data5;
         /// <summary>
-        /// Data probably (!) not needed for encryption
+        ///     Data probably (!) not needed for encryption
         /// </summary>
         public override void Decode()
         {
@@ -44,9 +44,8 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            var authOk = new FirstAuthenticationOk(this.Client, this);
+            var authOk = new FirstAuthenticationOk(Client, this);
             PacketManager.ProcessOutgoingPacket(authOk);
         }
-
     }
 }

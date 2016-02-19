@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x0210
-    class SpeedUpHeroUpgradeCommand : Command
+    internal class SpeedUpHeroUpgradeCommand : Command
     {
-        private int m_vBuildingId;
+        private readonly int m_vBuildingId;
 
         public SpeedUpHeroUpgradeCommand(BinaryReader br)
         {
@@ -26,13 +19,13 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
-            ClientAvatar ca = level.GetPlayerAvatar();
-            GameObject go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
+            var ca = level.GetPlayerAvatar();
+            var go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
 
             if (go != null)
             {
-                Building b = (Building)go;
-                HeroBaseComponent hbc = b.GetHeroBaseComponent();
+                var b = (Building) go;
+                var hbc = b.GetHeroBaseComponent();
                 if (hbc != null)
                     hbc.SpeedUpUpgrade();
             }

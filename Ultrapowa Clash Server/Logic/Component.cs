@@ -1,27 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
-using UCS.PacketProcessing;
-using UCS.Core;
-using UCS.GameFiles;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
-    class Component
+    internal class Component
     {
-        private bool m_vIsEnabled;//a1 + 8
-        private GameObject m_vParentGameObject;
-
-        public virtual int Type
-        {
-            get { return -1; }
-        }
+        private readonly GameObject m_vParentGameObject;
+        private bool m_vIsEnabled; //a1 + 8
 
         public Component()
         {
@@ -34,9 +18,9 @@ namespace UCS.Logic
             m_vParentGameObject = go;
         }
 
-        public bool IsEnabled()
+        public virtual int Type
         {
-            return m_vIsEnabled;
+            get { return -1; }
         }
 
         public GameObject GetParent()
@@ -44,9 +28,13 @@ namespace UCS.Logic
             return m_vParentGameObject;
         }
 
+        public bool IsEnabled()
+        {
+            return m_vIsEnabled;
+        }
+
         public virtual void Load(JObject jsonObject)
         {
-        
         }
 
         public virtual JObject Save(JObject jsonObject)
@@ -61,7 +49,6 @@ namespace UCS.Logic
 
         public virtual void Tick()
         {
-
         }
     }
 }

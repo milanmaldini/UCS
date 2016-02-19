@@ -1,101 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using UCS.PacketProcessing;
 using UCS.Core;
+using UCS.PacketProcessing;
 
 namespace UCS.Network
 {
-    class Gateway
+    internal class Gateway
     {
-        const int 
-            kPort = 9339,
+        private const int
             kHostConnectionBacklog = 30;
-        private static Socket m_vServerSocket;
-        IPAddress ip;
 
-        public void Start()
-        {
-            if (Host(kPort))
-            {
-                Console.WriteLine("Gateway started on port " + kPort);
-            }         
-        }
+        private const int
+            kPort = 9339;
 
-        void Disconnect()
-        {
-            if (m_vServerSocket != null)
-            {
-                m_vServerSocket.BeginDisconnect(false, new System.AsyncCallback(OnEndHostComplete), m_vServerSocket);
-            }
-        }
+        private IPAddress ip;
 
-        public static Socket Socket
-        {
-            get
-            {
-                return m_vServerSocket;
-            }
-        }
-
-        void OnClientConnect(System.IAsyncResult result)
-        {
-            try
-            {
-                Socket clientSocket = m_vServerSocket.EndAccept(result);
-                ResourcesManager.AddClient(new Client(clientSocket));
-                SocketRead.Begin(clientSocket, OnReceive, OnReceiveError);
-                Console.WriteLine("Client connected (" + ((IPEndPoint)clientSocket.RemoteEndPoint).Address.ToString() + ":" + ((IPEndPoint)clientSocket.RemoteEndPoint).Port.ToString() + ")");
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine("Exception when accepting incoming connection: " + e);
-            }
-            try
-            {
-                m_vServerSocket.BeginAccept(new System.AsyncCallback(OnClientConnect), m_vServerSocket);
-            }
-            catch (System.Exception e)
-            {
-                Console.WriteLine("Exception when starting new accept process: " + e);
-            }
-        }
-
-        void OnReceive(SocketRead read, byte[] data)
-        {
-            
-            try
-            {
-                long socketHandle = read.Socket.Handle.ToInt64();
-                Client c = ResourcesManager.GetClient(socketHandle);
-                    //Ajoute les données au stream client
-                c.DataStream.AddRange(data);
-
-                Message p;
-                while (c.TryGetPacket(out p))
-                {
-                    PacketManager.ProcessIncomingPacket(p);
-                }
-            }
-            catch(Exception)
-            {
-                //Client may not exist anymore
-            }
-        }
-
-        void OnReceiveError(SocketRead read, System.Exception exception)
-        {
-            //Console.WriteLine("Error received: " + exception);
-        }
-
-        void OnEndHostComplete(System.IAsyncResult result)
-        {
-            m_vServerSocket = null;
-        }
+        public static Socket Socket { get; private set; }
 
         public IPAddress IP
         {
@@ -107,7 +29,7 @@ namespace UCS.Network
                         from entry in Dns.GetHostEntry(Dns.GetHostName()).AddressList
                         where entry.AddressFamily == AddressFamily.InterNetwork
                         select entry
-                    ).FirstOrDefault();
+                        ).FirstOrDefault();
                 }
 
                 return ip;
@@ -116,26 +38,82 @@ namespace UCS.Network
 
         public bool Host(int port)
         {
-            //Console.WriteLine("Hosting on port " + port);
-
-            m_vServerSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
             try
             {
-                m_vServerSocket.Bind(new IPEndPoint(IPAddress.Any, port));
-                m_vServerSocket.Listen(kHostConnectionBacklog);
-                m_vServerSocket.BeginAccept(new System.AsyncCallback(OnClientConnect), m_vServerSocket);
+                Socket.Bind(new IPEndPoint(IPAddress.Any, port));
+                Socket.Listen(kHostConnectionBacklog);
+                Socket.BeginAccept(OnClientConnect, Socket);
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("Exception when attempting to host (" + port + "): " + e);
 
-                m_vServerSocket = null;
+                Socket = null;
 
                 return false;
             }
 
             return true;
         }
+
+        public void Start()
+        {
+            if (Host(kPort))
+                Console.WriteLine("[UCS]    Gateway started on port " + kPort);
+        }
+
+        private void Disconnect()
+        {
+            if (Socket != null)
+                Socket.BeginDisconnect(false, OnEndHostComplete, Socket);
+        }
+
+        private void OnClientConnect(IAsyncResult result)
+        {
+            try
+            {
+                var clientSocket = Socket.EndAccept(result);
+                ResourcesManager.AddClient(new Client(clientSocket));
+                SocketRead.Begin(clientSocket, OnReceive, OnReceiveError);
+                Console.WriteLine("[UCS]    Client connected (" + ((IPEndPoint) clientSocket.RemoteEndPoint).Address + ":" +
+                                  ((IPEndPoint) clientSocket.RemoteEndPoint).Port + ")");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[UCS]    Exception when accepting incoming connection: " + e);
+            }
+            try
+            {
+                Socket.BeginAccept(OnClientConnect, Socket);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[UCS]    Exception when starting new accept process: " + e);
+            }
+        }
+
+        private void OnEndHostComplete(IAsyncResult result)
+        {
+            Socket = null;
+        }
+
+        private void OnReceive(SocketRead read, byte[] data)
+        {
+            try
+            {
+                var socketHandle = read.Socket.Handle.ToInt64();
+                var c = ResourcesManager.GetClient(socketHandle);
+                c.DataStream.AddRange(data);
+
+                Message p;
+                while (c.TryGetPacket(out p))
+                    PacketManager.ProcessIncomingPacket(p);
+            }
+            catch (Exception) { }
+        }
+
+        private void OnReceiveError(SocketRead read, Exception exception) { }
     }
 }

@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using UCS.Logic;
+﻿using System.Collections.Generic;
 using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Packet 24715
-    class GlobalChatLineMessage : Message
+    internal class GlobalChatLineMessage : Message
     {
-        private string m_vMessage;
-        private long m_vHomeId;
-        private long m_vCurrentHomeId;
-        private string m_vPlayerName;
-        private int m_vLeagueId;
-        private bool m_vHasAlliance;
         private int m_vAllianceIcon;
-        private string m_vAllianceName;
         private long m_vAllianceId;
-        private int m_vPlayerLevel;
-
+        private string m_vAllianceName;
+        private long m_vCurrentHomeId;
+        private bool m_vHasAlliance;
+        private long m_vHomeId;
+        private int m_vLeagueId;
+        private string m_vMessage;
+        private readonly int m_vPlayerLevel;
+        private string m_vPlayerName;
 
         public GlobalChatLineMessage(Client client) : base(client)
         {
@@ -34,7 +32,7 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            List<Byte> pack = new List<Byte>();
+            var pack = new List<byte>();
 
             pack.AddString(m_vMessage);
             pack.AddString(m_vPlayerName);
@@ -45,38 +43,17 @@ namespace UCS.PacketProcessing
 
             if (!m_vHasAlliance)
             {
-                pack.Add((Byte)0);
+                pack.Add(0);
             }
             else
             {
-                pack.Add((Byte)1);
+                pack.Add(1);
                 pack.AddInt64(m_vAllianceId);
                 pack.AddString(m_vAllianceName);
                 pack.AddInt32(m_vAllianceIcon);
             }
 
             SetData(pack.ToArray());
-        }
-
-        public void SetChatMessage(string message)
-        {
-            m_vMessage = message;
-        }
-
-        public void SetPlayerId(long id)
-        {
-            m_vHomeId = id;
-            m_vCurrentHomeId = id;
-        }
-
-        public void SetPlayerName(string name)
-        {
-            m_vPlayerName = name;
-        }
-
-        public void SetLeagueId(int leagueId)
-        {
-            m_vLeagueId = leagueId;
         }
 
         public void SetAlliance(Alliance alliance)
@@ -88,6 +65,27 @@ namespace UCS.PacketProcessing
                 m_vAllianceName = alliance.GetAllianceName();
                 m_vAllianceIcon = alliance.GetAllianceBadgeData();
             }
+        }
+
+        public void SetChatMessage(string message)
+        {
+            m_vMessage = message;
+        }
+
+        public void SetLeagueId(int leagueId)
+        {
+            m_vLeagueId = leagueId;
+        }
+
+        public void SetPlayerId(long id)
+        {
+            m_vHomeId = id;
+            m_vCurrentHomeId = id;
+        }
+
+        public void SetPlayerName(string name)
+        {
+            m_vPlayerName = name;
         }
     }
 }

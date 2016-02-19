@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
+﻿using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using UCS.Core;
-using UCS.PacketProcessing;
-using UCS.GameFiles;
 using UCS.Helpers;
 
 namespace UCS.Logic
 {
-    class Base
+    internal class Base
     {
         private int m_vUnknown1;
 
@@ -34,7 +23,7 @@ namespace UCS.Logic
 
         public virtual byte[] Encode()
         {
-            List<Byte> data = new List<Byte>();
+            var data = new List<byte>();
             data.AddInt32(m_vUnknown1);
             return data.ToArray();
         }

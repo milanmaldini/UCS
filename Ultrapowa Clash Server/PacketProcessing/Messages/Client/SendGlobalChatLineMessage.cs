@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
+using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
-using UCS.Core;
 
 namespace UCS.PacketProcessing
 {
     //14715
-    class SendGlobalChatLineMessage : Message
+    internal class SendGlobalChatLineMessage : Message
     {
         public SendGlobalChatLineMessage(Client client, BinaryReader br) : base(client, br)
         {
         }
+
+        public string Message { get; set; }
 
         public override void Decode()
         {
@@ -26,39 +25,39 @@ namespace UCS.PacketProcessing
             }
         }
 
-        public String Message { get; set; }
-
         public override void Process(Level level)
         {
-            if(Message.Length > 0)
+            if (Message.Length > 0)
             {
-                if(Message[0] == '/')
+                if (Message[0] == '/')
                 {
-                    object obj = GameOpCommandFactory.Parse(Message);
+                    var obj = GameOpCommandFactory.Parse(Message);
                     if (obj != null)
                     {
-                        string player = "";
+                        var player = "";
                         if (level != null)
-                            player += " (" + level.GetPlayerAvatar().GetId() + ", " + level.GetPlayerAvatar().GetAvatarName() + ")";
+                            player += " (" + level.GetPlayerAvatar().GetId() + ", " +
+                                      level.GetPlayerAvatar().GetAvatarName() + ")";
                         Debugger.WriteLine("\t" + obj.GetType().Name + player);
-                        ((GameOpCommand)obj).Execute(level);
+                        ((GameOpCommand) obj).Execute(level);
                     }
                 }
                 else
                 {
-                    if (File.Exists(@"filter.ucs")) //If you rename filter.ucs, you can simply deactivate with it the global Chat and send a Message to the player.
+                    if (File.Exists(@"filter.ucs"))
+                        //If you rename filter.ucs, you can simply deactivate with it the global Chat and send a Message to the player.
                     {
-                        long senderId = level.GetPlayerAvatar().GetId();
-                        string senderName = level.GetPlayerAvatar().GetAvatarName();
+                        var senderId = level.GetPlayerAvatar().GetId();
+                        var senderName = level.GetPlayerAvatar().GetAvatarName();
 
-                        List<string> badwords = new List<string>();
-                        StreamReader r = new StreamReader(@"filter.ucs");
-                        string line = "";
+                        var badwords = new List<string>();
+                        var r = new StreamReader(@"filter.ucs");
+                        var line = "";
                         while ((line = r.ReadLine()) != null)
                         {
                             badwords.Add(line);
                         }
-                        bool badword = badwords.Any(s => Message.Contains(s));
+                        var badword = badwords.Any(s => Message.Contains(s));
 
                         if (badword)
                         {
@@ -90,12 +89,12 @@ namespace UCS.PacketProcessing
                         var p = new GlobalChatLineMessage(level.GetClient());
                         p.SetPlayerId(0);
                         p.SetPlayerName("UCS Chat System");
-                        p.SetChatMessage("The Global Chat is currently disabled. Please try again later! For more Informations, check the Server Status!");
+                        p.SetChatMessage(
+                            "The Global Chat is currently disabled. Please try again later! For more Informations, check the Server Status!");
                         PacketManager.ProcessOutgoingPacket(p);
-                        return;
                     }
                 }
-            }    
+            }
         }
     }
 }

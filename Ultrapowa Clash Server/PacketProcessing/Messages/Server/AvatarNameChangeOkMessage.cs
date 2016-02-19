@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UCS.Helpers;
-using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Packet 24111
-    class AvatarNameChangeOkMessage : Message
+    internal class AvatarNameChangeOkMessage : Message
     {
         private string m_vAvatarName;
-        private int m_vServerCommandType;
+        private readonly int m_vServerCommandType;
 
         public AvatarNameChangeOkMessage(Client client) : base(client)
         {
@@ -20,6 +15,18 @@ namespace UCS.PacketProcessing
 
             m_vServerCommandType = 0x03;
             m_vAvatarName = "Megapumba";
+        }
+
+        public override void Encode()
+        {
+            var pack = new List<byte>();
+
+            pack.AddInt32(m_vServerCommandType);
+            pack.AddString(m_vAvatarName);
+            pack.AddInt32(1);
+            pack.AddInt32(-1);
+
+            SetData(pack.ToArray());
         }
 
         public string GetAvatarName()
@@ -32,18 +39,5 @@ namespace UCS.PacketProcessing
         {
             m_vAvatarName = name;
         }
-
-        public override void Encode()
-        {
-            List<Byte> pack = new List<Byte>();
-
-            pack.AddInt32(m_vServerCommandType);
-            pack.AddString(m_vAvatarName);
-            pack.AddInt32(1);
-            pack.AddInt32(-1);
-
-            SetData(pack.ToArray());
-        }
-
     }
 }

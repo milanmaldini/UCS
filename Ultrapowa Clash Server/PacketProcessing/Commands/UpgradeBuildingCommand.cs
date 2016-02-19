@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
+﻿using System.IO;
 using UCS.Helpers;
-using UCS.GameFiles;
-using UCS.Core;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x1F6
-    class UpgradeBuildingCommand : Command
+    internal class UpgradeBuildingCommand : Command
     {
         public UpgradeBuildingCommand(BinaryReader br)
         {
@@ -22,23 +15,24 @@ namespace UCS.PacketProcessing
         }
 
         public int BuildingId { get; set; }
-        public uint Unknown2 { get; set; } 
         public uint Unknown1 { get; set; }
+        public uint Unknown2 { get; set; }
 
         public override void Execute(Level level)
         {
-            ClientAvatar ca = level.GetPlayerAvatar();
-            GameObject go = level.GameObjectManager.GetGameObjectByID(BuildingId);
+            var ca = level.GetPlayerAvatar();
+            var go = level.GameObjectManager.GetGameObjectByID(BuildingId);
 
-            ConstructionItem b = (ConstructionItem)go;
-            if(b.CanUpgrade())
+            var b = (ConstructionItem) go;
+            if (b.CanUpgrade())
             {
                 var bd = b.GetConstructionItemData();
-                if (ca.HasEnoughResources(bd.GetBuildResource(b.GetUpgradeLevel() + 1), bd.GetBuildCost(b.GetUpgradeLevel() + 1)))
+                if (ca.HasEnoughResources(bd.GetBuildResource(b.GetUpgradeLevel() + 1),
+                    bd.GetBuildCost(b.GetUpgradeLevel() + 1)))
                 {
                     if (level.HasFreeWorkers())
                     {
-                        ResourceData rd = bd.GetBuildResource(b.GetUpgradeLevel() + 1);
+                        var rd = bd.GetBuildResource(b.GetUpgradeLevel() + 1);
                         ca.SetResourceCount(rd, ca.GetResourceCount(rd) - bd.GetBuildCost(b.GetUpgradeLevel() + 1));
                         b.StartUpgrading();
                     }

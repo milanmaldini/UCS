@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using UCS.Logic;
-using UCS.Helpers;
-using UCS.GameFiles;
+﻿using System.IO;
 using UCS.Core;
+using UCS.GameFiles;
+using UCS.Helpers;
+using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
     //Commande 0x1FC 508
-    class TrainUnitCommand : Command
+    internal class TrainUnitCommand : Command
     {
         public TrainUnitCommand(BinaryReader br)
         {
@@ -24,35 +19,36 @@ namespace UCS.PacketProcessing
         }
 
         public int BuildingId { get; set; }
+        public int Count { get; set; }
+        public int UnitType { get; set; }
         public uint Unknown1 { get; set; } //00 00 00 00
-        public int UnitType { get; set; } //00 3D 09 03
-        public int Count { get; set; } //00 00 00 01
+
+        //00 3D 09 03
+        //00 00 00 01
         public uint Unknown3 { get; set; } //FF FF FF FF
 
         public override void Execute(Level level)
         {
-            GameObject go = level.GameObjectManager.GetGameObjectByID(BuildingId);
-            if(Count > 0)
+            var go = level.GameObjectManager.GetGameObjectByID(BuildingId);
+            if (Count > 0)
             {
-                Building b = (Building)go;
-                UnitProductionComponent c = b.GetUnitProductionComponent();
-                CombatItemData cid = (CombatItemData)ObjectManager.DataTables.GetDataById(UnitType);
+                var b = (Building) go;
+                var c = b.GetUnitProductionComponent();
+                var cid = (CombatItemData) ObjectManager.DataTables.GetDataById(UnitType);
                 do
                 {
                     if (!c.CanAddUnitToQueue(cid))
                         break;
-                    ResourceData trainingResource = cid.GetTrainingResource();
-                    ClientAvatar ca = level.GetHomeOwnerAvatar();
-                    int trainingCost = cid.GetTrainingCost(ca.GetUnitUpgradeLevel(cid));
+                    var trainingResource = cid.GetTrainingResource();
+                    var ca = level.GetHomeOwnerAvatar();
+                    var trainingCost = cid.GetTrainingCost(ca.GetUnitUpgradeLevel(cid));
                     if (!ca.HasEnoughResources(trainingResource, trainingCost))
                         break;
                     ca.SetResourceCount(trainingResource, ca.GetResourceCount(trainingResource) - trainingCost);
                     c.AddUnitToProductionQueue(cid);
                     Count--;
-                }
-                while (Count > 0);
+                } while (Count > 0);
             }
         }
-
     }
 }

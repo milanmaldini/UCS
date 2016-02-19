@@ -1,23 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Configuration;
-using UCS.PacketProcessing;
+﻿using Newtonsoft.Json.Linq;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace UCS.Logic
 {
-    class UnitUpgradeComponent : Component
+    internal class UnitUpgradeComponent : Component
     {
-        private Timer m_vTimer;//a1 + 12
-        private CombatItemData m_vCurrentlyUpgradedUnit;//a1 + 16
+        private CombatItemData m_vCurrentlyUpgradedUnit;
+        private Timer m_vTimer; //a1 + 12
+        //a1 + 16
         //a1 + 20 -- Listener?
 
         public UnitUpgradeComponent(GameObject go) : base(go)
@@ -26,24 +18,30 @@ namespace UCS.Logic
             m_vCurrentlyUpgradedUnit = null;
         }
 
+        public override int Type
+        {
+            get { return 9; }
+        }
+
         public bool CanStartUpgrading(CombatItemData cid)
         {
-            bool result = false;
+            var result = false;
             if (m_vCurrentlyUpgradedUnit == null)
             {
-                Building b = (Building)GetParent();
-                ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
-                ComponentManager cm = GetParent().GetLevel().GetComponentManager();
+                var b = (Building) GetParent();
+                var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                var cm = GetParent().GetLevel().GetComponentManager();
                 int maxProductionBuildingLevel;
-                if(cid.GetCombatItemType() == 1)
+                if (cid.GetCombatItemType() == 1)
                     maxProductionBuildingLevel = cm.GetMaxSpellForgeLevel();
                 else
                     maxProductionBuildingLevel = cm.GetMaxBarrackLevel();
                 if (ca.GetUnitUpgradeLevel(cid) < cid.GetUpgradeLevelCount() - 1)
                 {
-                    if(maxProductionBuildingLevel >= cid.GetRequiredProductionHouseLevel() - 1)
+                    if (maxProductionBuildingLevel >= cid.GetRequiredProductionHouseLevel() - 1)
                     {
-                        result = (b.GetUpgradeLevel() >= (cid.GetRequiredLaboratoryLevel(ca.GetUnitUpgradeLevel(cid) + 1)) - 1);
+                        result = b.GetUpgradeLevel() >=
+                                 cid.GetRequiredLaboratoryLevel(ca.GetUnitUpgradeLevel(cid) + 1) - 1;
                     }
                 }
             }
@@ -52,10 +50,10 @@ namespace UCS.Logic
 
         public void FinishUpgrading()
         {
-            if(m_vCurrentlyUpgradedUnit != null)
+            if (m_vCurrentlyUpgradedUnit != null)
             {
-                ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
-                int level = ca.GetUnitUpgradeLevel(m_vCurrentlyUpgradedUnit);
+                var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                var level = ca.GetUnitUpgradeLevel(m_vCurrentlyUpgradedUnit);
                 ca.SetUnitUpgradeLevel(m_vCurrentlyUpgradedUnit, level + 1);
             }
             m_vTimer = null;
@@ -69,7 +67,7 @@ namespace UCS.Logic
 
         public int GetRemainingSeconds()
         {
-            int result = 0;
+            var result = 0;
             if (m_vTimer != null)
             {
                 result = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
@@ -79,11 +77,11 @@ namespace UCS.Logic
 
         public int GetTotalSeconds()
         {
-            int result = 0;
+            var result = 0;
             if (m_vCurrentlyUpgradedUnit != null)
             {
-                ClientAvatar ca = GetParent().GetLevel().GetHomeOwnerAvatar();
-                int level = ca.GetUnitUpgradeLevel(m_vCurrentlyUpgradedUnit);
+                var ca = GetParent().GetLevel().GetHomeOwnerAvatar();
+                var level = ca.GetUnitUpgradeLevel(m_vCurrentlyUpgradedUnit);
                 result = m_vCurrentlyUpgradedUnit.GetUpgradeTime(level);
             }
             return result;
@@ -91,15 +89,15 @@ namespace UCS.Logic
 
         public override void Load(JObject jsonObject)
         {
-            JObject unitUpgradeObject = (JObject)jsonObject["unit_upg"];
+            var unitUpgradeObject = (JObject) jsonObject["unit_upg"];
             if (unitUpgradeObject != null)
             {
                 m_vTimer = new Timer();
-                int remainingTime = unitUpgradeObject["t"].ToObject<int>();
+                var remainingTime = unitUpgradeObject["t"].ToObject<int>();
                 m_vTimer.StartTimer(remainingTime, GetParent().GetLevel().GetTime());
 
-                int id = unitUpgradeObject["id"].ToObject<int>();
-                m_vCurrentlyUpgradedUnit = (CombatItemData)ObjectManager.DataTables.GetDataById(id);
+                var id = unitUpgradeObject["id"].ToObject<int>();
+                m_vCurrentlyUpgradedUnit = (CombatItemData) ObjectManager.DataTables.GetDataById(id);
             }
         }
 
@@ -107,9 +105,9 @@ namespace UCS.Logic
         {
             //{"data":1000007,"lvl":7,"x":4,"y":4,"unit_upg":{"unit_type":0,"t":591612,"id":4000001},"l1x":32,"l1y":32}
 
-            if(m_vCurrentlyUpgradedUnit != null)
+            if (m_vCurrentlyUpgradedUnit != null)
             {
-                JObject unitUpgradeObject = new JObject();
+                var unitUpgradeObject = new JObject();
 
                 unitUpgradeObject.Add("unit_type", m_vCurrentlyUpgradedUnit.GetCombatItemType());
                 unitUpgradeObject.Add("t", m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime()));
@@ -121,14 +119,14 @@ namespace UCS.Logic
 
         public void SpeedUp()
         {
-            if(m_vCurrentlyUpgradedUnit != null)
+            if (m_vCurrentlyUpgradedUnit != null)
             {
-                int remainingSeconds = 0;
-                if(m_vTimer != null)
+                var remainingSeconds = 0;
+                if (m_vTimer != null)
                 {
                     remainingSeconds = m_vTimer.GetRemainingSeconds(GetParent().GetLevel().GetTime());
                 }
-                int cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
+                var cost = GamePlayUtil.GetSpeedUpCost(remainingSeconds);
                 var ca = GetParent().GetLevel().GetPlayerAvatar();
                 if (ca.HasEnoughDiamonds(cost))
                 {
@@ -140,7 +138,7 @@ namespace UCS.Logic
 
         public void StartUpgrading(CombatItemData cid)
         {
-            if(CanStartUpgrading(cid))
+            if (CanStartUpgrading(cid))
             {
                 m_vCurrentlyUpgradedUnit = cid;
                 m_vTimer = new Timer();
@@ -157,11 +155,6 @@ namespace UCS.Logic
                     FinishUpgrading();
                 }
             }
-        }
-
-        public override int Type
-        {
-            get { return 9; }
         }
     }
 }

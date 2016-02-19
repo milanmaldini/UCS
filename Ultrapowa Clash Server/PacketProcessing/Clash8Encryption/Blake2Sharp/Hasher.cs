@@ -9,52 +9,51 @@
 // You should have received a copy of the CC0 Public Domain Dedication along with
 // this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Blake2Sharp
 {
-	public abstract class Hasher
-	{
-		public abstract void Init();
-		public abstract byte[] Finish();
-		public abstract void Update(byte[] data, int start, int count);
+    public abstract class Hasher
+    {
+        public HashAlgorithm AsHashAlgorithm()
+        {
+            return new HashAlgorithmAdapter(this);
+        }
 
-		public void Update(byte[] data)
-		{
-			Update(data, 0, data.Length);
-		}
+        public abstract byte[] Finish();
 
-		public HashAlgorithm AsHashAlgorithm()
-		{
-			return new HashAlgorithmAdapter(this);
-		}
+        public abstract void Init();
 
-		internal class HashAlgorithmAdapter : HashAlgorithm
-		{
-			private readonly Hasher _hasher;
+        public abstract void Update(byte[] data, int start, int count);
 
-			protected override void HashCore(byte[] array, int ibStart, int cbSize)
-			{
-				_hasher.Update(array, ibStart, cbSize);
-			}
+        public void Update(byte[] data)
+        {
+            Update(data, 0, data.Length);
+        }
 
-			protected override byte[] HashFinal()
-			{
-				return _hasher.Finish();
-			}
+        internal class HashAlgorithmAdapter : HashAlgorithm
+        {
+            private readonly Hasher _hasher;
 
-			public override void Initialize()
-			{
-				_hasher.Init();
-			}
+            public HashAlgorithmAdapter(Hasher hasher)
+            {
+                _hasher = hasher;
+            }
 
-			public HashAlgorithmAdapter(Hasher hasher)
-			{
-				_hasher = hasher;
-			}
-		}
-	}
+            public override void Initialize()
+            {
+                _hasher.Init();
+            }
+
+            protected override void HashCore(byte[] array, int ibStart, int cbSize)
+            {
+                _hasher.Update(array, ibStart, cbSize);
+            }
+
+            protected override byte[] HashFinal()
+            {
+                return _hasher.Finish();
+            }
+        }
+    }
 }
