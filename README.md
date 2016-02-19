@@ -1,13 +1,13 @@
 # Readme!
 
 This repository contains the Development build of Ultrapowa Clash Server, a C# server emulator for the game Clash of Clans. 
-Keep in mind that this is the version written by the official Developer Team containing									
-ExPl0itR																
-Lasertrap																
-Berkan (GobelinLand)															
-Aidid																	
-iSwürfel																
-thecheater887
+Keep in mind that this is the version written by the official Developer Team containing.
+
+Ultrapowa									
+Berkan																							
+iSwürfel																			
+aDeltaX								
+thecheater887										
 
 UCS is NOT affiliated with Supercell.
 Help and Support: http://ultrapowa.com/forum/
