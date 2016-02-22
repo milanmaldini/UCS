@@ -41,68 +41,62 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
-            var RawPacket = GetData(); // Raw, encrypted packet;
+
+            var RawPacket = GetData();
             var RawPacketWithoutPK = GetData().Skip(32).ToArray();
-            var PubKeyFromPacket = RawPacket.Take(32).ToArray(); // Public key from 10101
-            var PublicKey = Crypto8.StandardKeyPair.PublicKey; // Public key from for server
-            var PrivateKey = Crypto8.StandardKeyPair.PrivateKey; // Private key for the server
-            byte[] Nonce = null; // Blake2b nonce
+            byte[] CPublicKey = RawPacket.Take(32).ToArray();
+            byte[] SPublicKey = Crypto8.StandardKeyPair.PublicKey;
+            byte[] SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
+            byte[] Nonce = null;
 
-            /* 11. Server generates nonce with blake2b using pk and serverkey. */
-            var b2conf = new Blake2BConfig();
-            b2conf.OutputSizeInBytes = 24;
-            var b2 = Blake2B.Create(b2conf);
 
-            b2.Init();
-            b2.Update(PubKeyFromPacket);
-            b2.Update(PublicKey);
-            Nonce = b2.Finish();
+            /* 11. Server generates nonce with blake2b using pk and serverkey.  */
+            Nonce = Crypto8.GenerateNonce();
+            Console.WriteLine("[UCS]    Blake2B Nonce = " + Encoding.UTF8.GetString(Nonce));
+            /* ---------------------------------------------------------------- */
+            
+
             /* 12. Server generates a shared key (s) with crypto_box_beforenm using its private key and pk. */
             var sharedKey = new byte[32];
-            SodiumLibrary.crypto_box_beforenm(sharedKey, PubKeyFromPacket, Crypto8.StandardKeyPair.PrivateKey);
+            SodiumLibrary.crypto_box_beforenm(sharedKey, SPrivateKey, CPublicKey);
+            Console.WriteLine("[UCS]    Shared Key = " + Encoding.UTF8.GetString(sharedKey));
+            /* -------------------------------------------------------------------------------------------- */
+
 
             /* 13. Server decrypts packet 10101 with crypto_box_open using s and nonce. */
-            var decryptedPacket = PublicKeyBox.Open(RawPacketWithoutPK, Nonce, Crypto8.StandardKeyPair.PrivateKey, PubKeyFromPacket);
+            //var decryptedPacket = PublicKeyBox.Open(RawPacket, Nonce, SPrivateKey, CPublicKey);
+            /* ------------------------------------------------------------------------ */
 
-            var decryptedPacketWithoutNonces = decryptedPacket.Skip(48).ToArray();
+            byte[] decryptedPacket = null;
+            //SodiumLibrary.crypto_box_open_easy_afternm(decryptedPacket, RawPacket, Convert.ToInt64(RawPacket.Length), Nonce, sharedKey);
+           
+            
+            // END OF CRYPTO DECODING \\
 
-            //Console.WriteLine(Encoding.UTF8.GetString(decryptedPacketWithoutNonces));
-            //Console.WriteLine(BitConverter.ToString(decryptedPacketWithoutNonces));
 
 
+            Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
+
+            
             using (var reader = new BinaryReader(new MemoryStream(decryptedPacket)))
             {
+                Console.WriteLine("\n[UCS] ----- FULL PACKET CONTENT #10100 ----- [/UCS]\n");
+                Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
+                Console.WriteLine("\n[UCS] ----- -------------------------- ----- [/UCS]\n");
                 Console.WriteLine("SessionKey = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-                Console.WriteLine("Nonce = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-                Console.WriteLine("User ID = " + reader.ReadInt64());
-                Console.WriteLine("UserToken = " + reader.ReadString());
-                Console.WriteLine("Major Version = " + reader.ReadInt32());
-                Console.WriteLine("Content Version = " + reader.ReadInt32());
-                Console.WriteLine("Minor Version = " + reader.ReadInt32());
-                Console.WriteLine("MasterHash = " + reader.ReadString());
-                Console.WriteLine("Unknown 1 = " + reader.ReadString());
-                Console.WriteLine("OpenUDID = " + reader.ReadString());
-                Console.WriteLine("MacAddress = " + reader.ReadString());
-                Console.WriteLine("Device Model = " + reader.ReadString());
-                Console.WriteLine("");
+                //Console.WriteLine("Nonce = " + reader.ReadBytes(CoCKeyPair.NonceLength));
+                //Console.WriteLine("User ID = " + reader.ReadInt64());
+                //Console.WriteLine("UserToken = " + reader.ReadString());
+                //Console.WriteLine("Major Version = " + reader.ReadInt32());
+                //Console.WriteLine("Content Version = " + reader.ReadInt32());
+                //Console.WriteLine("Minor Version = " + reader.ReadInt32());
+                //Console.WriteLine("MasterHash = " + reader.ReadString());
+                //Console.WriteLine("Unknown 1 = " + reader.ReadString());
+                //Console.WriteLine("OpenUDID = " + reader.ReadString());
+                //Console.WriteLine("MacAddress = " + reader.ReadString());
+                //Console.WriteLine("Device Model = " + reader.ReadString());
+                //Console.WriteLine("");
             }
-        }
-
-        public void MessageReader(MessageReader reader)
-        {
-            Console.WriteLine("SessionKey = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-            Console.WriteLine("Nonce = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-            Console.WriteLine("User ID = " + reader.ReadInt64());
-            Console.WriteLine("UserToken = " + reader.ReadString());
-            Console.WriteLine("Major Version = " + reader.ReadInt32());
-            Console.WriteLine("Content Version = " + reader.ReadInt32());
-            Console.WriteLine("Minor Version = " + reader.ReadInt32());
-            Console.WriteLine("MasterHash = " + reader.ReadString());
-            Console.WriteLine("Unknown 1 = " + reader.ReadString());
-            Console.WriteLine("OpenUDID = " + reader.ReadString());
-            Console.WriteLine("MacAddress = " + reader.ReadString());
-            Console.WriteLine("Device Model = " + reader.ReadString());
-            Console.WriteLine("");
         }
 
         public override void Process(Level level)
@@ -152,7 +146,7 @@ namespace UCS.PacketProcessing
 
             level = ResourcesManager.GetPlayer(m_vAccountId);
             if (level != null)
-                //Console.WriteLine("Debug: Retrieve Player Data for player " + auth.PlayerId.ToString());
+            //Console.WriteLine("Debug: Retrieve Player Data for player " + auth.PlayerId.ToString());
             {
                 if (level.GetAccountStatus() == 99)
                 {
@@ -206,7 +200,7 @@ namespace UCS.PacketProcessing
             loginOk.SetServerEnvironment("prod");
             loginOk.SetDaysSinceStartedPlaying(10);
             loginOk.SetServerTime(
-                Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds*1000).ToString());
+                Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString());
             loginOk.SetAccountCreatedDate("1414003838000");
             loginOk.SetStartupCooldownSeconds(0);
             loginOk.SetCountryCode("FR");
@@ -222,4 +216,4 @@ namespace UCS.PacketProcessing
     }
 }
 
-// Last edit: 20.01.2016 - iSwuerfel
+// Last edit: 20.01.2016 - iSwuerfel 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using UCS.Core.Threading;
+﻿using UCS.Core.Threading;
 
 namespace UCS
 {
