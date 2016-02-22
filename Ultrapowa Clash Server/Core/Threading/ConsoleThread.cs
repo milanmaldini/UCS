@@ -38,7 +38,8 @@ namespace UCS.Core.Threading
     Y88b. .d88P 888        888     888  T88b   d8888888888 888        Y88b. .d88P 8888P   Y8888  d8888888888
      'Y88888P'  88888888   888     888   T88b d88P     888 888         'Y88888P'  888P     Y888 d88P     888
                   ");
-                Console.WriteLine("[UCS]    -> This program has need made by Ultrapowa Clash Server Team !");
+                Console.WriteLine("[UCS]    -> This Program is made by the Ultrapowa Network Developer Team!");
+                Console.WriteLine("[UCs]    -> You can find the source at www.ultrapowa.com and www.github.com/ultrapowa/ucs");
                 Console.WriteLine("[UCS]    -> Don't forget to visit www.ultrapowa.com daily for news update !");
                 Console.WriteLine("[UCS]    -> UCS is now starting...");
                 Console.WriteLine("");
