@@ -33,6 +33,7 @@ namespace UCS.PacketProcessing
         private string m_vSignature3;
         private string m_vSignature4;
         private string m_vUDID;
+        private static byte[] PlainText;
 
         public LoginMessage(Client client, BinaryReader br)
             : base(client, br)
@@ -41,49 +42,42 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
-
+            /* The Packet Raw Data */
             var RawPacket = GetData();
-            var RawPacketWithoutPK = GetData().Skip(32).ToArray();
+
+            /* The client public key */
             byte[] CPublicKey = RawPacket.Take(32).ToArray();
-            byte[] SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-            byte[] SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
-            byte[] Nonce = null;
 
+            // Encryption start - Decryption
+            Console.WriteLine("[UCS]    Client Public Key = " + Encoding.UTF8.GetString(CPublicKey) + "\n[UCS]      Client Public Key Length = " + CPublicKey.Length);
 
-            /* 11. Server generates nonce with blake2b using pk and serverkey.  */
-            Nonce = Crypto8.GenerateNonce();
-            Console.WriteLine("[UCS]    Blake2B Nonce = " + Encoding.UTF8.GetString(Nonce));
-            /* ---------------------------------------------------------------- */
+            /* Generating Blake2B Nonce with Client Public Key */
+            var CNonce = GenericHash.Hash(CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(CNonce) + "\n[UCS]       Client Nonce Length = " + CNonce.Length);
+
+            /* The full packet content in raw data without the public key of the client */
+            var cipherText = RawPacket.Skip(32).ToArray();
+
+            /* Finally, we store the decrypted data, and use the function below for dencryption */
+            PlainText = PublicKeyBox.Open(cipherText, CNonce, Crypto8.StandardKeyPair.PrivateKey, CPublicKey);
+
+            /* We also store the Session Key of the client */
+            var Skey = PlainText.Take(24).ToArray();
+
+            // ----------------------------------
+
+            ShowData();
             
+        }
 
-            /* 12. Server generates a shared key (s) with crypto_box_beforenm using its private key and pk. */
-            var sharedKey = new byte[32];
-            SodiumLibrary.crypto_box_beforenm(sharedKey, SPrivateKey, CPublicKey);
-            Console.WriteLine("[UCS]    Shared Key = " + Encoding.UTF8.GetString(sharedKey));
-            /* -------------------------------------------------------------------------------------------- */
-
-
-            /* 13. Server decrypts packet 10101 with crypto_box_open using s and nonce. */
-            //var decryptedPacket = PublicKeyBox.Open(RawPacket, Nonce, SPrivateKey, CPublicKey);
-            /* ------------------------------------------------------------------------ */
-
-            byte[] decryptedPacket = null;
-            //SodiumLibrary.crypto_box_open_easy_afternm(decryptedPacket, RawPacket, Convert.ToInt64(RawPacket.Length), Nonce, sharedKey);
-           
-            
-            // END OF CRYPTO DECODING \\
-
-
-
-            Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
-
-            
-            using (var reader = new BinaryReader(new MemoryStream(decryptedPacket)))
+        public static void ShowData()
+        {
+            using (var reader = new BinaryReader(new MemoryStream(PlainText)))
             {
                 Console.WriteLine("\n[UCS] ----- FULL PACKET CONTENT #10100 ----- [/UCS]\n");
-                Console.WriteLine(Encoding.UTF8.GetString(decryptedPacket));
+                Console.WriteLine(Encoding.UTF8.GetString(PlainText));
                 Console.WriteLine("\n[UCS] ----- -------------------------- ----- [/UCS]\n");
-                Console.WriteLine("SessionKey = " + reader.ReadBytes(CoCKeyPair.NonceLength));
+                //Console.WriteLine("SessionKey = " + reader.ReadBytes(CoCKeyPair.NonceLength));
                 //Console.WriteLine("Nonce = " + reader.ReadBytes(CoCKeyPair.NonceLength));
                 //Console.WriteLine("User ID = " + reader.ReadInt64());
                 //Console.WriteLine("UserToken = " + reader.ReadString());

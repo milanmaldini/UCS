@@ -49,7 +49,8 @@ namespace UCS.Core
                     try
                     {
                         Debugger.WriteLine("[UCS]   " + p.GetMessageType() + " " + p.GetType().Name + player);
-                        p.Decode();
+                        //if (p.GetMessageType() != 10101)
+                            p.Decode();
                         p.Process(pl);
                     }
                     catch (Exception ex)

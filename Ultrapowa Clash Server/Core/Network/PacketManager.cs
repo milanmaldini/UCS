@@ -31,7 +31,8 @@ namespace UCS.Network
 
         public static void ProcessOutgoingPacket(Message p)
         {
-            p.Encode();
+            if (p.GetMessageType() != 10101)
+                p.Encode();
 
             try
             {
@@ -93,7 +94,7 @@ namespace UCS.Network
                         p.Client.Encrypt(p.GetData());
                         p.Client.UpdateKey(sessionKey);
                     }
-                    else if (p.GetMessageType() != 20100)
+                    else if (p.GetMessageType() != 20100 && p.GetMessageType() != 10101)
                             p.Client.Encrypt(p.GetData());
 
                     try
