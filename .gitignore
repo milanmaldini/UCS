@@ -3,3 +3,10 @@ packages/
 ucspackages/
 .vs/Ultrapowa Clash Server/v14/.suo
 *.scgdat
+*.log
+*.pdb
+Ultrapowa Clash Server/bin/Debug/ucs.exe.manifest
+*.manifest
+Ultrapowa Clash Server/bin/Debug/ucs.vshost.application
+*.application
+Ultrapowa Clash Server/bin/Debug/ucs.vshost.exe.manifest

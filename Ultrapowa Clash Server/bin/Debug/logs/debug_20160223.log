@@ -62,3 +62,27 @@ System.Security.Cryptography.CryptographicException: Failed to open PublicKeyBox
 20160223160700	[UCS]   20100 FirstAuthenticationOk
 20160223160700	[UCS]   10101 LoginMessage
 20160223160700	[UCS]   20103 LoginFailedMessage
+20160223163845	[UCS]   Starting saving players from memory to database at 23/02/2016 16:38:45
+20160223163845	[UCS]   Finished saving players from memory to database at 23/02/2016 16:38:45
+20160223163845	[UCS]   Starting saving alliances from memory to database at 23/02/2016 16:38:45
+20160223163845	[UCS]   Finished saving alliances from memory to database at 23/02/2016 16:38:45
+20160223163900	[UCS]   10100 FirstAuthentication
+20160223163900	[UCS]   20100 FirstAuthenticationOk
+20160223163900	[UCS]   10101 LoginMessage
+20160223163900	[UCS]   20103 LoginFailedMessage
+20160223163945	[UCS]   Starting saving players from memory to database at 23/02/2016 16:39:45
+20160223163945	[UCS]   Finished saving players from memory to database at 23/02/2016 16:39:45
+20160223163945	[UCS]   Starting saving alliances from memory to database at 23/02/2016 16:39:45
+20160223163945	[UCS]   Finished saving alliances from memory to database at 23/02/2016 16:39:45
+20160223164045	[UCS]   Starting saving players from memory to database at 23/02/2016 16:40:45
+20160223164045	[UCS]   Finished saving players from memory to database at 23/02/2016 16:40:45
+20160223164045	[UCS]   Starting saving alliances from memory to database at 23/02/2016 16:40:45
+20160223164045	[UCS]   Finished saving alliances from memory to database at 23/02/2016 16:40:45
+20160223164317	[UCS]   10100 FirstAuthentication
+20160223164317	[UCS]   20100 FirstAuthenticationOk
+20160223164317	[UCS]   10101 LoginMessage
+20160223164317	[UCS]   20103 LoginFailedMessage
+20160223164451	[UCS]   10100 FirstAuthentication
+20160223164451	[UCS]   20100 FirstAuthenticationOk
+20160223164451	[UCS]   10101 LoginMessage
+20160223164452	[UCS]   20103 LoginFailedMessage

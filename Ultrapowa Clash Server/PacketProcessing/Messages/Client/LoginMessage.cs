@@ -16,6 +16,7 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
+        private static byte[] PlainText;
         private long m_vAccountId;
         private int m_vClientBuild;
         private int m_vClientContentVersion;
@@ -33,41 +34,10 @@ namespace UCS.PacketProcessing
         private string m_vSignature3;
         private string m_vSignature4;
         private string m_vUDID;
-        private static byte[] PlainText;
 
         public LoginMessage(Client client, BinaryReader br)
             : base(client, br)
         {
-        }
-
-        public override void Decode()
-        {
-            /* The Packet Raw Data */
-            var RawPacket = GetData();
-
-            /* The client public key */
-            byte[] CPublicKey = RawPacket.Take(32).ToArray();
-
-            // Encryption start - Decryption
-            Console.WriteLine("[UCS]    Client Public Key = " + Encoding.UTF8.GetString(CPublicKey) + "\n[UCS]      Client Public Key Length = " + CPublicKey.Length);
-
-            /* Generating Blake2B Nonce with Client Public Key */
-            var CNonce = GenericHash.Hash(CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
-            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(CNonce) + "\n[UCS]       Client Nonce Length = " + CNonce.Length);
-
-            /* The full packet content in raw data without the public key of the client */
-            var cipherText = RawPacket.Skip(32).ToArray();
-
-            /* Finally, we store the decrypted data, and use the function below for dencryption */
-            PlainText = PublicKeyBox.Open(cipherText, CNonce, Crypto8.StandardKeyPair.PrivateKey, CPublicKey);
-
-            /* We also store the Session Key of the client */
-            var Skey = PlainText.Take(24).ToArray();
-
-            // ----------------------------------
-
-            ShowData();
-            
         }
 
         public static void ShowData()
@@ -77,9 +47,7 @@ namespace UCS.PacketProcessing
                 Console.WriteLine("\n[UCS] ----- FULL PACKET CONTENT #10100 ----- [/UCS]\n");
                 Console.WriteLine(Encoding.UTF8.GetString(PlainText));
                 Console.WriteLine("\n[UCS] ----- -------------------------- ----- [/UCS]\n");
-                //Console.WriteLine("SessionKey = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-                //Console.WriteLine("Nonce = " + reader.ReadBytes(CoCKeyPair.NonceLength));
-                //Console.WriteLine("User ID = " + reader.ReadInt64());
+                Console.WriteLine("User ID = " + reader.ReadInt64());
                 //Console.WriteLine("UserToken = " + reader.ReadString());
                 //Console.WriteLine("Major Version = " + reader.ReadInt32());
                 //Console.WriteLine("Content Version = " + reader.ReadInt32());
@@ -91,6 +59,35 @@ namespace UCS.PacketProcessing
                 //Console.WriteLine("Device Model = " + reader.ReadString());
                 //Console.WriteLine("");
             }
+        }
+
+        public override void Decode()
+        {
+            /* The Packet Raw Data */
+            var RawPacket = GetData();
+
+            /* The client public key */
+            byte[] CPublicKey = RawPacket.Take(32).ToArray();
+
+            // Encryption start - Decryption 
+            Console.WriteLine("[UCS]    Client Public Key = " + Encoding.UTF8.GetString(CPublicKey) + "\n[UCS]      Client Public Key Length = " + CPublicKey.Length);
+
+            /* Generating Blake2B Nonce with Client Public Key */
+            var CNonce = GenericHash.Hash(CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(CNonce) + "\n[UCS]      Client Nonce Length = " + CNonce.Length);
+
+            /* The full packet content in raw data without the public key of the client */
+            var cipherText = RawPacket.Skip(32).ToArray();
+
+            /* Finally, we store the decrypted data, and use the function below for dencryption */
+            PlainText = PublicKeyBox.Open(cipherText, CNonce, Crypto8.StandardKeyPair.PrivateKey, CPublicKey);
+
+            /* We also store the Session Key of the client */
+            var Skey = PlainText.Take(24).ToArray();
+
+            // ---------------------------------- 
+
+            ShowData();
         }
 
         public override void Process(Level level)

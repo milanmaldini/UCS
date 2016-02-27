@@ -162,14 +162,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ucs.exe" size="397312">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ucs.exe" size="397824">
       <assemblyIdentity name="ucs" version="0.6.5.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>QYkuClkCzjVpZkYya75wkF3l5vSH/AAj30TwLMblfG0=</dsig:DigestValue>
+        <dsig:DigestValue>BpSGuZlBsTsECAp3MFFUxNL/EOcUvvOaeh3VMaiaJLQ=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
