@@ -8,37 +8,30 @@ namespace UCS.PacketProcessing
     internal class FirstAuthentication : Message
     {
         //Packet 10100
+        
+        public int Unknown1;
+        public int Unknown2;
+        public int MajorVersion;
+        public int Unknown4;
+        public int MinorVersion;
+        public string Hash;
+        public int Unknown6;
+        public int Unknown7;
 
-        public int Data1;
-
-        public int Data2;
-
-        public int Data4;
-
-        public int Data5;
-
-        public string MasterHash;
-
-        public byte[] SomeData;
-
-        public FirstAuthentication(Client client, BinaryReader br)
-            : base(client, br)
-        {
-        }
-
-        /// <summary>
-        ///     Data probably (!) not needed for encryption
-        /// </summary>
+        public FirstAuthentication(Client client, BinaryReader br) : base(client, br) { }
+        
         public override void Decode()
         {
             using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
             {
-                Data1 = reader.ReadInt32();
-                Data2 = reader.ReadInt32();
-                SomeData = reader.ReadByteArray();
-                MasterHash = reader.ReadString();
-                Data4 = reader.ReadInt32();
-                Data5 = reader.ReadInt32();
+                Unknown1 = reader.ReadInt32();
+                Unknown2 = reader.ReadInt32();
+                MajorVersion = reader.ReadInt32();
+                Unknown4 = reader.ReadInt32();
+                MinorVersion = reader.ReadInt32();
+                Hash = reader.ReadString();
+                Unknown6 = reader.ReadInt32();
+                Unknown7 = reader.ReadInt32();
             }
         }
 

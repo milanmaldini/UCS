@@ -35,10 +35,7 @@ namespace UCS.PacketProcessing
         private string m_vSignature4;
         private string m_vUDID;
 
-        public LoginMessage(Client client, BinaryReader br)
-            : base(client, br)
-        {
-        }
+        public LoginMessage(Client client, BinaryReader br) : base(client, br) { }
 
         public static void ShowData()
         {
@@ -48,13 +45,13 @@ namespace UCS.PacketProcessing
                 Console.WriteLine(Encoding.UTF8.GetString(PlainText));
                 Console.WriteLine("\n[UCS] ----- -------------------------- ----- [/UCS]\n");
                 Console.WriteLine("User ID = " + reader.ReadInt64());
-                //Console.WriteLine("UserToken = " + reader.ReadString());
-                //Console.WriteLine("Major Version = " + reader.ReadInt32());
-                //Console.WriteLine("Content Version = " + reader.ReadInt32());
-                //Console.WriteLine("Minor Version = " + reader.ReadInt32());
-                //Console.WriteLine("MasterHash = " + reader.ReadString());
-                //Console.WriteLine("Unknown 1 = " + reader.ReadString());
-                //Console.WriteLine("OpenUDID = " + reader.ReadString());
+                Console.WriteLine("UserToken = " + reader.ReadString());
+                Console.WriteLine("Major Version = " + reader.ReadInt32());
+                Console.WriteLine("Content Version = " + reader.ReadInt32());
+                Console.WriteLine("Minor Version = " + reader.ReadInt32());
+                Console.WriteLine("MasterHash = " + reader.ReadString());
+                Console.WriteLine("Unknown 1 = " + reader.ReadString());
+                Console.WriteLine("OpenUDID = " + reader.ReadString());
                 //Console.WriteLine("MacAddress = " + reader.ReadString());
                 //Console.WriteLine("Device Model = " + reader.ReadString());
                 //Console.WriteLine("");
@@ -63,27 +60,38 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
+            /* Generating a Key Pair (Private Key) */
+            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
+            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
+
             /* The Packet Raw Data */
             var RawPacket = GetData();
 
             /* The client public key */
-            byte[] CPublicKey = RawPacket.Take(32).ToArray();
+            var CPublicKey = RawPacket.Take(32).ToArray();
 
             // Encryption start - Decryption 
             Console.WriteLine("[UCS]    Client Public Key = " + Encoding.UTF8.GetString(CPublicKey) + "\n[UCS]      Client Public Key Length = " + CPublicKey.Length);
 
             /* Generating Blake2B Nonce with Client Public Key */
-            var CNonce = GenericHash.Hash(CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
-            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(CNonce) + "\n[UCS]      Client Nonce Length = " + CNonce.Length);
+            var SNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
+            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(SNonce) + "\n[UCS]      Client Nonce Length = " + SNonce.Length);
 
             /* The full packet content in raw data without the public key of the client */
             var cipherText = RawPacket.Skip(32).ToArray();
 
             /* Finally, we store the decrypted data, and use the function below for dencryption */
-            PlainText = PublicKeyBox.Open(cipherText, CNonce, Crypto8.StandardKeyPair.PrivateKey, CPublicKey);
+            PlainText = PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
 
             /* We also store the Session Key of the client */
-            var Skey = PlainText.Take(24).ToArray();
+            var CSessionKey = PlainText.Take(24).ToArray();
+
+            /* We also store the Client Nonce */
+            var CNonce = PlainText.Skip(24).Take(24).ToArray();
+
+            /* Replace the packet content by skipping the first 48 bytes */
+            PlainText = PlainText.Skip(24).Skip(24).ToArray();
+
 
             // ---------------------------------- 
 
@@ -137,7 +145,6 @@ namespace UCS.PacketProcessing
 
             level = ResourcesManager.GetPlayer(m_vAccountId);
             if (level != null)
-            //Console.WriteLine("Debug: Retrieve Player Data for player " + auth.PlayerId.ToString());
             {
                 if (level.GetAccountStatus() == 99)
                 {
@@ -149,12 +156,13 @@ namespace UCS.PacketProcessing
             }
             else
             {
-                //New player
                 level = ObjectManager.CreateAvatar(m_vAccountId);
                 var tokenSeed = new byte[20];
                 new Random().NextBytes(tokenSeed);
-                SHA1 sha = new SHA1CryptoServiceProvider();
-                m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
+                using (SHA1 sha = new SHA1CryptoServiceProvider())
+                {
+                    m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
+                }
             }
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
@@ -190,8 +198,7 @@ namespace UCS.PacketProcessing
             loginOk.SetContentVersion(m_vClientContentVersion);
             loginOk.SetServerEnvironment("prod");
             loginOk.SetDaysSinceStartedPlaying(10);
-            loginOk.SetServerTime(
-                Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString());
+            loginOk.SetServerTime(Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString());
             loginOk.SetAccountCreatedDate("1414003838000");
             loginOk.SetStartupCooldownSeconds(0);
             loginOk.SetCountryCode("FR");

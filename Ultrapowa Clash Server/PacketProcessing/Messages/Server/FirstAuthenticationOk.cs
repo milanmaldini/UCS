@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UCS.Helpers;
 
 namespace UCS.PacketProcessing
@@ -9,6 +10,16 @@ namespace UCS.PacketProcessing
         public FirstAuthenticationOk(Client client, FirstAuthentication cka) : base(client)
         {
             SetMessageType(20100);
+        }
+
+        public byte[] SessionKey;
+
+        public override void Decode()
+        {
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
+            {
+                SessionKey = reader.ReadAllBytes();
+            }
         }
 
         public override void Encode()
