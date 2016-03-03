@@ -25,12 +25,13 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(14302, typeof (AskForAllianceDataMessage));
             m_vMessages.Add(14303, typeof (AskForJoinableAlliancesListMessage));
             m_vMessages.Add(14305, typeof (JoinAllianceMessage));
-            //m_vMessages.Add(14306, );//Promote
+            m_vMessages.Add(14306, typeof(PromoteAllianceMemberMessage));
             m_vMessages.Add(14308, typeof (LeaveAllianceMessage));
             m_vMessages.Add(14315, typeof (ChatToAllianceStreamMessage));
             m_vMessages.Add(14324, typeof (SearchAlliancesMessage));
             m_vMessages.Add(14325, typeof (AskForAvatarProfileMessage));
             m_vMessages.Add(14715, typeof (SendGlobalChatLineMessage));
+            //m_vMessages.Add(14403, typeof (AskForPlayerLeagueList));
         }
 
         public static object Read(Client c, BinaryReader br, int packetType)

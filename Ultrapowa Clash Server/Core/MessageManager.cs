@@ -5,7 +5,7 @@ using UCS.PacketProcessing;
 
 namespace UCS.Core
 {
-    internal class MessageManager
+    internal class MessageManager : IDisposable
     {
         private static readonly EventWaitHandle m_vWaitHandle = new AutoResetEvent(false);
         private static ConcurrentQueue<Message> m_vPackets;
@@ -50,7 +50,7 @@ namespace UCS.Core
                     {
                         Debugger.WriteLine("[UCS]   " + p.GetMessageType() + " " + p.GetType().Name + player);
                         //if (p.GetMessageType() != 10101)
-                            p.Decode();
+                        p.Decode();
                         p.Process(pl);
                     }
                     catch (Exception ex)
@@ -64,5 +64,11 @@ namespace UCS.Core
         }
 
         private delegate void PacketProcessingDelegate();
+
+        public void Dispose()
+        {
+            m_vWaitHandle.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

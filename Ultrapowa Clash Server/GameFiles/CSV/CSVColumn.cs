@@ -24,7 +24,7 @@ namespace UCS.GameFiles
             return m_vValues[row];
         }
 
-        public int GetArraySize(int currentOffset, int nextOffset)
+        public static int GetArraySize(int currentOffset, int nextOffset)
         {
             return nextOffset - currentOffset;
         }

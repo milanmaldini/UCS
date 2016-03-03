@@ -92,7 +92,7 @@ namespace UCS.Logic
             return m_vCastleUsedCapacity;
         }
 
-        public int GetDataIndex(List<DataSlot> dsl, Data d)
+        public static int GetDataIndex(List<DataSlot> dsl, Data d)
         {
             return dsl.FindIndex(ds => ds.Data == d);
         }

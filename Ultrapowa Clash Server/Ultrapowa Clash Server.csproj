@@ -9,10 +9,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UCS</RootNamespace>
     <AssemblyName>ucs</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>D:\UCS</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,8 +30,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,7 +39,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>1</WarningLevel>
+    <WarningLevel>2</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
@@ -55,23 +55,34 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>754E790E6F7BEB5CDFA001B0E45CBED276B64342</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>860F24D7B04F1D89D1F18CF717D7429450EC2404</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Ultrapowa Clash Server_CléTemporaire.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ucs-sign.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>icone-ucs.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>UCS.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>ucs-sign.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>Custom</TargetZone>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -419,6 +430,7 @@
     <Compile Include="PacketProcessing\Messages\Server\GlobalChatLineMessage.cs" />
     <Compile Include="Logic\StreamEntry\ChatStreamEntry.cs" />
     <Compile Include="Logic\Village.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\PromoteAllianceMemberMessage.cs" />
     <Compile Include="PacketProcessing\UpdateNonceType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -453,6 +465,8 @@
       <LastGenOutput>ucsdb.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
+    <None Include="ucs-sign.pfx" />
     <None Include="ucsconf.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -480,6 +494,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icone-ucs.ico" />
     <Content Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2Sharp.csproj" />
     <Content Include="PacketProcessing\Clash8Encryption\Blake2Sharp\compression.c" />
     <Content Include="PacketProcessing\Clash8Encryption\libsodium-net\Dependencies\libsodium-64.dll">

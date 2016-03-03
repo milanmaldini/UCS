@@ -47,6 +47,7 @@ namespace Sodiumc
         {
             if (_privateKey != null && _privateKey.Length > 0)
                 Array.Clear(_privateKey, 0, _privateKey.Length);
+            GC.SuppressFinalize(this);
         }
 
         ~KeyPair()

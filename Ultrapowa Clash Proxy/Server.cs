@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace UCS.Proxy
 {
-    public class Server : ServerCrypto
+    public class Server : ServerCrypto, IDisposable
     {
         static readonly ManualResetEvent allDone = new ManualResetEvent(false);
         readonly int port;
@@ -20,7 +20,7 @@ namespace UCS.Proxy
             allDone.Set();
             try
             {
-                var listener = (Socket) ar.AsyncState;
+                var listener = (Socket)ar.AsyncState;
                 var socket = listener.EndAccept(ar);
 
                 var state = new ServerState
@@ -70,6 +70,12 @@ namespace UCS.Proxy
             }
             Console.WriteLine("\n[UCS]      Press ENTER to continue...");
             Console.Read();
+        }
+
+        public void Dispose()
+        {
+            allDone.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

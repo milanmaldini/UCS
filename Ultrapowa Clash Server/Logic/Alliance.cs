@@ -116,7 +116,7 @@ namespace UCS.Logic
             return data.ToArray();
         }
 
-        public byte[] EncodeMembers()
+        public static byte[] EncodeMembers()
         {
             var data = new List<byte>();
             return data.ToArray();

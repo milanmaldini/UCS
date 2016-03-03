@@ -88,6 +88,7 @@ namespace UCS.PacketProcessing
 
             _keyPair.Dispose();
             _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }

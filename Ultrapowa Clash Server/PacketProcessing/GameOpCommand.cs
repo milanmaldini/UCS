@@ -16,7 +16,7 @@ namespace UCS.PacketProcessing
             return m_vRequiredAccountPrivileges;
         }
 
-        public void SendCommandFailedMessage(Client c)
+        public static void SendCommandFailedMessage(Client c)
         {
             //Debugger.WriteLine("GameOp command failed. Insufficient privileges.");
             var p = new GlobalChatLineMessage(c);
