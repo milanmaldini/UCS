@@ -60,7 +60,7 @@ namespace UCS.Logic
             }
         }
 
-        public static int GetFinishTaskOfOneWorkerCost()
+        public int GetFinishTaskOfOneWorkerCost()
         {
             return 0;
         }
@@ -134,7 +134,7 @@ namespace UCS.Logic
             m_vWorkerCount++;
         }
 
-        public static void RemoveGameObjectReferences(GameObject go)
+        public void RemoveGameObjectReferences(GameObject go)
         {
         }
     }

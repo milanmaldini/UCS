@@ -9,7 +9,7 @@ namespace UCS.GameFiles
         {
         }
 
-        public static int GetDarkElixirDiamondCost(int resourceCount)
+        public int GetDarkElixirDiamondCost(int resourceCount)
         {
             var result = 0;
             if (resourceCount >= 1)
@@ -89,7 +89,7 @@ namespace UCS.GameFiles
             return (GlobalData) GetDataByName(name);
         }
 
-        public static int GetResourceDiamondCost(int resourceCount, ResourceData resourceData)
+        public int GetResourceDiamondCost(int resourceCount, ResourceData resourceData)
         {
             var result = 0;
             if (resourceData == ObjectManager.DataTables.GetResourceByName("DarkElixir"))
@@ -185,7 +185,7 @@ namespace UCS.GameFiles
             return result;
         }
 
-        public static int GetSpeedUpCost(int seconds)
+        public int GetSpeedUpCost(int seconds)
         {
             var cost = 0;
             if (seconds >= 1)

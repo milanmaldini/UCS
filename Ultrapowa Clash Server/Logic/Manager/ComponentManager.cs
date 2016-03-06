@@ -166,7 +166,7 @@ namespace UCS.Logic
             }
         }
 
-        public static void Tick()
+        public void Tick()
         {
         }
     }

@@ -433,15 +433,6 @@ namespace UCS.Logic
                 NpcLootedElixir.Add(ds);
             }
         }
-        
-        public void SetAllianceRole(int a)
-        {
-            var ame = GetAllianceMemberEntry();
-            if (ame != null)
-            {
-                ame.SetRole(a);
-            }
-        }
 
         public string SaveToJSON()
         {

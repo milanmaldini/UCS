@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace UCS.Core
 {
-    public class ApiManagerPro : IDisposable
+    public class ApiManagerPro
     {
         public static string jsonapp;
         private static readonly HttpListener _listener = new HttpListener();
@@ -130,7 +130,7 @@ namespace UCS.Core
                                 try
                                 {
                                     Debugger.WriteLine("New API Request!", null, 5);
-                                    var rstr = _responderMethod?.Invoke(ctx.Request);
+                                    var rstr = _responderMethod(ctx.Request);
                                     var buf = Encoding.UTF8.GetBytes(rstr);
                                     ctx.Response.ContentLength64 = buf.Length;
                                     ctx.Response.OutputStream.Write(buf, 0, buf.Length);
@@ -162,11 +162,6 @@ namespace UCS.Core
         private class JsonApiE
         {
             public Dictionary<string, string> Error { get; set; }
-        }
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
         }
     }
 }

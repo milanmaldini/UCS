@@ -43,7 +43,7 @@ namespace UCS.Logic
             m_vWarOptInStatus = 1;
         }
 
-        public static void Decode(byte[] avatarData)
+        public void Decode(byte[] avatarData)
         {
             using (var br = new BinaryReader(new MemoryStream(avatarData)))
             {
@@ -96,7 +96,7 @@ namespace UCS.Logic
             return m_vAvatarId;
         }
 
-        public static int GetDonations()
+        public int GetDonations()
         {
             return 150;
         }

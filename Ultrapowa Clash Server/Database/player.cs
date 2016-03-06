@@ -20,6 +20,5 @@ namespace UCS.Database
         public System.DateTime LastUpdateTime { get; set; }
         public string Avatar { get; set; }
         public string GameObjects { get; set; }
-		public string AddressIP { get; set; }
     }
 }

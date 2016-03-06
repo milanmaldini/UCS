@@ -16,7 +16,7 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
-        //private static byte[] PlainText;
+        private static byte[] PlainText;
         private long m_vAccountId;
         private int m_vClientBuild;
         private int m_vClientContentVersion;
@@ -37,7 +37,7 @@ namespace UCS.PacketProcessing
 
         public LoginMessage(Client client, BinaryReader br) : base(client, br) { }
 
-        public static void ShowData(byte[] PlainText)
+        public static void ShowData()
         {
             using (var reader = new BinaryReader(new MemoryStream(PlainText)))
             {
@@ -81,7 +81,7 @@ namespace UCS.PacketProcessing
             var cipherText = RawPacket.Skip(32).ToArray();
 
             /* Finally, we store the decrypted data, and use the function below for dencryption */
-            var PlainText = PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
+            PlainText = PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
 
             /* We also store the Session Key of the client */
             var CSessionKey = PlainText.Take(24).ToArray();
@@ -95,7 +95,7 @@ namespace UCS.PacketProcessing
 
             // ---------------------------------- 
 
-            ShowData(PlainText);
+            ShowData();
         }
 
         public override void Process(Level level)

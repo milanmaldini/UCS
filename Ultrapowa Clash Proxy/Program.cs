@@ -31,10 +31,8 @@ namespace UCS.Proxy
             Console.WriteLine();
             try
             {
-                using (var server = new Server(port))
-                {
-                    server.StartServer();
-                }
+                var server = new Server(port);
+                server.StartServer();
             }
             catch (Exception e)
             {

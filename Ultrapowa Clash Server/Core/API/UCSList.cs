@@ -47,7 +47,7 @@ namespace UCS.Core
             {
                 {"ApiKey", APIKey},
                 {"OnlinePlayers", Convert.ToString(ResourcesManager.GetOnlinePlayers().Count)},
-                {nameof(Status), Convert.ToString(Status)}
+                {"Status", Convert.ToString(Status)}
             }).Remove(0, 1);
 
             if (result == "OK")

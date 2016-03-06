@@ -151,7 +151,7 @@ namespace UCS.Logic
 
         public void Tick()
         {
-            ComponentManager.Tick();
+            m_vComponentManager.Tick();
             foreach (var l in m_vGameObjects)
             {
                 foreach (var go in l)
