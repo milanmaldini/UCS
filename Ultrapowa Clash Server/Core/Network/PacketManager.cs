@@ -72,7 +72,9 @@ namespace UCS.Network
                 while (m_vIncomingPackets.TryDequeue(out p))
                 {
                     if (p.GetMessageType() != 10100 && p.GetMessageType() != 10101)
+                    {
                         p.Client.Decrypt(p.GetData());
+                    }
                     Logger.WriteLine(p, "R");
                     MessageManager.ProcessPacket(p);
                 }
