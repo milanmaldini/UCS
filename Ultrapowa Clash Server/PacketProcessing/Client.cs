@@ -136,7 +136,7 @@ namespace UCS.PacketProcessing
             EnDecrypt(OutgoingPacketsKey, data);
         }
 
-        public void EnDecrypt(byte[] key, byte[] data)
+        public static void EnDecrypt(byte[] key, byte[] data)
         {
             int dataLen;
 

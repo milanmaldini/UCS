@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Net.Sockets;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class ClientCrypto : Protocol
     {

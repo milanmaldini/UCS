@@ -38,7 +38,7 @@ namespace UCS.GameFiles
             return m_vCSVRow.GetName();
         }
 
-        public void LoadData(Data obj, Type objectType, CSVRow row)
+        public static void LoadData(Data obj, Type objectType, CSVRow row)
         {
             foreach (var prop in objectType.GetProperties())
             {

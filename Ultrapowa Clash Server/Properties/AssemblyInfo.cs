@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Ultrapowa Clash Server")]
 [assembly: AssemblyDescription("Clash of Clans Server Emulator")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Ultrapowa")]
 [assembly: AssemblyProduct("Ultrapowa Clash Server")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]

@@ -3,9 +3,10 @@ using System.Data.Entity.Infrastructure;
 
 namespace UCS.Database
 {
-    internal class ucsdbEntities : DbContext
+    class ucsdbEntities : DbContext
     {
-        public ucsdbEntities(string connectionString) : base("name=" + connectionString)
+        public ucsdbEntities(string connectionString)
+            : base("name=" + connectionString)
         {
         }
 

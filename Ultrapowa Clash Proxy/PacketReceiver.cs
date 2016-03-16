@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Sockets;
 
-namespace UCS.Proxy
+namespace UCP
 {
     class PacketReceiver
     {

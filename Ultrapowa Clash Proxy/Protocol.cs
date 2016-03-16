@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class Protocol
     {

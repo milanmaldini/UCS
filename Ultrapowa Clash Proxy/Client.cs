@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class Client : ClientCrypto
     {
@@ -19,9 +19,9 @@ namespace UCS.Proxy
         {
             try
             {
-                var ipHostInfo = Dns.GetHostEntry(Proxy.hostname);
+                var ipHostInfo = Dns.GetHostEntry(UCP.Proxy.hostname);
                 var ipAddress = ipHostInfo.AddressList[0];
-                var remoteEndPoint = new IPEndPoint(ipAddress, Proxy.port);
+                var remoteEndPoint = new IPEndPoint(ipAddress, UCP.Proxy.port);
 
                 var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 state.socket = socket;

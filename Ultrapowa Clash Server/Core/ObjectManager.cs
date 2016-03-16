@@ -11,7 +11,7 @@ using Timer = System.Threading.Timer;
 namespace UCS.Core
 
 {
-    internal class ObjectManager
+    internal class ObjectManager : IDisposable
     {
         private static readonly object m_vDatabaseLock = new object();
         private static Dictionary<long, Alliance> m_vAlliances;
@@ -170,6 +170,14 @@ namespace UCS.Core
             m_vDatabase.Save(m_vAlliances.Values.ToList());
             if (m_vTimerCanceled)
                 TimerReference.Dispose();
+        }
+        public void Dispose()
+        {
+            if (TimerReference != null)
+            {
+                TimerReference.Dispose();
+                TimerReference = null;
+            }
         }
     }
 }

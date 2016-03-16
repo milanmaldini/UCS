@@ -7,7 +7,7 @@ using UCS.PacketProcessing;
 
 namespace UCS.Network
 {
-    internal class PacketManager
+    internal class PacketManager : IDisposable
     {
         private static readonly EventWaitHandle m_vIncomingWaitHandle = new AutoResetEvent(false);
         private static readonly EventWaitHandle m_vOutgoingWaitHandle = new AutoResetEvent(false);
@@ -31,8 +31,7 @@ namespace UCS.Network
 
         public static void ProcessOutgoingPacket(Message p)
         {
-            if (p.GetMessageType() != 10101)
-                p.Encode();
+            p.Encode();
 
             try
             {
@@ -52,14 +51,13 @@ namespace UCS.Network
 
         public void Start()
         {
-            m_vIsRunning = true;
-
             IncomingProcessingDelegate incomingProcessing = IncomingProcessing;
             incomingProcessing.BeginInvoke(null, null);
 
             OutgoingProcessingDelegate outgoingProcessing = OutgoingProcessing;
             outgoingProcessing.BeginInvoke(null, null);
 
+            m_vIsRunning = true;
             Console.WriteLine("[UCS]    Packet Manager started successfully");
         }
 
@@ -71,10 +69,7 @@ namespace UCS.Network
                 Message p;
                 while (m_vIncomingPackets.TryDequeue(out p))
                 {
-                    if (p.GetMessageType() != 10100 && p.GetMessageType() != 10101)
-                    {
-                        p.Client.Decrypt(p.GetData());
-                    }
+                    p.Client.Decrypt(p.GetData());
                     Logger.WriteLine(p, "R");
                     MessageManager.ProcessPacket(p);
                 }
@@ -92,12 +87,12 @@ namespace UCS.Network
                     Logger.WriteLine(p, "S");
                     if (p.GetMessageType() == 20000)
                     {
-                        var sessionKey = ((SessionKeyMessage) p).Key;
+                        var sessionKey = ((SessionKeyMessage)p).Key;
                         p.Client.Encrypt(p.GetData());
                         p.Client.UpdateKey(sessionKey);
                     }
-                    else if (p.GetMessageType() != 20100 && p.GetMessageType() != 10101)
-                            p.Client.Encrypt(p.GetData());
+                    else
+                        p.Client.Encrypt(p.GetData());
 
                     try
                     {
@@ -114,7 +109,10 @@ namespace UCS.Network
                             p.Client.Socket.Shutdown(SocketShutdown.Both);
                             p.Client.Socket.Close();
                         }
-                        catch (Exception) { }
+                        catch (Exception ex)
+                        {
+                            Debugger.WriteLine("[UCS]   Exception thrown when dropping client : ", ex);
+                        }
                     }
                 }
             }
@@ -122,5 +120,12 @@ namespace UCS.Network
 
         private delegate void IncomingProcessingDelegate();
         private delegate void OutgoingProcessingDelegate();
+
+        public void Dispose()
+        {
+            m_vIncomingWaitHandle.Dispose();
+            GC.SuppressFinalize(this);
+            m_vOutgoingWaitHandle.Dispose();
+        }
     }
 }

@@ -76,7 +76,7 @@ namespace UCS.GameFiles
                 nextOffset = nextRow.GetRowOffset();
             }
             var currentOffset = row.GetRowOffset();
-            return c.GetArraySize(currentOffset, nextOffset);
+            return CSVColumn.GetArraySize(currentOffset, nextOffset);
         }
 
         public int GetColumnIndexByName(string name)

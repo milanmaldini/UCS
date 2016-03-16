@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace UCS.Proxy
+namespace UCP
 {
     class Proxy
     {

@@ -19,13 +19,13 @@ namespace UCS.Helpers
         public static int GetResourceDiamondCost(int resourceCount, ResourceData resourceData)
         {
             var globals = ObjectManager.DataTables.GetGlobals();
-            return globals.GetResourceDiamondCost(resourceCount, resourceData);
+            return Globals.GetResourceDiamondCost(resourceCount, resourceData);
         }
 
         public static int GetSpeedUpCost(int seconds)
         {
             var globals = ObjectManager.DataTables.GetGlobals();
-            return globals.GetSpeedUpCost(seconds);
+            return Globals.GetSpeedUpCost(seconds);
         }
     }
 }

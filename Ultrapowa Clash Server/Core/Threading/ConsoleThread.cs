@@ -21,11 +21,11 @@ namespace UCS.Core.Threading
             T = new Thread(() =>
             {
                 Title = "Ultrapowa Clash Server v" + Assembly.GetExecutingAssembly().GetName().Version;
-                for (var i = 0; i < Title.Length; i++)
+                foreach (char t in Title)
                 {
-                    Tmp += Title[i];
+                    Tmp += t;
                     Console.Title = Tmp;
-                    Thread.Sleep(25);
+                    Thread.Sleep(20);
                 }
                 Console.WriteLine(
                     @"

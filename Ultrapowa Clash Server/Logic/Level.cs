@@ -11,6 +11,7 @@ namespace UCS.Logic
         public GameObjectManager GameObjectManager; //a1 + 44
         private byte m_vAccountPrivileges;
         private byte m_vAccountStatus;
+        private string m_vAddressIP;
         private Client m_vClient;
         private DateTime m_vTime; //a1 + 40
         public WorkerManager WorkerManager;
@@ -25,6 +26,7 @@ namespace UCS.Logic
             m_vClientAvatar = new ClientAvatar();
             m_vAccountPrivileges = 0;
             m_vAccountStatus = 0;
+            m_vAddressIP = "0";
         }
 
         public Level(long id)
@@ -35,6 +37,7 @@ namespace UCS.Logic
             m_vTime = DateTime.UtcNow;
             m_vAccountPrivileges = 0;
             m_vAccountStatus = 0;
+            m_vAddressIP = "0";
         }
 
         public byte GetAccountPrivileges()
@@ -45,6 +48,11 @@ namespace UCS.Logic
         public byte GetAccountStatus()
         {
             return m_vAccountStatus;
+        }
+
+        public string GetAddressIP()
+        {
+            return m_vAddressIP;
         }
 
         public Client GetClient()
@@ -111,6 +119,11 @@ namespace UCS.Logic
         public void SetTime(DateTime t)
         {
             m_vTime = t;
+        }
+
+        public void SetAddressIP(string IP)
+        {
+            m_vAddressIP = IP;
         }
 
         public void Tick()
