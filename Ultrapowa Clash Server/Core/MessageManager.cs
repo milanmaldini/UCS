@@ -29,7 +29,7 @@ namespace UCS.Core
 
             m_vIsRunning = true;
 
-            Console.WriteLine("Message Manager started");
+            Console.WriteLine("[UCS]    Message manager has been successfully started !");
         }
 
         private void PacketProcessing()

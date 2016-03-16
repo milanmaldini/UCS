@@ -2,6 +2,8 @@
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
+using System.Text;
+using System;
 
 namespace UCS.PacketProcessing
 {
@@ -22,7 +24,7 @@ namespace UCS.PacketProcessing
         
         public override void Decode()
         {
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetRawData())))
             {
                 Unknown1 = reader.ReadInt32();
                 Unknown2 = reader.ReadInt32();
@@ -32,6 +34,15 @@ namespace UCS.PacketProcessing
                 Hash = reader.ReadString();
                 Unknown6 = reader.ReadInt32();
                 Unknown7 = reader.ReadInt32();
+
+                Console.WriteLine("[UCS]    [10100]    Unknown1 ->    " + Unknown1);
+                Console.WriteLine("[UCS]    [10100]    Unknown2 ->    " + Unknown2);
+                Console.WriteLine("[UCS]    [10100]    MVersion ->    " + MajorVersion);
+                Console.WriteLine("[UCS]    [10100]    MVersion ->    " + MinorVersion);
+                Console.WriteLine("[UCS]    [10100]    Unknown4 ->    " + Unknown4);
+                Console.WriteLine("[UCS]    [10100]    Hash     ->    " + Hash);
+                Console.WriteLine("[UCS]    [10100]    Unknown6     ->    " + Unknown6);
+                Console.WriteLine("[UCS]    [10100]    Unknown7     ->    " + Unknown7);
             }
         }
 

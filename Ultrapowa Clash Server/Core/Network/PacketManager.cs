@@ -85,11 +85,11 @@ namespace UCS.Network
                 while (m_vOutgoingPackets.TryDequeue(out p))
                 {
                     Logger.WriteLine(p, "S");
-                    if (p.GetMessageType() == 20000)
+                    if (p.GetMessageType() == 20100)
                     {
-                        var sessionKey = ((SessionKeyMessage)p).Key;
-                        p.Client.Encrypt(p.GetData());
-                        p.Client.UpdateKey(sessionKey);
+                        var sessionKey = ((FirstAuthenticationOk)p).SessionKey;
+                        //p.Client.Encrypt(p.GetData());
+                        //p.Client.UpdateKey(sessionKey);
                     }
                     else
                         p.Client.Encrypt(p.GetData());

@@ -62,7 +62,7 @@ namespace UCS.PacketProcessing
 
         public Socket Socket { get; set; }
 
-        public static int extract_number(int[] buffer, int ix)
+        /*public static int extract_number(int[] buffer, int ix)
         {
             if (ix == 0)
             {
@@ -82,13 +82,13 @@ namespace UCS.PacketProcessing
 
             ix = (ix + 1)%624;
             return y%256;
-        }
+        }*/
 
         // Extract a tempered pseudorandom number based on the index-th value,
         // calling generate_numbers() every 624 numbers
         // Generate an array of 624 untempered numbers
         public static void generate_numbers(int[] buffer)
-        {
+        {/*
             for (var i = 0; i < 624; i++)
             {
                 var y = (int) ((buffer[i] & 0x80000000) + (buffer[(i + 1)%624] & 0x7fffffff));
@@ -97,21 +97,26 @@ namespace UCS.PacketProcessing
                 {
                     buffer[i] = (int) (buffer[i] ^ 2567483615);
                 }
-            }
+            }*/
         }
 
         // Initialize the generator from a seed
         public static void initialize_generator(int seed, int[] buffer)
-        {
+        {/*
             buffer[0] = seed;
             for (var i = 1; i < 624; ++i)
             {
                 buffer[i] = 1812433253*((buffer[i - 1] ^ (buffer[i - 1] >> 30)) + 1);
-            }
+            }*/
+        }
+
+        public static byte[] GenerateSessionKey()
+        {
+            return Crypto8.GenerateNonce();
         }
 
         public static void TransformSessionKey(int clientSeed, byte[] sessionKey)
-        {
+        {/*
             var buffer = new int[624];
             initialize_generator(clientSeed, buffer);
             var byte100 = 0;
@@ -123,7 +128,7 @@ namespace UCS.PacketProcessing
             for (var i = 0; i < sessionKey.Length; i++)
             {
                 sessionKey[i] ^= (byte) (extract_number(buffer, i + 100) & byte100);
-            }
+            }*/
         }
 
         public void Decrypt(byte[] data)
@@ -137,7 +142,7 @@ namespace UCS.PacketProcessing
         }
 
         public static void EnDecrypt(byte[] key, byte[] data)
-        {
+        {/*
             int dataLen;
 
             if (data != null)
@@ -161,6 +166,7 @@ namespace UCS.PacketProcessing
                     } while (dataLen > 0);
                 }
             }
+            */
         }
 
         public Level GetLevel()
@@ -205,7 +211,6 @@ namespace UCS.PacketProcessing
                     }
                     else
                     {
-                        //Update Decryption Key
                         var data = DataStream.Skip(7).Take(length).ToArray();
                         Decrypt(data);
                     }
@@ -216,7 +221,7 @@ namespace UCS.PacketProcessing
         }
 
         public unsafe void UpdateKey(byte[] sessionKey)
-        {
+        {/*
             TransformSessionKey((int) ClientSeed, sessionKey);
 
             var newKey = new byte[264];
@@ -286,7 +291,7 @@ namespace UCS.PacketProcessing
                 }
             }
             Array.Copy(newKey, IncomingPacketsKey, newKey.Length);
-            Array.Copy(newKey, OutgoingPacketsKey, newKey.Length);
+            Array.Copy(newKey, OutgoingPacketsKey, newKey.Length);*/
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Blake2Sharp;
-using Sodiumc;
+﻿using Sodium;
 using System;
 using System.Configuration;
 using System.IO;

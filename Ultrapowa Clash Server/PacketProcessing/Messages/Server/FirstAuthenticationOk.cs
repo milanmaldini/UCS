@@ -7,27 +7,20 @@ namespace UCS.PacketProcessing
     //Packet 20100
     internal class FirstAuthenticationOk : Message
     {
+        public byte[] SessionKey;
+
         public FirstAuthenticationOk(Client client, FirstAuthentication cka) : base(client)
         {
             SetMessageType(20100);
+            SessionKey = Crypto8.GenerateNonce();
         }
-
-        public byte[] SessionKey;
-
-        public override void Decode()
-        {
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
-            {
-                SessionKey = reader.ReadAllBytes();
-            }
-        }
-
+        
         public override void Encode()
         {
             var pack = new List<byte>();
-            pack.AddInt32(0);
-            pack.AddInt32(0);
-            pack.AddInt32(0);
+            pack.AddInt32(SessionKey.Length);
+            pack.AddRange(SessionKey);
+            pack.AddInt32(1);
             SetData(pack.ToArray());
         }
     }
