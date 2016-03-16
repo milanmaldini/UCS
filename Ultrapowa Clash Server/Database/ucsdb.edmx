@@ -23,6 +23,7 @@
           <Property Name="LastUpdateTime" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="Avatar" Type="text" Nullable="false" />
           <Property Name="GameObjects" Type="text" Nullable="false" />
+		  <Property Name="AddressIP" Type="text" Nullable="true" />
         </EntityType>
         <EntityContainer Name="ucsdbModelStoreContainer">
           <EntitySet Name="clan" EntityType="Self.clan" Schema="ucsdb" store:Type="Tables" />
@@ -50,6 +51,7 @@
           <Property Name="LastUpdateTime" Type="DateTime" Nullable="false" />
           <Property Name="Avatar" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
           <Property Name="GameObjects" Type="String" Nullable="false" MaxLength="65535" FixedLength="false" Unicode="false" />
+		      <Property Name="AddressIP" Type="String" Nullable="true" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="ucsdbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="clan" EntityType="Self.clan" />
@@ -79,6 +81,7 @@
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
                 <ScalarProperty Name="LastUpdateTime" ColumnName="LastUpdateTime" />
+				<ScalarProperty Name="AddressIP" ColumnName="AddressIP" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

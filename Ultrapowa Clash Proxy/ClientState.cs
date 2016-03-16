@@ -1,6 +1,6 @@
 ﻿using Sodium;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class ClientState : State
     {

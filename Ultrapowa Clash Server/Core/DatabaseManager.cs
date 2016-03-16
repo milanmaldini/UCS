@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using UCS.Database;
 using UCS.Logic;
 
@@ -31,6 +32,7 @@ namespace UCS.Core
                             AccountStatus = l.GetAccountStatus(),
                             AccountPrivileges = l.GetAccountPrivileges(),
                             LastUpdateTime = l.GetTime(),
+                            AddressIP = (l.GetClient().Socket.RemoteEndPoint as IPEndPoint).ToString(),
                             Avatar = l.GetPlayerAvatar().SaveToJSON(),
                             GameObjects = l.SaveToJSON()
                         }
@@ -83,6 +85,7 @@ namespace UCS.Core
                         account.SetAccountStatus(p.AccountStatus);
                         account.SetAccountPrivileges(p.AccountPrivileges);
                         account.SetTime(p.LastUpdateTime);
+                        account.SetAddressIP(p.AddressIP);
                         account.GetPlayerAvatar().LoadFromJSON(p.Avatar);
                         account.LoadFromJSON(p.GameObjects);
                     }

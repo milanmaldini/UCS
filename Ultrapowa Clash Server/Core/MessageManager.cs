@@ -1,15 +1,20 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
+using System.Collections.Concurrent;
+using UCS.Logic;
 using UCS.PacketProcessing;
 
 namespace UCS.Core
 {
-    internal class MessageManager
+    class MessageManager
     {
-        private static readonly EventWaitHandle m_vWaitHandle = new AutoResetEvent(false);
         private static ConcurrentQueue<Message> m_vPackets;
+        private static EventWaitHandle m_vWaitHandle = new AutoResetEvent(false);
         private bool m_vIsRunning;
+
+        private delegate void PacketProcessingDelegate();
 
         public MessageManager()
         {
@@ -17,18 +22,14 @@ namespace UCS.Core
             m_vIsRunning = false;
         }
 
-        public static void ProcessPacket(Message p)
-        {
-            m_vPackets.Enqueue(p);
-            m_vWaitHandle.Set();
-        }
-
         public void Start()
         {
-            PacketProcessingDelegate packetProcessing = PacketProcessing;
+            PacketProcessingDelegate packetProcessing = new PacketProcessingDelegate(PacketProcessing);
             packetProcessing.BeginInvoke(null, null);
+
             m_vIsRunning = true;
-            Console.WriteLine("[UCS]    Message Manager started successfully");
+
+            Console.WriteLine("Message Manager started");
         }
 
         private void PacketProcessing()
@@ -40,29 +41,30 @@ namespace UCS.Core
                 Message p;
                 while (m_vPackets.TryDequeue(out p))
                 {
-                    var pl = p.Client.GetLevel();
-                    var player = "";
+                    Level pl = p.Client.GetLevel();
+                    string player = "";
                     if (pl != null)
-                    {
-                        player = " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() + ")";
-                    }
+                        player += " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() + ")";
                     try
                     {
-                        Debugger.WriteLine("[UCS]   " + p.GetMessageType() + " " + p.GetType().Name + player);
-                        //if (p.GetMessageType() != 10101)
-                            p.Decode();
+                        Debugger.WriteLine("[R] " + p.GetMessageType() + " " + p.GetType().Name + player);
+                        p.Decode();
                         p.Process(pl);
                     }
                     catch (Exception ex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Debugger.WriteLine("[UCS]  An exception occured during processing of message " + p.GetType().Name + player, ex);
+                        Debugger.WriteLine("An exception occured during processing of message " + p.GetType().Name + player, ex);
                         Console.ResetColor();
                     }
                 }
             }
         }
 
-        private delegate void PacketProcessingDelegate();
+        public static void ProcessPacket(Message p)
+        {
+            m_vPackets.Enqueue(p);
+            m_vWaitHandle.Set();
+        }
     }
 }

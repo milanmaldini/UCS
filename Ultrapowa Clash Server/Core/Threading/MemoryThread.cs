@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using ThreadState = System.Threading.ThreadState;
 using Timer = System.Timers.Timer;
+using System.Timers;
 
 namespace UCS.Core.Threading
 {
@@ -51,13 +52,12 @@ namespace UCS.Core.Threading
     {
         [DllImport("psapi.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool GetPerformanceInfo([Out] out PerformanceInformation PerformanceInformation,
-            [In] int Size);
+        public static extern bool GetPerformanceInfo();
 
         public static long GetPhysicalAvailableMemoryInMiB()
         {
             var pi = new PerformanceInformation();
-            if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+            if (GetPerformanceInfo())
                 return Convert.ToInt64(pi.PhysicalAvailable.ToInt64()*pi.PageSize.ToInt64()/1048576);
             return -1;
         }
@@ -65,7 +65,7 @@ namespace UCS.Core.Threading
         public static long GetTotalMemoryInMiB()
         {
             var pi = new PerformanceInformation();
-            if (GetPerformanceInfo(out pi, Marshal.SizeOf(pi)))
+            if (GetPerformanceInfo())
                 return Convert.ToInt64(pi.PhysicalTotal.ToInt64()*pi.PageSize.ToInt64()/1048576);
             return -1;
         }

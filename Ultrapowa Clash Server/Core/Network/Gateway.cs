@@ -64,7 +64,7 @@ namespace UCS.Network
                 Console.WriteLine("[UCS]    Gateway started on port " + kPort);
         }
 
-        private void Disconnect()
+        private static void Disconnect()
         {
             if (Socket != null)
                 Socket.BeginDisconnect(false, OnEndHostComplete, Socket);
@@ -94,12 +94,12 @@ namespace UCS.Network
             }
         }
 
-        private void OnEndHostComplete(IAsyncResult result)
+        private static void OnEndHostComplete(IAsyncResult result)
         {
             Socket = null;
         }
 
-        private void OnReceive(SocketRead read, byte[] data)
+        private static void OnReceive(SocketRead read, byte[] data)
         {
             try
             {
@@ -111,9 +111,12 @@ namespace UCS.Network
                 while (c.TryGetPacket(out p))
                     PacketManager.ProcessIncomingPacket(p);
             }
-            catch (Exception) { }
+            catch (Exception ex)
+            {
+                Debugger.WriteLine("[UCS]   Exception thrown when processing incoming packet : ", ex);
+            }
         }
 
-        private void OnReceiveError(SocketRead read, Exception exception) { }
+        private static void OnReceiveError(SocketRead read, Exception exception) { }
     }
 }

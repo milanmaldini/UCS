@@ -2,9 +2,9 @@
 using System;
 using System.Linq;
 using System.Net.Sockets;
-using UCS.Proxy;
+using UCP;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class ServerCrypto : Protocol
     {

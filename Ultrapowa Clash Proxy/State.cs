@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace UCS.Proxy
+namespace UCP
 {
     public class State
     {

@@ -6,7 +6,7 @@ Keep in mind that this is the version written by the official Developer Team con
 Ultrapowa									
 Berkan																							
 iSwürfel																			
-ADeltaX								
+aDeltaX								
 thecheater887										
 
 UCS is NOT affiliated with Supercell.
