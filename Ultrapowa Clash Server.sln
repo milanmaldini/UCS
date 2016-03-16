@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ultrapowa Clash Server", "U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ultrapowa Clash Proxy", "Ultrapowa Clash Proxy\Ultrapowa Clash Proxy.csproj", "{8AAB8C26-C675-497D-B767-578F0BFDB26B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCS-Key", "UCS-Key\UCS-Key.csproj", "{FACD45E8-593E-4930-8CA0-3A2C508A7CB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UCS Key Generator", "UCS Key Generator\UCS Key Generator.csproj", "{DC81BBB9-0844-447C-BDCB-321C4A36EAAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{8AAB8C26-C675-497D-B767-578F0BFDB26B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AAB8C26-C675-497D-B767-578F0BFDB26B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AAB8C26-C675-497D-B767-578F0BFDB26B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FACD45E8-593E-4930-8CA0-3A2C508A7CB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FACD45E8-593E-4930-8CA0-3A2C508A7CB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FACD45E8-593E-4930-8CA0-3A2C508A7CB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FACD45E8-593E-4930-8CA0-3A2C508A7CB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC81BBB9-0844-447C-BDCB-321C4A36EAAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC81BBB9-0844-447C-BDCB-321C4A36EAAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC81BBB9-0844-447C-BDCB-321C4A36EAAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC81BBB9-0844-447C-BDCB-321C4A36EAAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

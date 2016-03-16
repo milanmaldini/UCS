@@ -2,9 +2,9 @@
 
 namespace UCS
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        internal static void Main()
         {
             ConsoleThread.Start();
         }

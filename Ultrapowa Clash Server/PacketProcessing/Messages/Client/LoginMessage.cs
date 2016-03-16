@@ -1,4 +1,4 @@
-﻿using Blake2Sharp;
+﻿using UCS_Key;
 using Sodiumc;
 using System;
 using System.Configuration;
@@ -61,8 +61,8 @@ namespace UCS.PacketProcessing
         public override void Decode()
         {
             /* Generating a Key Pair (Private Key) */
-            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
-            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
+            var SPrivateKey = new Key().PrivateKey;
+            var SPublicKey = new  Key().PublicKey;
 
             /* The Packet Raw Data */
             var RawPacket = GetData();
