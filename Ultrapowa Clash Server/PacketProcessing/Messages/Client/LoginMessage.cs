@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 ﻿using Sodium;
-=======
-﻿using UCS_Key;
-using Sodiumc;
->>>>>>> origin/ucs-recode
 using System;
 using System.Configuration;
 using System.IO;
@@ -65,8 +60,8 @@ namespace UCS.PacketProcessing
         public override void Decode()
         {
             /* Generating a Key Pair (Private Key) */
-            var SPrivateKey = new Key().PrivateKey;
-            var SPublicKey = new  Key().PublicKey;
+            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
+            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
 
             /* The Packet Raw Data */
             var RawPacket = GetData();
