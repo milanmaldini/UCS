@@ -3,9 +3,11 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Data.HashFunction;
 using System.Security.Cryptography;
 using System.Text;
 using UCS.Core;
+using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
 using UCS.PacketProcessing;
@@ -15,66 +17,51 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
-        //private static byte[] PlainText;
-        private long m_vAccountId;
-        private int m_vClientBuild;
-        private int m_vClientContentVersion;
-        private int m_vClientMajorVersion;
-        private uint m_vClientSeed;
-        private string m_vDevice;
-        private string m_vGameVersion;
-        private string m_vMacAddress;
-        private string m_vOpenUDID;
-        private string m_vPassToken;
-        private string m_vPhoneId;
-        private string m_vPreferredDeviceLanguage;
-        private string m_vResourceSha;
-        private string m_vSignature2;
-        private string m_vSignature3;
-        private string m_vSignature4;
-        private string m_vUDID;
+        public byte[] PublicKey;
+        public byte[] SessionKey;
+        public byte[] Nonce;
+        public long UserID;
+        public string UserToken;
+        public int MajorVersion;
+        public int ContentVersion;
+        public int MinorVersion;
+        public string MasterHash;
+        public string Unknown1;
+        public string OpenUDID;
+        public string MacAddress;
+        public string DeviceModel;
+        public int LocaleKey;
+        public string Language;
+        public string AdvertisingGUID;
+        public string OSVersion;
+        public byte Unknown2;
+        public string Unknown3;
+        public string AndroidDeviceID;
+        public string FacebookDistributionID;
+        public bool IsAdvertisingTrackingEnabled;
+        public string VendorGUID;
+        public int Seed;
+        public byte Unknown4;
+        public string Unknown5;
+        public string Unknown6;
+        public string ClientVersion;
+
 
         public LoginMessage(Client client, BinaryReader br) : base(client, br) { }
 
-        public static void ShowData(byte[] PlainText)
-        {
-            using (var reader = new BinaryReader(new MemoryStream(PlainText)))
-            {
-                Console.WriteLine("\n[UCS] ----- FULL PACKET CONTENT #10100 ----- [/UCS]\n");
-                Console.WriteLine(Encoding.UTF8.GetString(PlainText));
-                Console.WriteLine("\n[UCS] ----- -------------------------- ----- [/UCS]\n");
-                Console.WriteLine("User ID = " + reader.ReadInt64());
-                Console.WriteLine("UserToken = " + reader.ReadString());
-                Console.WriteLine("Major Version = " + reader.ReadInt32());
-                Console.WriteLine("Content Version = " + reader.ReadInt32());
-                Console.WriteLine("Minor Version = " + reader.ReadInt32());
-                Console.WriteLine("MasterHash = " + reader.ReadString());
-                Console.WriteLine("Unknown 1 = " + reader.ReadString());
-                Console.WriteLine("OpenUDID = " + reader.ReadString());
-                //Console.WriteLine("MacAddress = " + reader.ReadString());
-                //Console.WriteLine("Device Model = " + reader.ReadString());
-                //Console.WriteLine("");
-            }
-        }
-
         public override void Decode()
         {
-            /* Generating a Key Pair (Private Key) */
-            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
-            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-
+            
             /* The Packet Raw Data */
             var RawPacket = GetData();
 
-            /* The client public key */
+            /* Generating a Key Pair (Private Key) and store the client public key */
+            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
+            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
             var CPublicKey = RawPacket.Take(32).ToArray();
-
-            // Encryption start - Decryption 
-            Console.WriteLine("[UCS]    Client Public Key = " + Encoding.UTF8.GetString(CPublicKey) + "\n[UCS]      Client Public Key Length = " + CPublicKey.Length);
-
-            /* Generating Blake2B Nonce with Client Public Key */
+            
+            /* Generating Nonce with server public key */
             var SNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
-            Console.WriteLine("[UCS]    Client Nonce = " + Encoding.UTF8.GetString(SNonce) + "\n[UCS]      Client Nonce Length = " + SNonce.Length);
 
             /* The full packet content in raw data without the public key of the client */
             var cipherText = RawPacket.Skip(32).ToArray();
@@ -82,39 +69,64 @@ namespace UCS.PacketProcessing
             /* Finally, we store the decrypted data, and use the function below for dencryption */
             var PlainText = PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
 
-            /* We also store the Session Key of the client */
-            var CSessionKey = PlainText.Take(24).ToArray();
-
-            /* We also store the Client Nonce */
-            var CNonce = PlainText.Skip(24).Take(24).ToArray();
-
             /* Replace the packet content by skipping the first 48 bytes */
-            PlainText = PlainText.Skip(24).Skip(24).ToArray();
-
+            PlainText = PlainText.ToArray();
 
             // ---------------------------------- 
 
-            ShowData(PlainText);
+
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
+            {
+                SessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
+                Nonce = reader.ReadBytes(CoCKeyPair.NonceLength);
+
+                UserID = reader.ReadInt64();
+                UserToken = reader.ReadString();
+                MajorVersion = reader.ReadInt32();
+                ContentVersion = reader.ReadInt32();
+                MinorVersion = reader.ReadInt32();
+                MasterHash = reader.ReadString();
+
+                Unknown1 = reader.ReadString();
+
+                OpenUDID = reader.ReadString();
+                MacAddress = reader.ReadString();
+                DeviceModel = reader.ReadString();
+                LocaleKey = reader.ReadInt32();
+                Language = reader.ReadString();
+                AdvertisingGUID = reader.ReadString();
+                OSVersion = reader.ReadString();
+
+                Unknown2 = reader.ReadByte();
+                Unknown3 = reader.ReadString();
+
+                AndroidDeviceID = reader.ReadString();
+                FacebookDistributionID = reader.ReadString();
+                IsAdvertisingTrackingEnabled = reader.ReadBoolean();
+                VendorGUID = reader.ReadString();
+                Seed = reader.ReadInt32();
+
+                Unknown4 = reader.ReadByte();
+                Unknown5 = reader.ReadString();
+                Unknown6 = reader.ReadString();
+
+                ClientVersion = reader.ReadString();
+            }
+            Console.WriteLine("[UCS]    [10101] Session Key  = " + SessionKey);
+            Console.WriteLine("[UCS]    [10101] Client Nonce = " + Nonce);
+            Console.WriteLine("[UCS]    [10101] User ID      = " + UserID);
+            Console.WriteLine("[UCS]    [10101] User Token   = " + UserToken);
+            Console.WriteLine("[UCS]    [10101] MajorVersion = " + MajorVersion);
+            Console.WriteLine("[UCS]    [10101] ContVersion  = " + ContentVersion);
+            Console.WriteLine("[UCS]    [10101] MinorVersion = " + MinorVersion);
+            Console.WriteLine("[UCS]    [10101] MasterHash   = " + MasterHash);
+            Console.WriteLine("[UCS]    [10101] OpenUDID     = " + OpenUDID);
+            Console.WriteLine("[UCS]    [10101] OS Version   = " + OSVersion);
+            Console.WriteLine("[UCS]    [10101] ClientV      = " + ClientVersion);
         }
 
         public override void Process(Level level)
         {
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["ServerCapacityMode"]))
-            {
-                if (ResourcesManager.GetOnlinePlayers().Count >=
-                    Convert.ToInt32(ConfigurationManager.AppSettings["ServerCapacity"]))
-                {
-                    if (!(level.GetAccountPrivileges() >= 1))
-                    {
-                        var p = new LoginFailedMessage(Client);
-                        p.SetErrorCode(12);
-                        p.RemainingTime(0);
-                        p.SetReason(ConfigurationManager.AppSettings["ServerFullMessage"]);
-                        PacketManager.ProcessOutgoingPacket(p);
-                        return;
-                    }
-                }
-            }
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
@@ -124,11 +136,13 @@ namespace UCS.PacketProcessing
                 return;
             }
 
+            // TODO : IMPLEMENT THE CONTENT VERSION ( CONTENT VERSION STILL BUGGY, NEED TO SPLIT CLIENTV ) !!
+            /*
             var versionData = ConfigurationManager.AppSettings["clientVersion"].Split('.');
             if (versionData.Length >= 2)
             {
-                if (m_vClientMajorVersion != Convert.ToInt32(versionData[0]) ||
-                    m_vClientBuild != Convert.ToInt32(versionData[1]))
+                if (MajorVersion != Convert.ToInt32(versionData[0]) ||
+                    ContentVersion != Convert.ToInt32(versionData[1]))
                 {
                     var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(8);
@@ -140,9 +154,9 @@ namespace UCS.PacketProcessing
             else
             {
                 Debugger.WriteLine("Connection failed. UCS config key clientVersion is not properly set.");
-            }
+            }*/
 
-            level = ResourcesManager.GetPlayer(m_vAccountId);
+            level = ResourcesManager.GetPlayer(UserID);
             if (level != null)
             {
                 if (level.GetAccountStatus() == 99)
@@ -155,18 +169,18 @@ namespace UCS.PacketProcessing
             }
             else
             {
-                level = ObjectManager.CreateAvatar(m_vAccountId);
+                level = ObjectManager.CreateAvatar(UserID);
                 var tokenSeed = new byte[20];
                 new Random().NextBytes(tokenSeed);
                 using (SHA1 sha = new SHA1CryptoServiceProvider())
                 {
-                    m_vPassToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
+                    UserToken = BitConverter.ToString(sha.ComputeHash(tokenSeed)).Replace("-", "");
                 }
             }
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["useCustomPatch"]))
             {
-                if (m_vResourceSha != ObjectManager.FingerPrint.sha)
+                if (MasterHash != ObjectManager.FingerPrint.sha)
                 {
                     var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(7);
@@ -178,8 +192,8 @@ namespace UCS.PacketProcessing
                 }
             }
 
-            Client.ClientSeed = m_vClientSeed;
-            PacketManager.ProcessOutgoingPacket(new SessionKeyMessage(Client));
+            Client.ClientSeed = Seed;
+            //PacketManager.ProcessOutgoingPacket(new SessionKeyMessage(Client));
 
             if (level.GetAccountPrivileges() > 0)
                 level.GetPlayerAvatar().SetLeagueId(21);
@@ -191,10 +205,10 @@ namespace UCS.PacketProcessing
             var loginOk = new LoginOkMessage(Client);
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
-            loginOk.SetPassToken(m_vPassToken);
-            loginOk.SetServerMajorVersion(m_vClientMajorVersion);
-            loginOk.SetServerBuild(m_vClientBuild);
-            loginOk.SetContentVersion(m_vClientContentVersion);
+            loginOk.SetPassToken(UserToken);
+            loginOk.SetServerMajorVersion(MajorVersion);
+            loginOk.SetServerBuild(MinorVersion);
+            loginOk.SetContentVersion(ContentVersion);
             loginOk.SetServerEnvironment("prod");
             loginOk.SetDaysSinceStartedPlaying(10);
             loginOk.SetServerTime(Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString());
@@ -206,11 +220,10 @@ namespace UCS.PacketProcessing
             var alliance = ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId());
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
+
             PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }
     }
 }
-
-// Last edit: 20.01.2016 - iSwuerfel 

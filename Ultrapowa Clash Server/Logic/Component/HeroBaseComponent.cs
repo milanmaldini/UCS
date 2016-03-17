@@ -146,8 +146,7 @@ namespace UCS.Logic
                 GetParent().GetLevel().WorkerManager.AllocateWorker(GetParent());
                 m_vTimer = new Timer();
                 m_vTimer.StartTimer(GetTotalSeconds(), GetParent().GetLevel().GetTime());
-                m_vUpgradeLevelInProgress = GetParent().GetLevel().GetPlayerAvatar().GetUnitUpgradeLevel(m_vHeroData) +
-                                            1;
+                m_vUpgradeLevelInProgress = GetParent().GetLevel().GetPlayerAvatar().GetUnitUpgradeLevel(m_vHeroData) + 1;
                 //SetHeroState v27(v24, v26, 1);
                 //Not 100% done
             }

@@ -20,7 +20,6 @@ namespace UCS.PacketProcessing
             var pack = new List<byte>();
             pack.AddInt32(SessionKey.Length);
             pack.AddRange(SessionKey);
-            pack.AddInt32(1);
             SetData(pack.ToArray());
         }
     }

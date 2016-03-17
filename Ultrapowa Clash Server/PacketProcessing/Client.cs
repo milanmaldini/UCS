@@ -52,7 +52,7 @@ namespace UCS.PacketProcessing
             DataStream = new List<byte>();
         }
 
-        public uint ClientSeed { get; set; }
+        public int ClientSeed { get; set; }
 
         public List<byte> DataStream { get; set; }
 

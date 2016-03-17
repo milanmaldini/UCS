@@ -24,8 +24,10 @@ namespace UCS.PacketProcessing
         
         public override void Decode()
         {
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetRawData())))
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
             {
+                //Console.WriteLine(Encoding.UTF8.GetString(GetRawData()));
+                
                 Unknown1 = reader.ReadInt32();
                 Unknown2 = reader.ReadInt32();
                 MajorVersion = reader.ReadInt32();
@@ -43,6 +45,7 @@ namespace UCS.PacketProcessing
                 Console.WriteLine("[UCS]    [10100]    Hash     ->    " + Hash);
                 Console.WriteLine("[UCS]    [10100]    Unknown6     ->    " + Unknown6);
                 Console.WriteLine("[UCS]    [10100]    Unknown7     ->    " + Unknown7);
+                
             }
         }
 

@@ -375,7 +375,6 @@
     <Compile Include="PacketProcessing\Messages\Server\KeepAliveOkMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\LoginFailedMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\AllianceListMessage.cs" />
-    <Compile Include="PacketProcessing\Messages\Server\SessionKeyMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\LeaveAllianceOkMessage.cs" />
     <Compile Include="PacketProcessing\Message.cs" />
     <Compile Include="Core\Network\SocketRead.cs" />
