@@ -17,7 +17,9 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
-        public byte[] PublicKey;
+        public byte[] SPublicKey;
+        public byte[] SPrivateKey;
+        public byte[] CPublicKey;
         public byte[] SessionKey;
         public byte[] Nonce;
         public long UserID;
@@ -45,6 +47,7 @@ namespace UCS.PacketProcessing
         public string Unknown5;
         public string Unknown6;
         public string ClientVersion;
+        
 
 
         public LoginMessage(Client client, BinaryReader br) : base(client, br) { }
@@ -52,13 +55,13 @@ namespace UCS.PacketProcessing
         public override void Decode()
         {
             
-            /* The Packet Raw Data */
+            /* The Packet Data */
             var RawPacket = GetData();
 
-            /* Generating a Key Pair (Private Key) and store the client public key */
-            var SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
-            var SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-            var CPublicKey = RawPacket.Take(32).ToArray();
+            /* Generating a Key Pair and store the client public key */
+            SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
+            SPublicKey = Crypto8.StandardKeyPair.PublicKey;
+            CPublicKey = RawPacket.Take(32).ToArray();
             
             /* Generating Nonce with server public key */
             var SNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
@@ -75,7 +78,7 @@ namespace UCS.PacketProcessing
             // ---------------------------------- 
 
 
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
+           using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
             {
                 SessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
                 Nonce = reader.ReadBytes(CoCKeyPair.NonceLength);
@@ -112,8 +115,10 @@ namespace UCS.PacketProcessing
 
                 ClientVersion = reader.ReadString();
             }
-            Console.WriteLine("[UCS]    [10101] Session Key  = " + SessionKey);
-            Console.WriteLine("[UCS]    [10101] Client Nonce = " + Nonce);
+
+            Console.WriteLine("PACKEEEEET 10101 !!! - >     " + Encoding.UTF8.GetString(PlainText));
+            Console.WriteLine("[UCS]    [10101] Session Key  = " + BitConverter.ToString(SessionKey));
+            Console.WriteLine("[UCS]    [10101] Client Nonce = " + BitConverter.ToString(Nonce));
             Console.WriteLine("[UCS]    [10101] User ID      = " + UserID);
             Console.WriteLine("[UCS]    [10101] User Token   = " + UserToken);
             Console.WriteLine("[UCS]    [10101] MajorVersion = " + MajorVersion);
@@ -123,10 +128,19 @@ namespace UCS.PacketProcessing
             Console.WriteLine("[UCS]    [10101] OpenUDID     = " + OpenUDID);
             Console.WriteLine("[UCS]    [10101] OS Version   = " + OSVersion);
             Console.WriteLine("[UCS]    [10101] ClientV      = " + ClientVersion);
+            Console.WriteLine("[UCS]    [10101] Language     = " + Language);
+            Console.WriteLine("[UCS]    [10101] ADeviceID    = " + AndroidDeviceID);
+            Console.WriteLine("[UCS]    [10101] Device Model = " + DeviceModel);
         }
 
         public override void Process(Level level)
         {
+            /* Storing Data about Client Crypto */
+            Client.CPublicKey = CPublicKey;
+            Client.CSessionKey = SessionKey;
+            Client.CState = 1;
+            Client.CNonce = Nonce;
+            /* END */
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
@@ -135,14 +149,12 @@ namespace UCS.PacketProcessing
                 PacketManager.ProcessOutgoingPacket(p);
                 return;
             }
-
-            // TODO : IMPLEMENT THE CONTENT VERSION ( CONTENT VERSION STILL BUGGY, NEED TO SPLIT CLIENTV ) !!
-            /*
+            
             var versionData = ConfigurationManager.AppSettings["clientVersion"].Split('.');
             if (versionData.Length >= 2)
             {
-                if (MajorVersion != Convert.ToInt32(versionData[0]) ||
-                    ContentVersion != Convert.ToInt32(versionData[1]))
+                var cv = ClientVersion.Split('.');
+                if (cv[0] != versionData[0] || cv[1] != versionData[1])
                 {
                     var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(8);
@@ -154,7 +166,7 @@ namespace UCS.PacketProcessing
             else
             {
                 Debugger.WriteLine("Connection failed. UCS config key clientVersion is not properly set.");
-            }*/
+            }
 
             level = ResourcesManager.GetPlayer(UserID);
             if (level != null)

@@ -12,7 +12,10 @@ namespace UCS.Logic
         private byte m_vAccountPrivileges;
         private byte m_vAccountStatus;
         private string m_vAddressIP;
+        private byte[] m_vClientKey;
+        private byte[] m_vClientNonce;
         private byte[] m_vSessionKey;
+        private int m_vClientState;
         private Client m_vClient;
         private DateTime m_vTime; //a1 + 40
         public WorkerManager WorkerManager;
@@ -43,6 +46,33 @@ namespace UCS.Logic
         public byte GetAccountPrivileges()
         {
             return m_vAccountPrivileges;
+        }
+        public byte[] GetClientKey()
+        {
+            return m_vClientKey;
+        }
+        public byte[] GetClientNonce()
+        {
+            return m_vClientNonce;
+        }
+
+        public int GetClientState()
+        {
+            return m_vClientState;
+        }
+
+        public void SetClientState(int i)
+        {
+            m_vClientState = i;
+        }
+
+        public void SetClientKey(byte[] ClientKey)
+        {
+            m_vClientKey = ClientKey;
+        }
+        public void SetClientNonce(byte[] ClientNonce)
+        {
+            m_vClientNonce = ClientNonce;
         }
 
         public byte[] GetSessionKey()

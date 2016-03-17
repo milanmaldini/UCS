@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
 using UCS.Core;
+using UCS.Logic;
 using UCS.PacketProcessing;
 
 namespace UCS.Network
@@ -32,6 +33,7 @@ namespace UCS.Network
         public static void ProcessOutgoingPacket(Message p)
         {
             p.Encode();
+            //p.Process(p.Client.GetLevel());
 
             try
             {

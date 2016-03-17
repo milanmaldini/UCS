@@ -32,7 +32,6 @@ namespace UCS.Core
                             AccountStatus = l.GetAccountStatus(),
                             AccountPrivileges = l.GetAccountPrivileges(),
                             LastUpdateTime = l.GetTime(),
-                            AddressIP = (l.GetClient().Socket.RemoteEndPoint as IPEndPoint).ToString(),
                             Avatar = l.GetPlayerAvatar().SaveToJSON(),
                             GameObjects = l.SaveToJSON()
                         }

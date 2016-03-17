@@ -54,6 +54,16 @@ namespace UCS.PacketProcessing
 
         public int ClientSeed { get; set; }
 
+        public byte[] CPublicKey { get; set; }
+
+        public byte[] CSessionKey { get; set; }
+
+        public byte[] CNonce { get; set; }
+
+        public int CState { get; set; }
+
+        public byte[] CSharedKey { get; set; }
+
         public List<byte> DataStream { get; set; }
 
         public byte[] IncomingPacketsKey { get; set; }

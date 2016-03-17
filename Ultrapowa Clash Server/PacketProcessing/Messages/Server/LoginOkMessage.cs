@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Sodium;
+using System;
+using System.Collections.Generic;
 using UCS.Helpers;
 
 namespace UCS.PacketProcessing
@@ -21,12 +23,19 @@ namespace UCS.PacketProcessing
         private string m_vServerTime;
         private int m_vSessionCount;
         private int m_vStartupCooldownSeconds;
+        private byte[] m_vClientKey;
+        private byte[] m_vClientNonce;
+        private int m_vFacebookAppID;
+        private int m_vLastUpdate;
+        private int m_vGoogleID;
 
         public LoginOkMessage(Client client) : base(client)
         {
             SetMessageType(20104);
             SetMessageVersion(1);
             Unknown11 = "someid2";
+            m_vClientKey = client.CPublicKey;
+            m_vClientNonce = client.CNonce;
         }
 
         public string Unknown11 { get; set; }
@@ -36,6 +45,8 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
+            pack.AddRange(m_vClientKey);
+            pack.AddRange(m_vClientNonce);
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -45,16 +56,21 @@ namespace UCS.PacketProcessing
             pack.AddInt32(m_vServerBuild);
             pack.AddInt32(m_vContentVersion);
             pack.AddString(m_vServerEnvironment);
-            pack.AddInt32(m_vDaysSinceStartedPlaying);
-            pack.AddInt32(m_vPlayTimeSeconds);
+            //pack.AddInt32(m_vDaysSinceStartedPlaying);
             pack.AddInt32(m_vSessionCount);
+            pack.AddInt32(m_vPlayTimeSeconds);
             pack.AddString("someid1");
-            pack.AddString(m_vServerTime);
-            pack.AddString(m_vAccountCreatedDate);
+            //pack.AddString(m_vServerTime);
+            pack.AddInt32(m_vFacebookAppID);
             pack.AddInt32(m_vStartupCooldownSeconds);
+            pack.AddString(m_vAccountCreatedDate);
             pack.AddString("someid2");
+            pack.AddInt32(m_vGoogleID);
             pack.AddString(m_vCountryCode);
-            SetData(pack.ToArray());
+            pack.AddInt32(1);
+            var packet = pack.ToArray();
+            packet = PublicKeyBox.Create(packet, m_vClientNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
+            SetData(packet);
         }
 
         public void SetAccountCreatedDate(string date)
