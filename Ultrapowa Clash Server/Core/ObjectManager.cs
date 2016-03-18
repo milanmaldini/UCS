@@ -156,8 +156,7 @@ namespace UCS.Core
 
         public static void LoadNpcLevels()
         {
-            Console.WriteLine("");
-            Console.Write("[UCS]    Loading Npc levels... ");
+            Console.Write("\n[UCS]    Loading Npc levels... ");
             for (var i = 0; i < 50; i++)
                 using (var sr = new StreamReader(@"gamefiles/pve/level" + (i + 1) + ".json"))
                     NpcLevels.Add(i, sr.ReadToEnd());
