@@ -28,21 +28,14 @@ namespace UCS.Core
             {
                 lock (m_vSyncObject)
                 {
-                    m_vTextWriter.Write(DateTime.Now.ToString("yyyyMMddHHmmss"));
-                    m_vTextWriter.Write(";");
+                    m_vTextWriter.Write(DateTime.Now.ToString("yyyyMMddHHmmss"), ";");
                     if (prefix != null)
                     {
                         m_vTextWriter.Write(prefix);
                         m_vTextWriter.Write(";");
                     }
-                    m_vTextWriter.Write(p.GetMessageType().ToString());
-                    m_vTextWriter.Write("(");
-                    m_vTextWriter.Write(p.GetMessageVersion().ToString());
-                    m_vTextWriter.Write(");");
-                    m_vTextWriter.Write(p.GetLength().ToString());
-                    m_vTextWriter.Write(";");
-                    m_vTextWriter.WriteLine(p.ToHexString());
-                    m_vTextWriter.WriteLine(Regex.Replace(p.ToString(), @"[^\u0020-\u007F]", "."));
+                    m_vTextWriter.Write(p.GetMessageType().ToString(), "(", p.GetMessageVersion().ToString(), ");", p.GetLength().ToString(), ";", p.ToHexString(), "\n",
+                        Regex.Replace(p.ToString(), @"[^\u0020-\u007F]", "."), "\n");
                     m_vTextWriter.Flush();
                 }
             }
@@ -54,12 +47,10 @@ namespace UCS.Core
             {
                 lock (m_vSyncObject)
                 {
-                    m_vTextWriter.Write("{0} {1}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
-                    m_vTextWriter.Write(";");
+                    m_vTextWriter.Write("{0} {1}", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString(), ";");
                     if (prefix != null)
                     {
-                        m_vTextWriter.Write(prefix);
-                        m_vTextWriter.Write(";");
+                        m_vTextWriter.Write(prefix, ";");
                     }
                     m_vTextWriter.WriteLine(s);
                     m_vTextWriter.Flush();
