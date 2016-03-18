@@ -1,6 +1,8 @@
 ﻿using Sodium;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UCS.Helpers;
 
 namespace UCS.PacketProcessing
@@ -28,6 +30,7 @@ namespace UCS.PacketProcessing
         private int m_vFacebookAppID;
         private int m_vLastUpdate;
         private int m_vGoogleID;
+        private byte[] m_vNonce;
 
         public LoginOkMessage(Client client) : base(client)
         {
@@ -45,8 +48,14 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-            pack.AddRange(m_vClientKey);
-            pack.AddRange(m_vClientNonce);
+            using (var bw = new BinaryWriter(new MemoryStream()))
+            {
+                bw.Write(m_vNonce, 0, m_vNonce.Length);
+                bw.Write(m_vClientKey, 0, m_vClientKey.Length);
+                pack.AddRange(((MemoryStream)bw.BaseStream).ToArray());
+            }
+            //pack.AddRange(m_vClientKey);
+            //pack.AddRange(m_vClientNonce);
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -56,23 +65,27 @@ namespace UCS.PacketProcessing
             pack.AddInt32(m_vServerBuild);
             pack.AddInt32(m_vContentVersion);
             pack.AddString(m_vServerEnvironment);
-            //pack.AddInt32(m_vDaysSinceStartedPlaying);
             pack.AddInt32(m_vSessionCount);
             pack.AddInt32(m_vPlayTimeSeconds);
             pack.AddString("someid1");
-            //pack.AddString(m_vServerTime);
             pack.AddInt32(m_vFacebookAppID);
             pack.AddInt32(m_vStartupCooldownSeconds);
             pack.AddString(m_vAccountCreatedDate);
             pack.AddString("someid2");
             pack.AddInt32(m_vGoogleID);
             pack.AddString(m_vCountryCode);
-            pack.AddInt32(1);
+            pack.AddString("8.116");
             var packet = pack.ToArray();
-            packet = PublicKeyBox.Create(packet, m_vClientNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
+
+            packet = PublicKeyBox.Create(packet, m_vNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
+            Console.WriteLine("20104 Packet ENCRYPTED => " + Encoding.UTF8.GetString(packet));
             SetData(packet);
         }
 
+        public void SetNonce(byte[] nonce)
+        {
+            m_vNonce = nonce;
+        }
         public void SetAccountCreatedDate(string date)
         {
             m_vAccountCreatedDate = date;

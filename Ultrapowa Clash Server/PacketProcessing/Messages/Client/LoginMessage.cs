@@ -47,6 +47,7 @@ namespace UCS.PacketProcessing
         public string Unknown5;
         public string Unknown6;
         public string ClientVersion;
+        public byte[] PlainText;
         
 
 
@@ -56,29 +57,33 @@ namespace UCS.PacketProcessing
         {
             
             /* The Packet Data */
-            var RawPacket = GetData();
+            byte[] RawPacket = GetData();
 
             /* Generating a Key Pair and store the client public key */
             SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
             SPublicKey = Crypto8.StandardKeyPair.PublicKey;
             CPublicKey = RawPacket.Take(32).ToArray();
+
+            try
+            {
+                /* Generating Nonce with server public key */
+                var ServerNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
+
+                /* The full packet content in raw data without the public key of the client */
+                var cipherText = RawPacket.Skip(32).ToArray();
+
+                /* Finally, we store the decrypted data, and use the function below for dencryption */
+                PlainText = PublicKeyBox.Open(cipherText, ServerNonce, SPrivateKey, CPublicKey).ToArray();
+            }
+            catch
+            {
+                Console.WriteLine("[UCS][ERROR] Someone with an old version of clash of clans tried to connected unsuccessfully.");
+            }
             
-            /* Generating Nonce with server public key */
-            var SNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
-
-            /* The full packet content in raw data without the public key of the client */
-            var cipherText = RawPacket.Skip(32).ToArray();
-
-            /* Finally, we store the decrypted data, and use the function below for dencryption */
-            var PlainText = PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
-
-            /* Replace the packet content by skipping the first 48 bytes */
-            PlainText = PlainText.ToArray();
-
             // ---------------------------------- 
 
 
-           using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
             {
                 SessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
                 Nonce = reader.ReadBytes(CoCKeyPair.NonceLength);
@@ -116,7 +121,8 @@ namespace UCS.PacketProcessing
                 ClientVersion = reader.ReadString();
             }
 
-            Console.WriteLine("PACKEEEEET 10101 !!! - >     " + Encoding.UTF8.GetString(PlainText));
+
+
             Console.WriteLine("[UCS]    [10101] Session Key  = " + BitConverter.ToString(SessionKey));
             Console.WriteLine("[UCS]    [10101] Client Nonce = " + BitConverter.ToString(Nonce));
             Console.WriteLine("[UCS]    [10101] User ID      = " + UserID);
@@ -136,10 +142,12 @@ namespace UCS.PacketProcessing
         public override void Process(Level level)
         {
             /* Storing Data about Client Crypto */
+
             Client.CPublicKey = CPublicKey;
             Client.CSessionKey = SessionKey;
             Client.CState = 1;
             Client.CNonce = Nonce;
+            
             /* END */
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
@@ -215,6 +223,9 @@ namespace UCS.PacketProcessing
             level.Tick();
 
             var loginOk = new LoginOkMessage(Client);
+            /* SETTING NONCE */
+            loginOk.SetNonce(GenericHash.Hash(Nonce.Concat(CPublicKey).Concat(SPublicKey).ToArray(), null, 24));
+            /* END OF CRYPTO */
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
             loginOk.SetPassToken(UserToken);
