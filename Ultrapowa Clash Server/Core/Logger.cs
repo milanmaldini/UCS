@@ -31,8 +31,7 @@ namespace UCS.Core
                     m_vTextWriter.Write(DateTime.Now.ToString("yyyyMMddHHmmss"), ";");
                     if (prefix != null)
                     {
-                        m_vTextWriter.Write(prefix);
-                        m_vTextWriter.Write(";");
+                        m_vTextWriter.Write(prefix, ";");
                     }
                     m_vTextWriter.Write(p.GetMessageType().ToString(), "(", p.GetMessageVersion().ToString(), ");", p.GetLength().ToString(), ";", p.ToHexString(), "\n",
                         Regex.Replace(p.ToString(), @"[^\u0020-\u007F]", "."), "\n");
