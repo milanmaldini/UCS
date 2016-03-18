@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Sodium;
+using System.Collections.Generic;
 using UCS.Helpers;
 
 namespace UCS.PacketProcessing
@@ -43,7 +44,8 @@ namespace UCS.PacketProcessing
             pack.AddInt32(-1);
             pack.Add(0);
 
-            SetData(pack.ToArray());
+            
+            SetData(PublicKeyBox.Create(pack.ToArray(), Client.CNonce, Crypto8.StandardKeyPair.PublicKey, Client.CPublicKey));
         }
 
         public void RemainingTime(int code)

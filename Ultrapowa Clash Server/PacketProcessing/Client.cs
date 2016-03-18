@@ -62,6 +62,8 @@ namespace UCS.PacketProcessing
 
         public int CState { get; set; }
 
+        public byte[] CRNonce { get; set; }
+
         public byte[] CSharedKey { get; set; }
 
         public List<byte> DataStream { get; set; }

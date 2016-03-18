@@ -100,8 +100,7 @@ namespace UCS.Logic
         public byte[] Encode()
         {
             var data = new List<byte>();
-
-            data.AddInt32(0);
+            
             data.AddInt64(m_vId);
             data.AddInt64(m_vCurrentHomeId);
             if (m_vAllianceId != 0)
@@ -114,26 +113,31 @@ namespace UCS.Logic
                 data.AddInt32(alliance.GetAllianceMember(m_vId).GetRole());
                 data.AddInt32(alliance.GetAllianceLevel());
                 data.Add(0);
-                data.AddInt32(0);
             }
             else
             {
                 data.Add(0);
-                data.AddInt32(0);
+                
             }
 
             //7.156
+            data.AddInt32(0); //1
+            data.AddInt32(0); //2
+            data.AddInt32(0); //3
+            data.AddInt32(0); //4
+            data.AddInt32(0); //5
+            data.AddInt32(0); //6
+            data.AddInt32(0); //7
+            data.AddInt32(0); //8
+            data.AddInt32(0); //9
+            data.AddInt32(0); //10
+            data.AddInt32(1); //11
+
+            // 8.X
+            data.AddInt32(1);
             data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(0);
-            data.AddInt32(m_vLeagueId); //league
+
+            data.AddInt32(m_vLeagueId);
 
             data.AddInt32(GetAllianceCastleLevel());
             data.AddInt32(GetAllianceCastleTotalCapacity());
@@ -144,33 +148,34 @@ namespace UCS.Logic
             data.AddInt32(m_vAvatarLevel);
             data.AddInt32(m_vExperience);
             data.AddInt32(m_vCurrentGems);
-            data.AddInt32(m_vCurrentGems); //FreeDiamonds
-            data.AddInt32(0x04B0);
-            data.AddInt32(0x003C);
+            data.AddInt32(m_vCurrentGems);
+            data.AddInt32(1200);
+            data.AddInt32(60);
             data.AddInt32(m_vScore);
+            
+            
+            data.AddInt32(0);
+            data.AddInt32(0);
+            data.AddInt32(0);
+            data.AddInt32(0);
 
-            data.AddRange(new byte[]
-            {
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x01,
-                0x00, 0x00, 0x00, 0xDC, 0x6C, 0xF5, 0xEB, 0x48
-            });
+            data.AddInt32(0);
+            data.AddInt32(0);
+            data.AddInt32(0);
+            data.AddInt32(1);
+            data.AddInt32(946720861);
 
             data.Add(m_vIsAvatarNameSet);
-            data.AddInt32(0); //Cumulative Purchased Diamonds
-            data.AddInt32(0);
 
-            //7.65
             data.AddInt32(0);
-
-            //7.1
+            data.AddInt32(0);
+            data.AddInt32(0);
             data.AddInt32(1);
+
+            data.AddInt32(1);
+            data.AddInt32(0);
+
+           
 
             data.AddDataSlots(GetResourceCaps());
             data.AddDataSlots(GetResources());
@@ -213,8 +218,17 @@ namespace UCS.Logic
             data.AddDataSlots(NpcLootedGold);
             data.AddDataSlots(NpcLootedElixir);
 
+            data.AddDataSlots(new List<DataSlot>());
+            data.AddDataSlots(new List<DataSlot>());
+            data.AddDataSlots(new List<DataSlot>());
+            data.AddDataSlots(new List<DataSlot>());
+
             //7.65
             data.AddInt32(0);
+            data.AddInt32(0);
+            data.AddInt64(1454783074000);
+            data.AddInt64(1454783074000);
+            data.AddInt64(1454783074000);
 
             return data.ToArray();
         }

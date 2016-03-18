@@ -394,6 +394,7 @@
     <Compile Include="Logic\StreamEntry\ChatStreamEntry.cs" />
     <Compile Include="Logic\Village.cs" />
     <Compile Include="PacketProcessing\Messages\Client\PromoteAllianceMemberMessage.cs" />
+    <Compile Include="PacketProcessing\MessageWriter.cs" />
     <Compile Include="PacketProcessing\UpdateNonceType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -48,14 +48,10 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-            using (var bw = new BinaryWriter(new MemoryStream()))
-            {
-                bw.Write(m_vNonce, 0, m_vNonce.Length);
-                bw.Write(m_vClientKey, 0, m_vClientKey.Length);
-                pack.AddRange(((MemoryStream)bw.BaseStream).ToArray());
-            }
-            //pack.AddRange(m_vClientKey);
-            //pack.AddRange(m_vClientNonce);
+
+            pack.AddRange(m_vNonce);
+            pack.AddRange(m_vClientKey);
+
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -78,7 +74,6 @@ namespace UCS.PacketProcessing
             var packet = pack.ToArray();
 
             packet = PublicKeyBox.Create(packet, m_vNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
-            Console.WriteLine("20104 Packet ENCRYPTED => " + Encoding.UTF8.GetString(packet));
             SetData(packet);
         }
 

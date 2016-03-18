@@ -32,36 +32,29 @@ namespace UCS.PacketProcessing
             var Avatar = Player.GetPlayerAvatar();
             var data = new List<byte>();
             
+
+            var home = new ClientHome(Avatar.GetId());
+            home.SetShieldDurationSeconds(Avatar.RemainingShieldTime);
+            home.SetHomeJSON(Player.SaveToJSON());
+            
             data.AddInt32(0);
             data.AddInt32(-1);
-            data.AddInt32((int) Player.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
-            data.AddInt32(0);
-            data.AddInt64(Avatar.GetId());
-            data.AddInt32(Avatar.RemainingShieldTime);
-            data.AddInt32(1800);
-            data.AddInt32(69119);
-            data.AddInt32(1200);
-            data.AddInt32(60);
-            data.AddString("true");
+            data.AddInt32((int)Player.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds);
 
-            using (var bw = new BinaryWriter(new MemoryStream()))
-            {
-                var Home = Player.SaveToJSON();
-                var CHome = ZlibStream.CompressString(Home);
-                
-                bw.Write(Home.Length);
-                bw.Write(CHome);
 
-                data.AddRange(((MemoryStream)bw.BaseStream).ToArray());
-            }
 
-            data.AddInt32(0);
+
+            data.AddRange(home.Encode());
+            data.AddRange(Avatar.Encode());
+
+
+
+
             
             var packet = data.ToArray();
-            
+            Console.WriteLine(Encoding.UTF8.GetString(packet));
             Client.CNonce = Utilities.Increment(Client.CNonce);
-
-            packet = PublicKeyBox.Create(packet, Client.CNonce, Crypto8.StandardKeyPair.PrivateKey, m_vClientKey);
+            packet = PublicKeyBox.Create(packet, Client.CNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
             SetData(packet);
         }
     }

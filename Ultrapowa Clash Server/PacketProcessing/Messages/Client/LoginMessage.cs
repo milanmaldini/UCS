@@ -78,6 +78,7 @@ namespace UCS.PacketProcessing
             catch
             {
                 Console.WriteLine("[UCS][ERROR] Someone with an old version of clash of clans tried to connected unsuccessfully.");
+                return;
             }
             
             // ---------------------------------- 
@@ -152,6 +153,7 @@ namespace UCS.PacketProcessing
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
+                Console.WriteLine("Sending LoginFailed message !");
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
                 PacketManager.ProcessOutgoingPacket(p);
@@ -223,9 +225,7 @@ namespace UCS.PacketProcessing
             level.Tick();
 
             var loginOk = new LoginOkMessage(Client);
-            /* SETTING NONCE */
-            loginOk.SetNonce(GenericHash.Hash(Nonce.Concat(CPublicKey).Concat(SPublicKey).ToArray(), null, 24));
-            /* END OF CRYPTO */
+            loginOk.SetNonce(Nonce);
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
             loginOk.SetPassToken(UserToken);
