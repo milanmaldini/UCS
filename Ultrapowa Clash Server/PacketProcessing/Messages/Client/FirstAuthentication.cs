@@ -42,6 +42,8 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
+            if (MajorVersion != 8)
+                return;
             var authOk = new FirstAuthenticationOk(Client, this);
             PacketManager.ProcessOutgoingPacket(authOk);
         }

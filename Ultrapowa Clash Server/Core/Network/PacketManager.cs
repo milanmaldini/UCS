@@ -41,7 +41,7 @@ namespace UCS.Network
                 var player = "";
                 if (pl != null)
                     player = " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() + ")";
-                Debugger.WriteLine("[UCS]   " + p.GetMessageType() + " " + p.GetType().Name + player);
+                Debugger.WriteLine("[UCS][" + p.GetMessageType() + "] Processing " + p.GetType().Name + player);
                 m_vOutgoingPackets.Enqueue(p);
                 m_vOutgoingWaitHandle.Set();
             }
@@ -87,13 +87,7 @@ namespace UCS.Network
                 while (m_vOutgoingPackets.TryDequeue(out p))
                 {
                     Logger.WriteLine(p, "S");
-                    if (p.GetMessageType() == 20100)
-                    {
-                        var sessionKey = ((FirstAuthenticationOk)p).SessionKey;
-                        //p.Client.Encrypt(p.GetData());
-                        //p.Client.UpdateKey(sessionKey);
-                    }
-                    else
+                    if (p.GetMessageType() != 20100)
                         p.Client.Encrypt(p.GetData());
 
                     try

@@ -23,7 +23,7 @@ namespace UCS.PacketProcessing
         {
             SetMessageType(20103);
             SetMessageVersion(10);
-            SetReason("UCS Developement Team <3");
+            //SetReason("UCS Developement Team <3");
             client.CState = 2;
             
             //9: removeredirectdomain

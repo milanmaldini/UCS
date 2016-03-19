@@ -218,7 +218,6 @@ namespace UCS.PacketProcessing
             }
 
             Client.ClientSeed = Seed;
-            //PacketManager.ProcessOutgoingPacket(new SessionKeyMessage(Client));
 
             if (level.GetAccountPrivileges() > 0)
                 level.GetPlayerAvatar().SetLeagueId(21);

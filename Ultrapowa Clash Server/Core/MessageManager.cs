@@ -47,7 +47,7 @@ namespace UCS.Core
                         player += " (" + pl.GetPlayerAvatar().GetId() + ", " + pl.GetPlayerAvatar().GetAvatarName() + ")";
                     try
                     {
-                        Debugger.WriteLine("[R] " + p.GetMessageType() + " " + p.GetType().Name + player);
+                        Debugger.WriteLine("[UCS][" + p.GetMessageType() + "] Processing " + p.GetType().Name + player);
                         p.Decode();
                         p.Process(pl);
                     }

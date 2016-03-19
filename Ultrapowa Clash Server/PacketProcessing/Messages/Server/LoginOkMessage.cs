@@ -26,8 +26,6 @@ namespace UCS.PacketProcessing
         private string m_vServerTime;
         private int m_vSessionCount;
         private int m_vStartupCooldownSeconds;
-        private byte[] m_vClientKey;
-        private byte[] m_vClientNonce;
         private int m_vFacebookAppID;
         private int m_vLastUpdate;
         private int m_vGoogleID;
