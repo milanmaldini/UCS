@@ -25,6 +25,15 @@ namespace UCS.PacketProcessing
             SetMessageVersion(10);
             SetReason("UCS Developement Team");
             client.CState = 2;
+
+            //errorcodes:
+            //9: removeredirectdomain
+            //8: new game version available (removeupdateurl)
+            //7: removeresourcefingerprintdata
+            //10: maintenance
+            //11: banni temporairement
+            //12: played too much
+            //13: compte verrouillé
         }
 
         public override void Encode()
@@ -37,7 +46,7 @@ namespace UCS.PacketProcessing
 
             
             var pack = new List<byte>();
-            pack.AddRange(Client.CNonce);
+            /*pack.AddRange(Client.CNonce);
             pack.AddRange(Client.CSharedKey);
             pack.AddInt32(m_vErrorCode);
             pack.AddString(m_vResourceFingerprintData);
@@ -47,6 +56,17 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vReason);
             pack.AddInt32(m_vRemainingTime);
             pack.AddInt32(-1);
+            pack.Add(0);*/
+            pack.AddInt32(m_vErrorCode);
+            pack.AddString("");
+            pack.AddString(m_vRedirectDomain);
+            pack.AddString(m_vContentURL);
+            pack.AddString(m_vUpdateURL);
+            pack.AddString(m_vReason);
+            pack.AddInt32(-1);
+            pack.Add(0);
+            pack.AddString("");
+
 
             var packet = pack.ToArray();
             packet = Client.CNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
