@@ -260,6 +260,52 @@
     <Compile Include="Logic\Building.cs" />
     <Compile Include="Core\Network\Gateway.cs" />
     <Compile Include="Core\Network\PacketManager.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2B.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BConfig.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BCore-FullyUnrolled.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BCore-Inline.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BCore-Simple.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BCore.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BHasher.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BNodeHasher.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2BTreeConfig.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2IvBuilder.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Hasher.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\NodeHasher.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Blake2Sharp\TreeHasher.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\Curve25519\Curve25519.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\CryptoHash.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\DetachedBox.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\DynamicInvoke.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\AdditionalDataOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\BytesOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\KeyOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\MacOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\NonceOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\PersonalOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\PublicKeyBox.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\SaltOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\SeedOutOfRangeException.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Exceptions\SignatureOutOfRangeException .cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\GenericHash.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\GenericHashAlgorithm.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\KeyPair.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\LazyInvoke.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\OneTimeAuth.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\PasswordHash.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\PublicKeyAuth.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\ScalarMult.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SealedPublicKeyBox.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SecretAead.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SecretAeadAes.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SecretBox.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SecretKeyAuth.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\ShortHash.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SodiumCore.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\SodiumLibrary.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\StreamEncryption.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\libsodium-net\Utilities.cs" />
+    <Compile Include="PacketProcessing\Clash8Encryption\TweetNaCl\TweetNacl.cs" />
     <Compile Include="PacketProcessing\Client.cs" />
     <Compile Include="PacketProcessing\CoCCypto.cs" />
     <Compile Include="PacketProcessing\CoCKeyPair.cs" />
@@ -427,6 +473,9 @@
       <LastGenOutput>ucsdb.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="PacketProcessing\Clash8Encryption\Blake2Sharp\compression.c" />
+    <None Include="PacketProcessing\Clash8Encryption\libsodium-net\Settings.StyleCop" />
+    <None Include="PacketProcessing\Clash8Encryption\libsodium-net\Sodium.dll.config" />
     <None Include="ucsconf.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -455,6 +504,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icone-ucs.ico" />
+    <Content Include="PacketProcessing\Clash8Encryption\Blake2Sharp\Blake2Sharp.csproj" />
+    <Content Include="PacketProcessing\Clash8Encryption\libsodium-net\Dependencies\libsodium-64.dll" />
+    <Content Include="PacketProcessing\Clash8Encryption\libsodium-net\Dependencies\libsodium.dll" />
+    <Content Include="PacketProcessing\Clash8Encryption\libsodium-net\libsodium-net.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.94.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.94.0\build\net451\System.Data.SQLite.Core.targets')" />

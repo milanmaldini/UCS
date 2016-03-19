@@ -1,12 +1,15 @@
-﻿using Sodium;
+﻿using Blake2Sharp;
+using Sodium;
+using Sodiumc;
 using System;
 using System.Configuration;
+using System.Data.HashFunction;
 using System.IO;
 using System.Linq;
-using System.Data.HashFunction;
 using System.Security.Cryptography;
 using System.Text;
 using UCS.Core;
+using UCS.EncryptionTesting;
 using UCS.Helpers;
 using UCS.Logic;
 using UCS.Network;
@@ -20,6 +23,8 @@ namespace UCS.PacketProcessing
         public byte[] SPublicKey;
         public byte[] SPrivateKey;
         public byte[] CPublicKey;
+        public byte[] CSharedKey;
+        public byte[] SNonce;
         public byte[] SessionKey;
         public byte[] Nonce;
         public long UserID;
@@ -48,41 +53,38 @@ namespace UCS.PacketProcessing
         public string Unknown6;
         public string ClientVersion;
         public byte[] PlainText;
-        
 
-
-        public LoginMessage(Client client, BinaryReader br) : base(client, br) { }
+        public LoginMessage(Client client, BinaryReader br) : base(client, br)
+        {
+        }
 
         public override void Decode()
         {
-            
             /* The Packet Data */
             byte[] RawPacket = GetData();
 
             /* Generating a Key Pair and store the client public key */
+            CPublicKey = RawPacket.Take(32).ToArray();
             SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
             SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-            CPublicKey = RawPacket.Take(32).ToArray();
-
-            try
-            {
-                /* Generating Nonce with server public key */
-                var ServerNonce = GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
-
-                /* The full packet content in raw data without the public key of the client */
-                var cipherText = RawPacket.Skip(32).ToArray();
-
-                /* Finally, we store the decrypted data, and use the function below for dencryption */
-                PlainText = PublicKeyBox.Open(cipherText, ServerNonce, SPrivateKey, CPublicKey).ToArray();
-            }
-            catch
-            {
-                Console.WriteLine("[UCS][ERROR] Someone with an old version of clash of clans tried to connected unsuccessfully.");
-                return;
-            }
             
-            // ---------------------------------- 
+            /* Generating Nonce with server public key */
+            SNonce = Sodiumc.GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
 
+            /* Generating a Shared Key with server private key and client public key */
+            //Sodiumc.SodiumLibrary.crypto_box_beforenm(CSharedKey, CPublicKey, SPrivateKey);
+
+            /* The full packet content in raw data without the public key of the client */
+            var cipherText = RawPacket.Skip(32).ToArray();
+
+            CSharedKey = CPublicKey;
+
+            /* Finally, we store the decrypted data, and use the function below for dencryption */
+            //PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CSharedKey).ToArray();
+
+            PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
+
+            // ----------------------------------
 
             using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
             {
@@ -122,7 +124,15 @@ namespace UCS.PacketProcessing
                 ClientVersion = reader.ReadString();
             }
 
+            /* Storing Data about Client Crypto */
 
+            Client.CPublicKey = CPublicKey;
+            Client.CSessionKey = SessionKey;
+            Client.CState = 1;
+            Client.CNonce = Nonce;
+            Client.CSharedKey = CPublicKey;
+
+            /* END */
 
             Console.WriteLine("[UCS]    [10101] Session Key  = " + BitConverter.ToString(SessionKey));
             Console.WriteLine("[UCS]    [10101] Client Nonce = " + BitConverter.ToString(Nonce));
@@ -142,24 +152,16 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            /* Storing Data about Client Crypto */
 
-            Client.CPublicKey = CPublicKey;
-            Client.CSessionKey = SessionKey;
-            Client.CState = 1;
-            Client.CNonce = Nonce;
-            
-            /* END */
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
-                Console.WriteLine("Sending LoginFailed message !");
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
                 PacketManager.ProcessOutgoingPacket(p);
                 return;
             }
-            
+
             var versionData = ConfigurationManager.AppSettings["clientVersion"].Split('.');
             if (versionData.Length >= 2)
             {

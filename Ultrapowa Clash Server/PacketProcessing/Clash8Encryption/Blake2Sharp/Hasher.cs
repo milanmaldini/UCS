@@ -1,0 +1,59 @@
+﻿// BLAKE2 reference source code package - C# implementation
+
+// Written in 2012 by Christian Winnerlein  <codesinchaos@gmail.com>
+
+// To the extent possible under law, the author(s) have dedicated all copyright
+// and related and neighboring rights to this software to the public domain
+// worldwide. This software is distributed without any warranty.
+
+// You should have received a copy of the CC0 Public Domain Dedication along with
+// this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+
+using System.Security.Cryptography;
+
+namespace Blake2Sharp
+{
+    public abstract class Hasher
+    {
+        public HashAlgorithm AsHashAlgorithm()
+        {
+            return new HashAlgorithmAdapter(this);
+        }
+
+        public abstract byte[] Finish();
+
+        public abstract void Init();
+
+        public abstract void Update(byte[] data, int start, int count);
+
+        public void Update(byte[] data)
+        {
+            Update(data, 0, data.Length);
+        }
+
+        internal class HashAlgorithmAdapter : HashAlgorithm
+        {
+            private readonly Hasher _hasher;
+
+            public HashAlgorithmAdapter(Hasher hasher)
+            {
+                _hasher = hasher;
+            }
+
+            public override void Initialize()
+            {
+                _hasher.Init();
+            }
+
+            protected override void HashCore(byte[] array, int ibStart, int cbSize)
+            {
+                _hasher.Update(array, ibStart, cbSize);
+            }
+
+            protected override byte[] HashFinal()
+            {
+                return _hasher.Finish();
+            }
+        }
+    }
+}
