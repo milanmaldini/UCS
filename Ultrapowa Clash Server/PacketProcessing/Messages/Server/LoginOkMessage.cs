@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using UCS.Helpers;
 
@@ -37,8 +38,6 @@ namespace UCS.PacketProcessing
             SetMessageType(20104);
             SetMessageVersion(1);
             Unknown11 = "someid2";
-            m_vClientKey = client.CPublicKey;
-            m_vClientNonce = client.CNonce;
         }
 
         public string Unknown11 { get; set; }
@@ -49,8 +48,8 @@ namespace UCS.PacketProcessing
         {
             var pack = new List<byte>();
 
-            pack.AddRange(m_vNonce);
-            pack.AddRange(m_vClientKey);
+            pack.AddRange(Client.CRNonce);
+            pack.AddRange(Client.CPublicKey);
 
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
@@ -63,18 +62,20 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vServerEnvironment);
             pack.AddInt32(m_vSessionCount);
             pack.AddInt32(m_vPlayTimeSeconds);
-            pack.AddString("someid1");
-            pack.AddInt32(m_vFacebookAppID);
-            pack.AddInt32(m_vStartupCooldownSeconds);
+            pack.AddInt32(0);
+            pack.AddString(m_vFacebookAppID.ToString());
             pack.AddString(m_vAccountCreatedDate);
-            pack.AddString("someid2");
-            pack.AddInt32(m_vGoogleID);
+            pack.AddString(m_vAccountCreatedDate);
+            pack.AddInt32(0);
+            pack.AddString(m_vGoogleID.ToString());
             pack.AddString(m_vCountryCode);
             pack.AddString("8.116");
-            var packet = pack.ToArray();
 
-            packet = PublicKeyBox.Create(packet, m_vNonce, Crypto8.StandardKeyPair.PublicKey, m_vClientKey);
-            SetData(packet);
+            var packet = pack.ToArray();
+            
+            packet = Client.CSNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
+            byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+            SetData(PublicKeyBox.Create(packet, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
         }
 
         public void SetNonce(byte[] nonce)

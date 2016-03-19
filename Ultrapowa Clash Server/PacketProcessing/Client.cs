@@ -50,6 +50,7 @@ namespace UCS.PacketProcessing
             OutgoingPacketsKey = new byte[m_vEnDecryptKey.Length];
             Array.Copy(m_vEnDecryptKey, OutgoingPacketsKey, m_vEnDecryptKey.Length);
             DataStream = new List<byte>();
+            CState = 0;
         }
 
         public int ClientSeed { get; set; }
@@ -58,7 +59,7 @@ namespace UCS.PacketProcessing
 
         public byte[] CSessionKey { get; set; }
 
-        public byte[] CNonce { get; set; }
+        public byte[] CSNonce { get; set; }
 
         public int CState { get; set; }
 

@@ -23,10 +23,9 @@ namespace UCS.PacketProcessing
         {
             SetMessageType(20103);
             SetMessageVersion(10);
-            SetReason("UCS Developement Team");
+            SetReason("UCS Developement Team <3");
             client.CState = 2;
-
-            //errorcodes:
+            
             //9: removeredirectdomain
             //8: new game version available (removeupdateurl)
             //7: removeresourcefingerprintdata
@@ -39,15 +38,13 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             Console.WriteLine("[UCS][20103] Client Key     -> " + Encoding.UTF8.GetString(Client.CPublicKey));
-            Console.WriteLine("[UCS][20103] Client Nonce   -> " + Encoding.UTF8.GetString(Client.CNonce));
+            Console.WriteLine("[UCS][20103] Client Nonce   -> " + Encoding.UTF8.GetString(Client.CSNonce));
             Console.WriteLine("[UCS][20103] Client Shared  -> " + Encoding.UTF8.GetString(Client.CSharedKey));
             Console.WriteLine("[UCS][20103] Client Session -> " + Encoding.UTF8.GetString(Client.CSessionKey));
             Console.WriteLine("[UCS][20103] Client State   -> " + Client.CState);
 
             
             var pack = new List<byte>();
-            /*pack.AddRange(Client.CNonce);
-            pack.AddRange(Client.CSharedKey);
             pack.AddInt32(m_vErrorCode);
             pack.AddString(m_vResourceFingerprintData);
             pack.AddString(m_vRedirectDomain);
@@ -56,21 +53,13 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vReason);
             pack.AddInt32(m_vRemainingTime);
             pack.AddInt32(-1);
-            pack.Add(0);*/
-            pack.AddInt32(m_vErrorCode);
-            pack.AddString("");
-            pack.AddString(m_vRedirectDomain);
-            pack.AddString(m_vContentURL);
-            pack.AddString(m_vUpdateURL);
-            pack.AddString(m_vReason);
-            pack.AddInt32(-1);
             pack.Add(0);
             pack.AddString("");
 
 
             var packet = pack.ToArray();
-            packet = Client.CNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
-            byte[] nonce = GenericHash.Hash(Client.CNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+            packet = Client.CSNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
+            byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
             SetData(PublicKeyBox.Create(packet, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
             
         }

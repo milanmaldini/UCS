@@ -67,29 +67,39 @@ namespace UCS.PacketProcessing
             CPublicKey = RawPacket.Take(32).ToArray();
             SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
             SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-            
-            /* Generating Nonce with server public key */
-            SNonce = Sodiumc.GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
+            Client.CRNonce = Crypto8.GenerateNonce();
 
-            /* Generating a Shared Key with server private key and client public key */
-            //Sodiumc.SodiumLibrary.crypto_box_beforenm(CSharedKey, CPublicKey, SPrivateKey);
 
-            /* The full packet content in raw data without the public key of the client */
-            var cipherText = RawPacket.Skip(32).ToArray();
+            try
+            {
+                /* Generating Nonce with server public key */
+                Nonce = Sodiumc.GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
 
-            CSharedKey = CPublicKey;
+                /* Generating a Shared Key with server private key and client public key */
+                //Sodiumc.SodiumLibrary.crypto_box_beforenm(CSharedKey, CPublicKey, SPrivateKey);
 
-            /* Finally, we store the decrypted data, and use the function below for dencryption */
-            //PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CSharedKey).ToArray();
+                /* The full packet content in raw data without the public key of the client */
+                var cipherText = RawPacket.Skip(32).ToArray();
 
-            PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CPublicKey);
+                Client.CSharedKey = SPublicKey;
+                Client.CPublicKey = CPublicKey;
 
+                /* Finally, we store the decrypted data, and use the function below for dencryption */
+                //PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CSharedKey).ToArray();
+
+                PlainText = Sodium.PublicKeyBox.Open(cipherText, Nonce, SPrivateKey, CPublicKey);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[UCS][10101] Player with uncompatible client detected, UCS is ignoring him.");
+                return;
+            }
             // ----------------------------------
 
             using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
             {
-                SessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
-                Nonce = reader.ReadBytes(CoCKeyPair.NonceLength);
+                Client.CSessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
+                Client.CSNonce = reader.ReadBytes(CoCKeyPair.NonceLength);
 
                 UserID = reader.ReadInt64();
                 UserToken = reader.ReadString();
@@ -123,36 +133,27 @@ namespace UCS.PacketProcessing
 
                 ClientVersion = reader.ReadString();
             }
-
-            /* Storing Data about Client Crypto */
-
-            Client.CPublicKey = CPublicKey;
-            Client.CSessionKey = SessionKey;
+            
             Client.CState = 1;
-            Client.CNonce = Nonce;
-            Client.CSharedKey = CPublicKey;
-
-            /* END */
-
-            Console.WriteLine("[UCS]    [10101] Session Key  = " + BitConverter.ToString(SessionKey));
-            Console.WriteLine("[UCS]    [10101] Client Nonce = " + BitConverter.ToString(Nonce));
-            Console.WriteLine("[UCS]    [10101] User ID      = " + UserID);
-            Console.WriteLine("[UCS]    [10101] User Token   = " + UserToken);
-            Console.WriteLine("[UCS]    [10101] MajorVersion = " + MajorVersion);
-            Console.WriteLine("[UCS]    [10101] ContVersion  = " + ContentVersion);
-            Console.WriteLine("[UCS]    [10101] MinorVersion = " + MinorVersion);
-            Console.WriteLine("[UCS]    [10101] MasterHash   = " + MasterHash);
-            Console.WriteLine("[UCS]    [10101] OpenUDID     = " + OpenUDID);
-            Console.WriteLine("[UCS]    [10101] OS Version   = " + OSVersion);
-            Console.WriteLine("[UCS]    [10101] ClientV      = " + ClientVersion);
-            Console.WriteLine("[UCS]    [10101] Language     = " + Language);
-            Console.WriteLine("[UCS]    [10101] ADeviceID    = " + AndroidDeviceID);
-            Console.WriteLine("[UCS]    [10101] Device Model = " + DeviceModel);
+            
+            Console.WriteLine("[UCS][10101] User ID      = " + UserID);
+            Console.WriteLine("[UCS][10101] User Token   = " + UserToken);
+            Console.WriteLine("[UCS][10101] MajorVersion = " + MajorVersion);
+            Console.WriteLine("[UCS][10101] ContVersion  = " + ContentVersion);
+            Console.WriteLine("[UCS][10101] MinorVersion = " + MinorVersion);
+            Console.WriteLine("[UCS][10101] MasterHash   = " + MasterHash);
+            Console.WriteLine("[UCS][10101] OpenUDID     = " + OpenUDID);
+            Console.WriteLine("[UCS][10101] OS Version   = " + OSVersion);
+            Console.WriteLine("[UCS][10101] ClientV      = " + ClientVersion);
+            Console.WriteLine("[UCS][10101] Language     = " + Language);
+            Console.WriteLine("[UCS][10101] ADeviceID    = " + AndroidDeviceID);
+            Console.WriteLine("[UCS][10101] Device Model = " + DeviceModel);
         }
 
         public override void Process(Level level)
         {
-
+            if (Client.CState == 0)
+                return;
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
@@ -177,7 +178,7 @@ namespace UCS.PacketProcessing
             }
             else
             {
-                Debugger.WriteLine("Connection failed. UCS config key clientVersion is not properly set.");
+                Debugger.WriteLine("[UCS][10101] Connection failed. UCS config key clientVersion is not properly set.");
             }
 
             level = ResourcesManager.GetPlayer(UserID);
@@ -227,7 +228,6 @@ namespace UCS.PacketProcessing
             level.Tick();
 
             var loginOk = new LoginOkMessage(Client);
-            loginOk.SetNonce(Nonce);
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
             loginOk.SetPassToken(UserToken);

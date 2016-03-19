@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Sodium;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UCS.PacketProcessing
 {
@@ -13,7 +15,9 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var data = new List<byte>();
-            SetData(data.ToArray());
+            var packet = data.ToArray();
+            Client.CRNonce = Utilities.Increment(Utilities.Increment(Client.CRNonce));
+            SetData(SecretBox.Create(packet, Client.CSNonce, Client.CSharedKey).Skip(16).ToArray());
         }
     }
 }

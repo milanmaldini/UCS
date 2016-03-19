@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Sodium;
+using System.IO;
 using UCS.Logic;
 using UCS.Network;
 
@@ -14,6 +15,7 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
+            Client.CSNonce = Utilities.Increment(Utilities.Increment(Client.CSNonce));
         }
 
         public override void Process(Level level)
