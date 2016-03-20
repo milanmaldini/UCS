@@ -1,6 +1,5 @@
 ﻿using Blake2Sharp;
 using Sodium;
-using Sodiumc;
 using System;
 using System.Configuration;
 using System.Data.HashFunction;
@@ -20,13 +19,6 @@ namespace UCS.PacketProcessing
     //Packet 10101
     internal class LoginMessage : Message
     {
-        public byte[] SPublicKey;
-        public byte[] SPrivateKey;
-        public byte[] CPublicKey;
-        public byte[] CSharedKey;
-        public byte[] SNonce;
-        public byte[] SessionKey;
-        public byte[] Nonce;
         public long UserID;
         public string UserToken;
         public int MajorVersion;
@@ -56,60 +48,20 @@ namespace UCS.PacketProcessing
 
         public LoginMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         public override void Decode()
         {
-            /* The Packet Data */
-            byte[] RawPacket = GetData();
-
-            /* Generating a Key Pair and store the client public key */
-            CPublicKey = RawPacket.Take(32).ToArray();
-            SPrivateKey = Crypto8.StandardKeyPair.PrivateKey;
-            SPublicKey = Crypto8.StandardKeyPair.PublicKey;
-            Client.CRNonce = Crypto8.GenerateNonce();
-
-
-            try
+            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
             {
-                /* Generating Nonce with server public key */
-                Nonce = Sodiumc.GenericHash.Hash(CPublicKey.Concat(SPublicKey).ToArray(), null, 24);
-
-                /* Generating a Shared Key with server private key and client public key */
-                //Sodiumc.SodiumLibrary.crypto_box_beforenm(CSharedKey, CPublicKey, SPrivateKey);
-
-                /* The full packet content in raw data without the public key of the client */
-                var cipherText = RawPacket.Skip(32).ToArray();
-
-                Client.CSharedKey = SPublicKey;
-                Client.CPublicKey = CPublicKey;
-
-                /* Finally, we store the decrypted data, and use the function below for dencryption */
-                //PlainText = Sodiumc.PublicKeyBox.Open(cipherText, SNonce, SPrivateKey, CSharedKey).ToArray();
-
-                PlainText = Sodium.PublicKeyBox.Open(cipherText, Nonce, SPrivateKey, CPublicKey);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("[UCS][10101] Player with uncompatible client detected, UCS is ignoring him.");
-                return;
-            }
-            // ----------------------------------
-
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(PlainText)))
-            {
-                Client.CSessionKey = reader.ReadBytes(CoCKeyPair.NonceLength);
-                Client.CSNonce = reader.ReadBytes(CoCKeyPair.NonceLength);
-
                 UserID = reader.ReadInt64();
                 UserToken = reader.ReadString();
                 MajorVersion = reader.ReadInt32();
                 ContentVersion = reader.ReadInt32();
                 MinorVersion = reader.ReadInt32();
                 MasterHash = reader.ReadString();
-
                 Unknown1 = reader.ReadString();
-
                 OpenUDID = reader.ReadString();
                 MacAddress = reader.ReadString();
                 DeviceModel = reader.ReadString();
@@ -117,25 +69,23 @@ namespace UCS.PacketProcessing
                 Language = reader.ReadString();
                 AdvertisingGUID = reader.ReadString();
                 OSVersion = reader.ReadString();
-
                 Unknown2 = reader.ReadByte();
                 Unknown3 = reader.ReadString();
-
                 AndroidDeviceID = reader.ReadString();
                 FacebookDistributionID = reader.ReadString();
                 IsAdvertisingTrackingEnabled = reader.ReadBoolean();
                 VendorGUID = reader.ReadString();
                 Seed = reader.ReadInt32();
-
                 Unknown4 = reader.ReadByte();
                 Unknown5 = reader.ReadString();
                 Unknown6 = reader.ReadString();
-
                 ClientVersion = reader.ReadString();
             }
-            
-            Client.CState = 1;
-            
+            ShowData();
+        }
+
+        public void ShowData()
+        {
             Console.WriteLine("[UCS][10101] User ID      = " + UserID);
             Console.WriteLine("[UCS][10101] User Token   = " + UserToken);
             Console.WriteLine("[UCS][10101] MajorVersion = " + MajorVersion);
@@ -225,7 +175,7 @@ namespace UCS.PacketProcessing
                 level.GetPlayerAvatar().SetLeagueId(22);
             ResourcesManager.LogPlayerIn(level, Client);
             level.Tick();
-
+            
             var loginOk = new LoginOkMessage(Client);
             var avatar = level.GetPlayerAvatar();
             loginOk.SetAccountId(avatar.GetId());
@@ -245,7 +195,7 @@ namespace UCS.PacketProcessing
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
 
-            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
+            /*PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));*/
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }

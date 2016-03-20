@@ -35,7 +35,6 @@ namespace UCS.PacketProcessing
         {
             SetMessageType(20104);
             SetMessageVersion(1);
-            Unknown11 = "someid2";
         }
 
         public string Unknown11 { get; set; }
@@ -45,10 +44,9 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-
+            /*
             pack.AddRange(Client.CRNonce);
             pack.AddRange(Client.CPublicKey);
-
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -67,13 +65,31 @@ namespace UCS.PacketProcessing
             pack.AddInt32(0);
             pack.AddString(m_vGoogleID.ToString());
             pack.AddString(m_vCountryCode);
-            pack.AddString("8.116");
+            pack.AddString("8.116");*/
+            pack.AddRange(Client.CRNonce);
+            pack.AddRange(Client.CPublicKey);
 
-            var packet = pack.ToArray();
-            
-            packet = Client.CSNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
-            byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
-            SetData(PublicKeyBox.Create(packet, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
+            pack.AddInt64(m_vAccountId);
+            pack.AddInt64(m_vAccountId);
+            pack.AddString(m_vPassToken);
+            pack.AddString(m_vFacebookId);
+            pack.AddString(m_vGamecenterId);
+            pack.AddInt32(m_vServerMajorVersion);
+            pack.AddInt32(m_vServerBuild);
+            pack.AddInt32(m_vContentVersion);
+            pack.AddString(m_vServerEnvironment);
+            pack.AddInt32(m_vSessionCount);
+            pack.AddInt32(m_vPlayTimeSeconds);
+            pack.AddString("someid1");
+            pack.AddInt32(m_vFacebookAppID);
+            pack.AddInt32(m_vStartupCooldownSeconds);
+            pack.AddString(m_vAccountCreatedDate);
+            pack.AddString("someid2");
+            pack.AddInt32(m_vGoogleID);
+            pack.AddString(m_vCountryCode);
+            pack.AddString("8.116");
+            SetData(PublicKeyBox.Create(pack.ToArray(), Client.CRNonce, Crypto8.StandardKeyPair.PublicKey, Client.CPublicKey));
+            //Encrypt8(pack.ToArray());
         }
 
         public void SetNonce(byte[] nonce)

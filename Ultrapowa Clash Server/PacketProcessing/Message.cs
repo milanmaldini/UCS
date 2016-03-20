@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sodium;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -34,6 +35,43 @@ namespace UCS.PacketProcessing
             m_vLength = (0x00 << 24) | (tempLength[0] << 16) | (tempLength[1] << 8) | tempLength[2];
             m_vMessageVersion = br.ReadUInt16WithEndian();
             m_vData = br.ReadBytes(m_vLength);
+        }
+
+        public void Encrypt8(byte[] plainText)
+        {
+            if (m_vType == 20103 || m_vType == 20104)
+            {
+                byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+                plainText = Client.CSNonce.Concat(Client.CSharedKey).Concat(plainText).ToArray();
+                SetData(PublicKeyBox.Create(plainText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
+                Client.CState = 2;
+            }
+            else
+            {
+                SetData(SecretBox.Create(plainText, Client.CSNonce, Client.CSharedKey).Skip(16).ToArray());
+            }
+        }
+        public void Decrypt8()
+        {
+            if (m_vType == 10101)
+            {
+                byte[] cipherText = m_vData;
+                Client.CPublicKey = cipherText.Take(32).ToArray();
+                Client.CSharedKey = Client.CPublicKey;
+                Client.CRNonce = Crypto8.GenerateNonce();
+                byte[] nonce = GenericHash.Hash(Client.CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+                cipherText = cipherText.Skip(32).ToArray();
+                var PlainText = PublicKeyBox.Open(cipherText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey);
+                Client.CSessionKey = PlainText.Take(24).ToArray();
+                Client.CSNonce = PlainText.Skip(24).Take(24).ToArray();
+                SetData(PlainText.Skip(24).Skip(24).ToArray());
+                Client.CState = 1;
+            }
+            else
+            {
+                Client.CSNonce = Utilities.Increment(Utilities.Increment(Client.CSNonce));
+                SetData(SecretBox.Open(new byte[16].Concat(m_vData).ToArray(), Client.CSNonce, Client.CSharedKey));
+            }
         }
 
         public int Broadcasting { get; set; }

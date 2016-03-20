@@ -24,8 +24,6 @@ namespace UCS.PacketProcessing
             SetMessageType(20103);
             SetMessageVersion(10);
             //SetReason("UCS Developement Team <3");
-            client.CState = 2;
-            
             //9: removeredirectdomain
             //8: new game version available (removeupdateurl)
             //7: removeresourcefingerprintdata
@@ -37,13 +35,6 @@ namespace UCS.PacketProcessing
 
         public override void Encode()
         {
-            Console.WriteLine("[UCS][20103] Client Key     -> " + Encoding.UTF8.GetString(Client.CPublicKey));
-            Console.WriteLine("[UCS][20103] Client Nonce   -> " + Encoding.UTF8.GetString(Client.CSNonce));
-            Console.WriteLine("[UCS][20103] Client Shared  -> " + Encoding.UTF8.GetString(Client.CSharedKey));
-            Console.WriteLine("[UCS][20103] Client Session -> " + Encoding.UTF8.GetString(Client.CSessionKey));
-            Console.WriteLine("[UCS][20103] Client State   -> " + Client.CState);
-
-            
             var pack = new List<byte>();
             pack.AddInt32(m_vErrorCode);
             pack.AddString(m_vResourceFingerprintData);
@@ -55,13 +46,7 @@ namespace UCS.PacketProcessing
             pack.AddInt32(-1);
             pack.Add(0);
             pack.AddString("");
-
-
-            var packet = pack.ToArray();
-            packet = Client.CSNonce.Concat(Client.CPublicKey).Concat(packet).ToArray();
-            byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
-            SetData(PublicKeyBox.Create(packet, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
-            
+            Encrypt8(pack.ToArray());
         }
 
         public void RemainingTime(int code)
