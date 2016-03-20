@@ -23,7 +23,7 @@ namespace UCS.PacketProcessing
         {
             SetMessageType(20103);
             SetMessageVersion(10);
-            //SetReason("UCS Developement Team <3");
+            SetReason("LasterTrap is comming <3");
             //9: removeredirectdomain
             //8: new game version available (removeupdateurl)
             //7: removeresourcefingerprintdata
