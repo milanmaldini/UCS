@@ -41,8 +41,7 @@ namespace UCS.PacketProcessing
 
             Client.CRNonce = Utilities.Increment(Utilities.Increment(Client.CRNonce));
             //SetData(PublicKeyBox.Create(packet, Client.CRNonce, Crypto8.StandardKeyPair.PublicKey, Client.CPublicKey));
-
-            SetData(SecretBox.Create(packet, Client.CRNonce, Client.CPublicKey).Skip(16).ToArray());
+            SetData(SecretBox.Create(packet, Client.CSNonce, Client.CPublicKey).Skip(16).ToArray());
         }
     }
 }

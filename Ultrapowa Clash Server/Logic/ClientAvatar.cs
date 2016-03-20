@@ -117,7 +117,6 @@ namespace UCS.Logic
             else
             {
                 data.Add(0);
-                
             }
 
             //7.156
@@ -162,8 +161,8 @@ namespace UCS.Logic
             data.AddInt32(0);
             data.AddInt32(0);
             data.AddInt32(0);
-            data.AddInt32(1);
-            data.AddInt32(946720861);
+            data.Add(1);
+            data.AddInt64(946720861000);
 
             data.Add(m_vIsAvatarNameSet);
 

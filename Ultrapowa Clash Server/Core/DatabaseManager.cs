@@ -84,7 +84,6 @@ namespace UCS.Core
                         account.SetAccountStatus(p.AccountStatus);
                         account.SetAccountPrivileges(p.AccountPrivileges);
                         account.SetTime(p.LastUpdateTime);
-                        account.SetAddressIP(p.AddressIP);
                         account.GetPlayerAvatar().LoadFromJSON(p.Avatar);
                         account.LoadFromJSON(p.GameObjects);
                     }

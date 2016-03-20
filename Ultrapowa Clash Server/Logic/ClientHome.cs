@@ -31,20 +31,11 @@ namespace UCS.Logic
             data.AddInt32(69119);
             data.AddInt32(1200);
             data.AddInt32(60);
-            data.AddString("true");
+            data.Add(1);
 
-            using (var bw = new BinaryWriter(new MemoryStream()))
-            {
-                bw.Write(m_vHomeLenght);
-                bw.Write(m_vSerializedVillage);
-                data.AddRange((((MemoryStream)bw.BaseStream).ToArray()));
-            }
 
-            //data.AddInt32(m_vSerializedVillage.Length + 4);
-
-            //data.AddInt32(m_vHomeLenght);
-
-            //data.AddRange(m_vSerializedVillage);
+            data.AddInt32(m_vHomeLenght + 4);
+            data.AddRange(m_vSerializedVillage);
 
             data.AddInt32(0);
 
