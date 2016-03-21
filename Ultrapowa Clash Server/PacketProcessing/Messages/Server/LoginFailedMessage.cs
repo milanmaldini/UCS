@@ -22,8 +22,6 @@ namespace UCS.PacketProcessing
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
-            SetMessageVersion(10);
-            SetReason("LasterTrap is comming <3");
             //9: removeredirectdomain
             //8: new game version available (removeupdateurl)
             //7: removeresourcefingerprintdata

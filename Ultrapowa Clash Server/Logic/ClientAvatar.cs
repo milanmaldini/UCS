@@ -133,8 +133,8 @@ namespace UCS.Logic
             data.AddInt32(1); //11
 
             // 8.X
-            data.AddInt32(1);
-            data.AddInt32(0);
+            data.AddInt32(0); //12
+            data.AddInt32(-1); //13
 
             data.AddInt32(m_vLeagueId);
 
@@ -151,9 +151,8 @@ namespace UCS.Logic
             data.AddInt32(1200);
             data.AddInt32(60);
             data.AddInt32(m_vScore);
-            
-            
-            data.AddInt32(0);
+
+            data.AddInt32(110); //Attack win
             data.AddInt32(0);
             data.AddInt32(0);
             data.AddInt32(0);

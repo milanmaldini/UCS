@@ -36,18 +36,30 @@ namespace UCS.PacketProcessing
             m_vMessageVersion = br.ReadUInt16WithEndian();
             m_vData = br.ReadBytes(m_vLength);
         }
-
+        private static void IncrementNonce(byte[] nonce)
+        {
+            // TODO: Write own method for incrementing nonces by 2.
+            nonce = Utilities.Increment(Utilities.Increment(nonce));
+        }
         public void Encrypt8(byte[] plainText)
         {
-            if (m_vType == 20103 || m_vType == 20104)
+            if (m_vType == 20103)
             {
                 byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
                 plainText = Client.CSNonce.Concat(Client.CSharedKey).Concat(plainText).ToArray();
                 SetData(PublicKeyBox.Create(plainText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
                 Client.CState = 2;
             }
-            else
+            else if (m_vType == 20104)
             {
+                byte[] nonce = GenericHash.Hash(Client.CSNonce.Concat(Client.CPublicKey).Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+                plainText = Client.CSNonce.Concat(Client.CSharedKey).Concat(plainText).ToArray();
+                SetData(PublicKeyBox.Create(plainText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey));
+                Client.CState = 2;
+            }
+            else 
+            {
+                IncrementNonce(Client.CSNonce);
                 SetData(SecretBox.Create(plainText, Client.CSNonce, Client.CSharedKey).Skip(16).ToArray());
             }
         }

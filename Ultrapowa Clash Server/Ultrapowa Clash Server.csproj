@@ -343,7 +343,7 @@
     <Compile Include="PacketProcessing\Messages\Client\EditClanSettingsMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\EndClientTurnMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\FetchWarBaseMessage.cs" />
-    <Compile Include="PacketProcessing\Messages\Client\FirstAuthentication.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\SessionRequest.cs" />
     <Compile Include="PacketProcessing\Messages\Client\KeepAliveMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AttackNpcMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\SetDeviceTokenMessage.cs" />
@@ -415,7 +415,7 @@
     <Compile Include="PacketProcessing\Messages\Server\AvatarStreamMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\BookmarksListMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\DisconnectedMessage.cs" />
-    <Compile Include="PacketProcessing\Messages\Server\FirstAuthenticationOk.cs" />
+    <Compile Include="PacketProcessing\Messages\Server\SessionSuccess.cs" />
     <Compile Include="PacketProcessing\Messages\Server\HomeBattleReplayDataMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\OutOfSyncMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\ShutdownStartedMessage.cs" />

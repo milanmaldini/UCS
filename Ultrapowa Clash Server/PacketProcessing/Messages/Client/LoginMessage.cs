@@ -86,6 +86,7 @@ namespace UCS.PacketProcessing
 
         public void ShowData()
         {
+            Console.WriteLine("[UCS][10101] Raw Data     = " + Encoding.UTF8.GetString(GetData()));
             Console.WriteLine("[UCS][10101] User ID      = " + UserID);
             Console.WriteLine("[UCS][10101] User Token   = " + UserToken);
             Console.WriteLine("[UCS][10101] MajorVersion = " + MajorVersion);
@@ -105,7 +106,7 @@ namespace UCS.PacketProcessing
             if (Client.CState == 0)
                 return;
 
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
+            if (!Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
@@ -188,14 +189,14 @@ namespace UCS.PacketProcessing
             loginOk.SetServerTime(Math.Round(level.GetTime().Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString());
             loginOk.SetAccountCreatedDate("1414003838000");
             loginOk.SetStartupCooldownSeconds(0);
-            loginOk.SetCountryCode("FR");
+            loginOk.SetCountryCode(Language);
             PacketManager.ProcessOutgoingPacket(loginOk);
 
             var alliance = ObjectManager.GetAlliance(level.GetPlayerAvatar().GetAllianceId());
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
 
-            /*PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));*/
+            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }

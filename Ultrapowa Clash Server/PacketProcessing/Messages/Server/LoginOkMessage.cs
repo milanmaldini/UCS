@@ -66,9 +66,8 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vGoogleID.ToString());
             pack.AddString(m_vCountryCode);
             pack.AddString("8.116");*/
-            pack.AddRange(Client.CRNonce);
-            pack.AddRange(Client.CPublicKey);
-
+            pack.AddRange(GenerateBlake2BNonce(Client.CSNonce, Client.CSharedKey, Crypto8.StandardKeyPair.PublicKey));
+            pack.AddRange(GenerateBlake2BNonce(Client.CPublicKey, Crypto8.StandardKeyPair.PublicKey));
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -87,10 +86,32 @@ namespace UCS.PacketProcessing
             pack.AddString("someid2");
             pack.AddInt32(m_vGoogleID);
             pack.AddString(m_vCountryCode);
-            pack.AddString("8.116");
-            SetData(PublicKeyBox.Create(pack.ToArray(), Client.CRNonce, Crypto8.StandardKeyPair.PublicKey, Client.CPublicKey));
-            //Encrypt8(pack.ToArray());
+            pack.AddInt32(0);
+            Console.WriteLine(Encoding.UTF8.GetString(GenerateBlake2BNonce(Client.CPublicKey, Crypto8.StandardKeyPair.PublicKey)));
+            Encrypt8(pack.ToArray());
         }
+
+        private static byte[] GenerateBlake2BNonce(byte[] snonce, byte[] clientKey, byte[] serverKey)
+        {
+            var hashBuffer = new byte[clientKey.Length + serverKey.Length + snonce.Length];
+
+            Buffer.BlockCopy(snonce, 0, hashBuffer, 0, CoCKeyPair.NonceLength);
+            Buffer.BlockCopy(clientKey, 0, hashBuffer, CoCKeyPair.NonceLength, clientKey.Length);
+            Buffer.BlockCopy(serverKey, 0, hashBuffer, CoCKeyPair.NonceLength + CoCKeyPair.KeyLength, serverKey.Length);
+
+            return GenericHash.Hash(hashBuffer, null, CoCKeyPair.NonceLength);
+        }
+
+        private static byte[] GenerateBlake2BNonce(byte[] clientKey, byte[] serverKey)
+        {
+            var hashBuffer = new byte[clientKey.Length + serverKey.Length];
+
+            Buffer.BlockCopy(clientKey, 0, hashBuffer, 0, clientKey.Length);
+            Buffer.BlockCopy(serverKey, 0, hashBuffer, CoCKeyPair.KeyLength, serverKey.Length);
+
+            return GenericHash.Hash(hashBuffer, null, CoCKeyPair.NonceLength);
+        }
+
 
         public void SetNonce(byte[] nonce)
         {

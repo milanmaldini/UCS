@@ -39,9 +39,7 @@ namespace UCS.PacketProcessing
             
             var packet = data.ToArray();
 
-            Client.CRNonce = Utilities.Increment(Utilities.Increment(Client.CRNonce));
-            //SetData(PublicKeyBox.Create(packet, Client.CRNonce, Crypto8.StandardKeyPair.PublicKey, Client.CPublicKey));
-            SetData(SecretBox.Create(packet, Client.CSNonce, Client.CPublicKey).Skip(16).ToArray());
+            Encrypt8(packet);
         }
     }
 }
