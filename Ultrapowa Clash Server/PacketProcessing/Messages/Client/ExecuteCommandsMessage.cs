@@ -9,7 +9,7 @@ namespace UCS.PacketProcessing
     //Packet 14102
     internal class ExecuteCommandsMessage : Message
     {
-        public ExecuteCommandsMessage(Client client, BinaryReader br) : base(client, br) { Decrypt8(); }
+        public ExecuteCommandsMessage(Client client, BinaryReader br) : base(client, br) { }
 
         public byte[] NestedCommands;
 

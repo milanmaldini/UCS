@@ -23,7 +23,7 @@ namespace UCS.Logic
         {
             var data = new List<byte>();
 
-            //data.AddRange(base.Encode());
+            data.AddRange(base.Encode());
             data.AddInt32(0);
             data.AddInt64(m_vId);
             data.AddInt32(m_vRemainingShieldTime);

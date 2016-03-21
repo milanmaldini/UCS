@@ -35,6 +35,7 @@ namespace UCS.PacketProcessing
             m_vLength = (0x00 << 24) | (tempLength[0] << 16) | (tempLength[1] << 8) | tempLength[2];
             m_vMessageVersion = br.ReadUInt16WithEndian();
             m_vData = br.ReadBytes(m_vLength);
+
         }
         private static void IncrementNonce(byte[] nonce)
         {
