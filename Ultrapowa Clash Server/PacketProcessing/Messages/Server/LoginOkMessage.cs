@@ -40,7 +40,13 @@ namespace UCS.PacketProcessing
         public string Unknown11 { get; set; }
 
         public string Unknown9 { get; set; }
-
+        public static string ByteArrayToString(byte[] ba)
+        {
+            StringBuilder hex = new StringBuilder(ba.Length * 2);
+            foreach (byte b in ba)
+                hex.AppendFormat("{0:x2}", b);
+            return hex.ToString();
+        }
         public override void Encode()
         {
             var pack = new List<byte>();
@@ -66,8 +72,8 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vGoogleID.ToString());
             pack.AddString(m_vCountryCode);
             pack.AddString("8.116");*/
-            pack.AddRange(GenerateBlake2BNonce(Client.CSNonce, Client.CSharedKey, Crypto8.StandardKeyPair.PublicKey));
-            pack.AddRange(GenerateBlake2BNonce(Client.CPublicKey, Crypto8.StandardKeyPair.PublicKey));
+            pack.AddRange(Client.CSNonce);
+            pack.AddRange(Client.CSharedKey);
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -87,7 +93,6 @@ namespace UCS.PacketProcessing
             pack.AddInt32(m_vGoogleID);
             pack.AddString(m_vCountryCode);
             pack.AddInt32(0);
-            Console.WriteLine(Encoding.UTF8.GetString(GenerateBlake2BNonce(Client.CPublicKey, Crypto8.StandardKeyPair.PublicKey)));
             Encrypt8(pack.ToArray());
         }
 

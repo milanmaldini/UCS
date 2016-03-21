@@ -15,7 +15,7 @@ namespace UCS.PacketProcessing
         private int m_vLength;
         private ushort m_vMessageVersion;
         private ushort m_vType;
-
+       
         public Message() { }
 
         public Message(Client c)
