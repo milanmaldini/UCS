@@ -153,7 +153,7 @@ namespace UCS.Logic
 
         public override void Load(JObject jsonObject)
         {
-            IsSpellForge = jsonObject["storage_type"].ToObject<int>() == 1;
+            //IsSpellForge = jsonObject["storage_type"].ToObject<int>() == 1;
             var unitArray = (JArray) jsonObject["units"];
             if (unitArray != null)
             {
