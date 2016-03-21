@@ -10,7 +10,7 @@ namespace UCP
     {
         protected static KeyPair serverKey =
             PublicKeyBox.GenerateKeyPair(
-                Utilities.HexToBinary("AC1B01242BBD3A8AEE5ED686D82802348EF396B3774EEC078B4A27169A0730A7"));
+                Utilities.HexToBinary("1891D401FADB51D25D3A9174D472A9F691A45B974285D47729C45C6538070D85"));
 
         public static void DecryptPacket(Socket socket, ServerState state, byte[] packet)
         {
