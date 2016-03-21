@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using UCS.Core;
 using UCS.GameFiles;
 using UCS.Helpers;
@@ -10,7 +11,7 @@ namespace UCS.PacketProcessing
     internal class BuyResourcesCommand : Command
     {
         private readonly object m_vCommand;
-        private readonly byte m_vIsCommandEmbedded;
+        private readonly bool m_vIsCommandEmbedded;
         private readonly int m_vResourceCount;
         private readonly int m_vResourceId;
 
@@ -18,9 +19,13 @@ namespace UCS.PacketProcessing
         {
             m_vResourceId = br.ReadInt32WithEndian();
             m_vResourceCount = br.ReadInt32WithEndian();
-            m_vIsCommandEmbedded = br.ReadByte();
-            if (m_vIsCommandEmbedded >= 0x01)
+            m_vIsCommandEmbedded = br.ReadBoolean();
+            if (m_vIsCommandEmbedded)
             {
+                Depth++;
+                Debugger.WriteLine("Depth: " + Depth);
+                if (Depth >= MaxEmbeddedDepth)
+                    throw new ArgumentException("A command contained embedded command depth was greater than max embedded commands.");
                 m_vCommand = CommandFactory.Read(br);
             }
             br.ReadInt32WithEndian(); //Unknown1
@@ -44,8 +49,14 @@ namespace UCS.PacketProcessing
                             {
                                 avatar.UseDiamonds(diamondCost);
                                 avatar.CommodityCountChangeHelper(0, rd, m_vResourceCount);
-                                if (m_vIsCommandEmbedded >= 1)
-                                    ((Command) m_vCommand).Execute(level);
+                                if (m_vIsCommandEmbedded)
+                                    Depth++;
+                                Debugger.WriteLine("Depth: " + Depth);
+
+                                if (Depth >= MaxEmbeddedDepth)
+                                    throw new ArgumentException("A command contained embedded command depth was greater than max embedded commands.");
+
+                                ((Command) m_vCommand).Execute(level);
                             }
                         }
                     }

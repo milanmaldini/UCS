@@ -36,10 +36,7 @@ namespace UCS.PacketProcessing
 
             data.AddRange(home.Encode());
             data.AddRange(Avatar.Encode());
-            
-            var packet = data.ToArray();
-
-            Encrypt8(packet);
+            Encrypt8(data.ToArray());
         }
     }
 }

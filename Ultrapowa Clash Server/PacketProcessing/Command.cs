@@ -5,6 +5,8 @@ namespace UCS.PacketProcessing
 {
     internal class Command
     {
+        public const int MaxEmbeddedDepth = 10;
+        internal int Depth { get; set; }
         public virtual byte[] Encode()
         {
             return new List<byte>().ToArray();

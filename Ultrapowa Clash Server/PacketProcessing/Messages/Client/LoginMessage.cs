@@ -103,10 +103,10 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            if (Client.CState == 0)
+            if (Client.CState == 0 || Client.CState == null)
                 return;
 
-            if (!Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
+            if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
