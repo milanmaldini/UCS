@@ -53,35 +53,42 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
-            using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
-            {
-                UserID = reader.ReadInt64();
-                UserToken = reader.ReadString();
-                MajorVersion = reader.ReadInt32();
-                ContentVersion = reader.ReadInt32();
-                MinorVersion = reader.ReadInt32();
-                MasterHash = reader.ReadString();
-                Unknown1 = reader.ReadString();
-                OpenUDID = reader.ReadString();
-                MacAddress = reader.ReadString();
-                DeviceModel = reader.ReadString();
-                LocaleKey = reader.ReadInt32();
-                Language = reader.ReadString();
-                AdvertisingGUID = reader.ReadString();
-                OSVersion = reader.ReadString();
-                Unknown2 = reader.ReadByte();
-                Unknown3 = reader.ReadString();
-                AndroidDeviceID = reader.ReadString();
-                FacebookDistributionID = reader.ReadString();
-                IsAdvertisingTrackingEnabled = reader.ReadBoolean();
-                VendorGUID = reader.ReadString();
-                Seed = reader.ReadInt32();
-                Unknown4 = reader.ReadByte();
-                Unknown5 = reader.ReadString();
-                Unknown6 = reader.ReadString();
-                ClientVersion = reader.ReadString();
+            try {
+                using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
+                {
+                    UserID = reader.ReadInt64();
+                    UserToken = reader.ReadString();
+                    MajorVersion = reader.ReadInt32();
+                    ContentVersion = reader.ReadInt32();
+                    MinorVersion = reader.ReadInt32();
+                    MasterHash = reader.ReadString();
+                    Unknown1 = reader.ReadString();
+                    OpenUDID = reader.ReadString();
+                    MacAddress = reader.ReadString();
+                    DeviceModel = reader.ReadString();
+                    LocaleKey = reader.ReadInt32();
+                    Language = reader.ReadString();
+                    AdvertisingGUID = reader.ReadString();
+                    OSVersion = reader.ReadString();
+                    Unknown2 = reader.ReadByte();
+                    Unknown3 = reader.ReadString();
+                    AndroidDeviceID = reader.ReadString();
+                    FacebookDistributionID = reader.ReadString();
+                    IsAdvertisingTrackingEnabled = reader.ReadBoolean();
+                    VendorGUID = reader.ReadString();
+                    Seed = reader.ReadInt32();
+                    Unknown4 = reader.ReadByte();
+                    Unknown5 = reader.ReadString();
+                    Unknown6 = reader.ReadString();
+                    ClientVersion = reader.ReadString();
+                    Client.CState = 1;
+                }
+                ShowData();
             }
-            ShowData();
+            catch (Exception)
+            {
+                Client.CState = 0;
+            }
         }
 
         public void ShowData()
@@ -103,7 +110,7 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
-            if (Client.CState == 0 || Client.CState == null)
+            if (Client.CState == 0)
                 return;
 
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
