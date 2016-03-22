@@ -93,19 +93,11 @@ namespace UCS.PacketProcessing
 
         public void ShowData()
         {
-            Console.WriteLine("[UCS][10101] Raw Data     = " + Encoding.UTF8.GetString(GetData()));
-            Console.WriteLine("[UCS][10101] User ID      = " + UserID);
-            Console.WriteLine("[UCS][10101] User Token   = " + UserToken);
-            Console.WriteLine("[UCS][10101] MajorVersion = " + MajorVersion);
-            Console.WriteLine("[UCS][10101] ContVersion  = " + ContentVersion);
-            Console.WriteLine("[UCS][10101] MinorVersion = " + MinorVersion);
-            Console.WriteLine("[UCS][10101] MasterHash   = " + MasterHash);
-            Console.WriteLine("[UCS][10101] OpenUDID     = " + OpenUDID);
-            Console.WriteLine("[UCS][10101] OS Version   = " + OSVersion);
-            Console.WriteLine("[UCS][10101] ClientV      = " + ClientVersion);
-            Console.WriteLine("[UCS][10101] Language     = " + Language);
-            Console.WriteLine("[UCS][10101] ADeviceID    = " + AndroidDeviceID);
-            Console.WriteLine("[UCS][10101] Device Model = " + DeviceModel);
+            Console.WriteLine("[UCS][10101] User Account ID     = " + UserID);
+            Console.WriteLine("[UCS][10101] Master Hash         = " + MasterHash);
+            Console.WriteLine("[UCS][10101] Client Version      = " + ClientVersion);
+            Console.WriteLine("[UCS][10101] Language            = " + Language);
+            Console.WriteLine("[UCS][10101] Device Model        = " + DeviceModel);
         }
 
         public override void Process(Level level)
@@ -203,7 +195,7 @@ namespace UCS.PacketProcessing
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
 
-            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
+            //PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }
