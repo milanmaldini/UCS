@@ -22,13 +22,14 @@ namespace UCS.PacketProcessing
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
-            //9: removeredirectdomain
-            //8: new game version available (removeupdateurl)
-            //7: removeresourcefingerprintdata
-            //10: maintenance
-            //11: banni temporairement
-            //12: played too much
-            //13: compte verrouillé
+            // SetReason("UCS Developement Team");
+            // 9  : removeredirectdomain
+            // 8  : new game version available (removeupdateurl)
+            // 7  : removeresourcefingerprintdata
+            // 10 : maintenance
+            // 11 : banni temporairement
+            // 12 : played too much
+            // 13 : compte verrouillé
         }
 
         public override void Encode()

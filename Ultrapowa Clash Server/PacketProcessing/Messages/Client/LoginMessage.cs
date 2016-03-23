@@ -105,7 +105,7 @@ namespace UCS.PacketProcessing
             if (Client.CState == 0)
                 return;
 
-            if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
+            if (!Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
