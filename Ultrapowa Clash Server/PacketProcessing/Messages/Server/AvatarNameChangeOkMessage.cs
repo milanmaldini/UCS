@@ -26,7 +26,7 @@ namespace UCS.PacketProcessing
             pack.AddInt32(1);
             pack.AddInt32(-1);
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public string GetAvatarName()

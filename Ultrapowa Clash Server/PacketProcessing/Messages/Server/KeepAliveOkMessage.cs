@@ -16,8 +16,7 @@ namespace UCS.PacketProcessing
         {
             var data = new List<byte>();
             var packet = data.ToArray();
-            Client.CRNonce = Utilities.Increment(Utilities.Increment(Client.CRNonce));
-            SetData(SecretBox.Create(packet, Client.CSNonce, Client.CSharedKey).Skip(16).ToArray());
+            Encrypt8(packet);
         }
     }
 }

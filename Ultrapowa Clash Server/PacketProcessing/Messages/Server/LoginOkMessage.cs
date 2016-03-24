@@ -40,40 +40,13 @@ namespace UCS.PacketProcessing
         public string Unknown11 { get; set; }
 
         public string Unknown9 { get; set; }
-        public static string ByteArrayToString(byte[] ba)
-        {
-            StringBuilder hex = new StringBuilder(ba.Length * 2);
-            foreach (byte b in ba)
-                hex.AppendFormat("{0:x2}", b);
-            return hex.ToString();
-        }
+
         public override void Encode()
         {
             var pack = new List<byte>();
-            /*
             pack.AddRange(Client.CRNonce);
-            pack.AddRange(Client.CPublicKey);
-            pack.AddInt64(m_vAccountId);
-            pack.AddInt64(m_vAccountId);
-            pack.AddString(m_vPassToken);
-            pack.AddString(m_vFacebookId);
-            pack.AddString(m_vGamecenterId);
-            pack.AddInt32(m_vServerMajorVersion);
-            pack.AddInt32(m_vServerBuild);
-            pack.AddInt32(m_vContentVersion);
-            pack.AddString(m_vServerEnvironment);
-            pack.AddInt32(m_vSessionCount);
-            pack.AddInt32(m_vPlayTimeSeconds);
-            pack.AddInt32(0);
-            pack.AddString(m_vFacebookAppID.ToString());
-            pack.AddString(m_vAccountCreatedDate);
-            pack.AddString(m_vAccountCreatedDate);
-            pack.AddInt32(0);
-            pack.AddString(m_vGoogleID.ToString());
-            pack.AddString(m_vCountryCode);
-            pack.AddString("8.116");*/
-            pack.AddRange(Client.CSNonce);
             pack.AddRange(Client.CSharedKey);
+
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -95,33 +68,7 @@ namespace UCS.PacketProcessing
             pack.AddInt32(0);
             Encrypt8(pack.ToArray());
         }
-
-        private static byte[] GenerateBlake2BNonce(byte[] snonce, byte[] clientKey, byte[] serverKey)
-        {
-            var hashBuffer = new byte[clientKey.Length + serverKey.Length + snonce.Length];
-
-            Buffer.BlockCopy(snonce, 0, hashBuffer, 0, CoCKeyPair.NonceLength);
-            Buffer.BlockCopy(clientKey, 0, hashBuffer, CoCKeyPair.NonceLength, clientKey.Length);
-            Buffer.BlockCopy(serverKey, 0, hashBuffer, CoCKeyPair.NonceLength + CoCKeyPair.KeyLength, serverKey.Length);
-
-            return GenericHash.Hash(hashBuffer, null, CoCKeyPair.NonceLength);
-        }
-
-        private static byte[] GenerateBlake2BNonce(byte[] clientKey, byte[] serverKey)
-        {
-            var hashBuffer = new byte[clientKey.Length + serverKey.Length];
-
-            Buffer.BlockCopy(clientKey, 0, hashBuffer, 0, clientKey.Length);
-            Buffer.BlockCopy(serverKey, 0, hashBuffer, CoCKeyPair.KeyLength, serverKey.Length);
-
-            return GenericHash.Hash(hashBuffer, null, CoCKeyPair.NonceLength);
-        }
-
-
-        public void SetNonce(byte[] nonce)
-        {
-            m_vNonce = nonce;
-        }
+        
         public void SetAccountCreatedDate(string date)
         {
             m_vAccountCreatedDate = date;

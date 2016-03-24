@@ -48,8 +48,8 @@ namespace UCS.PacketProcessing
             }
             else 
             {
-                Utilities.Increment(Utilities.Increment(Client.CSNonce));
-                SetData(SecretBox.Create(plainText, Client.CSNonce, Client.CSharedKey).Skip(16).ToArray());
+                Client.CRNonce = Utilities.Increment(Utilities.Increment(Client.CRNonce));
+                SetData(SecretBox.Create(plainText, Client.CRNonce, Client.CSharedKey).Skip(16).ToArray());
             }
         }
         public void Decrypt8()
