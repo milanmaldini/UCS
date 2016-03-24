@@ -33,7 +33,7 @@ namespace UCS.PacketProcessing
             data.AddRange(m_vOwnerLevel.GetPlayerAvatar().Encode());
             data.AddRange(m_vVisitorLevel.GetPlayerAvatar().Encode());
             data.AddRange(new byte[] {0x00, 0x00, 0x00, 0x03, 0x00});
-            SetData(data.ToArray());
+            Encrypt8(data.ToArray());
         }
     }
 }

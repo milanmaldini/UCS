@@ -18,7 +18,7 @@ namespace UCS.PacketProcessing
         {
             var data = new List<byte>();
             data.AddInt32(m_vCode);
-            SetData(data.ToArray());
+            Encrypt8(data.ToArray());
         }
 
         public void SetCode(int code)

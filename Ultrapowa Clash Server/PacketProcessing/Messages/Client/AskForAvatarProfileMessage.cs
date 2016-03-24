@@ -14,7 +14,7 @@ namespace UCS.PacketProcessing
 
         public AskForAvatarProfileMessage(Client client, BinaryReader br) : base(client, br)
         {
-            //Empty pack
+            Decrypt8();
         }
 
         public override void Decode()

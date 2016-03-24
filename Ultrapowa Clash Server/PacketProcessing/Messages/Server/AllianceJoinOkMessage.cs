@@ -13,7 +13,7 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
     }
 }

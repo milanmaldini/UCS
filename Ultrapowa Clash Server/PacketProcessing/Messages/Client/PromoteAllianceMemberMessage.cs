@@ -13,7 +13,10 @@ namespace UCS.PacketProcessing
         private long m_vId;
         private int m_vRole;
 
-        public PromoteAllianceMemberMessage(Client client, BinaryReader br) : base(client, br) { }
+        public PromoteAllianceMemberMessage(Client client, BinaryReader br) : base(client, br)
+        {
+            Decrypt8();
+        }
 
         public override void Decode()
         {

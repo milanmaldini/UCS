@@ -23,6 +23,7 @@ namespace UCS.PacketProcessing
 
         public SearchAlliancesMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         //00 00 00 03

@@ -17,7 +17,7 @@ namespace UCS.PacketProcessing
         {
             var pack = new List<byte>();
             pack.AddRange(m_vStreamEntry.Encode());
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public void SetStreamEntry(StreamEntry entry)

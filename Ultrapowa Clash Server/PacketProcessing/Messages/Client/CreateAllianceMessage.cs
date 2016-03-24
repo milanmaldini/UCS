@@ -19,6 +19,7 @@ namespace UCS.PacketProcessing
 
         public CreateAllianceMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         //00 00 00 04 6E 61 6D 65 00 00 00 0B 64 65 73 63 72 69 70 74 69 6F 6E 5B 00 02 52 00 00 00 01 00 00 07 D0 00 00 00 02 01 E8 48 39

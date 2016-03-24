@@ -30,7 +30,7 @@ namespace UCS.PacketProcessing
 
             pack.AddRange(m_vAvatarStreamEntry.Encode());
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public void SetAvatarStreamEntry(AvatarStreamEntry entry)

@@ -19,7 +19,7 @@ namespace UCS.PacketProcessing
             var pack = new List<byte>();
             pack.AddInt32(m_vServerCommandId);
             pack.AddRange(m_vCommand.Encode());
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public void SetCommand(Command c)

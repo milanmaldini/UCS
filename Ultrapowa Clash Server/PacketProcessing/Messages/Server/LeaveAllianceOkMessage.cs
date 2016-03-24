@@ -29,7 +29,7 @@ namespace UCS.PacketProcessing
             pack.AddInt32(1); //reason? 1= leave, 2=kick
             pack.AddInt32(-1);
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
     }
 }

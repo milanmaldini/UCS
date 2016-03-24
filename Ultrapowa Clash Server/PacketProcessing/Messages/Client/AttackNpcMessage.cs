@@ -10,6 +10,7 @@ namespace UCS.PacketProcessing
     {
         public AttackNpcMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         public int LevelId { get; set; }

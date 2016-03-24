@@ -29,7 +29,7 @@ namespace UCS.PacketProcessing
                 pack.AddRange(chatMessage.Encode());
             }
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
     }
 }

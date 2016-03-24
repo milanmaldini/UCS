@@ -26,7 +26,7 @@ namespace UCS.PacketProcessing
             {
                 pack.AddRange(alliance.EncodeFullEntry());
             }
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public void SetAlliances(List<Alliance> alliances)

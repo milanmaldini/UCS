@@ -18,7 +18,7 @@ namespace UCS.PacketProcessing
         {
             var data = new List<byte>();
             data.AddString(m_vErrorMessage);
-            SetData(data.ToArray());
+            Encrypt8(data.ToArray());
         }
 
         public void SetErrorMessage(string message)

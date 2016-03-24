@@ -34,7 +34,7 @@ namespace UCS.PacketProcessing
             data.Add(1);
             data.AddRange(m_vVisitorLevel.GetPlayerAvatar().Encode());
 
-            SetData(data.ToArray());
+            Encrypt8(data.ToArray());
         }
     }
 }

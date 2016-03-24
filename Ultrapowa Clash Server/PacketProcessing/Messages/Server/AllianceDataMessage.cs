@@ -59,7 +59,7 @@ namespace UCS.PacketProcessing
                 pack.AddRange(allianceMember.Encode());
             }
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
     }
 }

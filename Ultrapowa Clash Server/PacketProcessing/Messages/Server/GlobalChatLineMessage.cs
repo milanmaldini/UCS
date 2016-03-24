@@ -53,7 +53,7 @@ namespace UCS.PacketProcessing
                 pack.AddInt32(m_vAllianceIcon);
             }
 
-            SetData(pack.ToArray());
+            Encrypt8(pack.ToArray());
         }
 
         public void SetAlliance(Alliance alliance)

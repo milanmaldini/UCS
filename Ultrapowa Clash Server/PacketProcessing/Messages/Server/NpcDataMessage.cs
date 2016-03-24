@@ -37,7 +37,7 @@ namespace UCS.PacketProcessing
             data.AddInt32(0);
             data.AddInt32(LevelId);
 
-            SetData(data.ToArray());
+            Encrypt8(data.ToArray());
         }
     }
 }

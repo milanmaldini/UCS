@@ -196,7 +196,7 @@ namespace UCS.PacketProcessing
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
 
-            //PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
+            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }

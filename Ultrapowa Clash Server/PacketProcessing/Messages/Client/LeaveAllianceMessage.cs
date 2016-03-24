@@ -10,6 +10,7 @@ namespace UCS.PacketProcessing
     {
         public LeaveAllianceMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         public override void Decode()

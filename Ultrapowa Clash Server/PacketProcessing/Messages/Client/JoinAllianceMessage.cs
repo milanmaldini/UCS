@@ -13,6 +13,7 @@ namespace UCS.PacketProcessing
 
         public JoinAllianceMessage(Client client, BinaryReader br) : base(client, br)
         {
+            Decrypt8();
         }
 
         public override void Decode()
