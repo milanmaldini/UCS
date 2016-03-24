@@ -22,7 +22,7 @@ namespace UCS.Core
         {
             try
             {
-                Debugger.WriteLine("[UCS]   Saving new account to database (player id: " + l.GetPlayerAvatar().GetId() + ")");
+                Debugger.WriteLine("[UCS]    Saving new account to database (player id: " + l.GetPlayerAvatar().GetId() + ")");
                 using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.player.Add(
@@ -41,7 +41,7 @@ namespace UCS.Core
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during CreateAccount processing :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during CreateAccount processing :", ex);
             }
         }
 
@@ -49,7 +49,7 @@ namespace UCS.Core
         {
             try
             {
-                Debugger.WriteLine("[UCS]   Saving new Alliance to database (alliance id: " + a.GetAllianceId() + ")");
+                Debugger.WriteLine("[UCS]    Saving new Alliance to database (alliance id: " + a.GetAllianceId() + ")");
                 using (var db = new ucsdbEntities(m_vConnectionString))
                 {
                     db.clan.Add(
@@ -65,7 +65,7 @@ namespace UCS.Core
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during CreateAlliance processing :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during CreateAlliance processing :", ex);
             }
         }
 
@@ -91,7 +91,7 @@ namespace UCS.Core
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during GetAccount processing :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during GetAccount processing :", ex);
             }
             return account;
         }
@@ -113,7 +113,7 @@ namespace UCS.Core
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during GetAlliance processing :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during GetAlliance processing :", ex);
             }
             return alliance;
         }
@@ -136,7 +136,7 @@ namespace UCS.Core
 
         public void Save(List<Level> avatars)
         {
-            Debugger.WriteLine("[UCS]   Starting saving players from memory to database at " + DateTime.Now);
+            Debugger.WriteLine("[UCS]    Starting saving players from memory to database at " + DateTime.Now);
             try
             {
                 using (var context = new ucsdbEntities(m_vConnectionString))
@@ -182,17 +182,17 @@ namespace UCS.Core
                     }
                     context.SaveChanges();
                 }
-                Debugger.WriteLine("[UCS]   Finished saving players from memory to database at " + DateTime.Now);
+                Debugger.WriteLine("[UCS]    Finished saving players from memory to database at " + DateTime.Now);
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during Save processing for avatars :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during Save processing for avatars :", ex);
             }
         }
 
         public void Save(List<Alliance> alliances)
         {
-            Debugger.WriteLine("[UCS]   Starting saving alliances from memory to database at " + DateTime.Now);
+            Debugger.WriteLine("[UCS]    Starting saving alliances from memory to database at " + DateTime.Now);
             try
             {
                 using (var context = new ucsdbEntities(m_vConnectionString))
@@ -232,11 +232,11 @@ namespace UCS.Core
                     }
                     context.SaveChanges();
                 }
-                Debugger.WriteLine("[UCS]   Finished saving alliances from memory to database at " + DateTime.Now);
+                Debugger.WriteLine("[UCS]    Finished saving alliances from memory to database at " + DateTime.Now);
             }
             catch (Exception ex)
             {
-                Debugger.WriteLine("[UCS]   An exception occured during Save processing for alliances :", ex);
+                Debugger.WriteLine("[UCS]    An exception occured during Save processing for alliances :", ex);
             }
         }
     }

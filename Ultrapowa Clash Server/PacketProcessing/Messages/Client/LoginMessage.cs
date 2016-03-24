@@ -104,11 +104,12 @@ namespace UCS.PacketProcessing
         {
             if (Client.CState == 0)
                 return;
-
+            
             if (Convert.ToBoolean(ConfigurationManager.AppSettings["maintenanceMode"]))
             {
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
+                p.SetReason("UCS Developement Team");
                 PacketManager.ProcessOutgoingPacket(p);
                 return;
             }
@@ -195,7 +196,7 @@ namespace UCS.PacketProcessing
             if (alliance == null)
                 level.GetPlayerAvatar().SetAllianceId(0);
 
-            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
+            //PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(Client, level));
             if (alliance != null)
                 PacketManager.ProcessOutgoingPacket(new AllianceStreamMessage(Client, alliance));
         }

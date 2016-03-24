@@ -22,10 +22,8 @@ namespace UCS.PacketProcessing
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
-            // SetReason("UCS Developement Team");
-            // 9  : removeredirectdomain
+            SetReason("UCS Developement Team");
             // 8  : new game version available (removeupdateurl)
-            // 7  : removeresourcefingerprintdata
             // 10 : maintenance
             // 11 : banni temporairement
             // 12 : played too much
@@ -45,6 +43,8 @@ namespace UCS.PacketProcessing
             pack.AddInt32(-1);
             pack.Add(0);
             pack.AddString("");
+            pack.AddInt32(-1);
+            pack.AddInt32(2);
             Encrypt8(pack.ToArray());
         }
 

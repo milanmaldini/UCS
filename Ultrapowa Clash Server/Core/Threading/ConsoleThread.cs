@@ -47,8 +47,8 @@ namespace UCS.Core.Threading
                     Directory.CreateDirectory("logs");
                 Debugger.SetLogLevel(int.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
                 Logger.SetLogLevel(int.Parse(ConfigurationManager.AppSettings["loggingLevel"]));
-                NetworkThread.Start();
                 MemoryThread.Start();
+                NetworkThread.Start();
                 while ((Command = Console.ReadLine()) != null)
                     CommandParser.Parse(Command);
             });

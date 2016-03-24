@@ -29,7 +29,6 @@ namespace UCS.PacketProcessing
         private int m_vFacebookAppID;
         private int m_vLastUpdate;
         private int m_vGoogleID;
-        private byte[] m_vNonce;
 
         public LoginOkMessage(Client client) : base(client)
         {
@@ -45,8 +44,8 @@ namespace UCS.PacketProcessing
         {
             var pack = new List<byte>();
             pack.AddRange(Client.CRNonce);
-            pack.AddRange(Client.CSharedKey);
-
+            pack.AddRange(Client.CPublicKey);
+            
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
@@ -58,14 +57,30 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vServerEnvironment);
             pack.AddInt32(m_vSessionCount);
             pack.AddInt32(m_vPlayTimeSeconds);
-            pack.AddString("someid1");
-            pack.AddInt32(m_vFacebookAppID);
-            pack.AddInt32(m_vStartupCooldownSeconds);
-            pack.AddString(m_vAccountCreatedDate);
-            pack.AddString("someid2");
-            pack.AddInt32(m_vGoogleID);
-            pack.AddString(m_vCountryCode);
             pack.AddInt32(0);
+            pack.AddString(m_vFacebookAppID.ToString());
+            pack.AddString((m_vStartupCooldownSeconds.ToString()));
+            pack.AddString(m_vAccountCreatedDate);
+            pack.AddInt32(0);
+            pack.AddString(m_vGoogleID.ToString());
+            pack.AddString(m_vCountryCode);
+            pack.AddString("someid2");
+
+            // DEBUG INFO
+            Console.WriteLine("Account ID : " + m_vAccountId);
+            Console.WriteLine("User Token : " + m_vPassToken);
+            Console.WriteLine("FacebookID : " + m_vFacebookId);
+            Console.WriteLine("GameCenter : " + m_vGamecenterId);
+            Console.WriteLine("MajorVers  : " + m_vServerMajorVersion);
+            Console.WriteLine("LoginCount : " + m_vSessionCount);
+            Console.WriteLine("PlayTime S : " + m_vPlayTimeSeconds);
+            Console.WriteLine("FB APP ID  : " + m_vFacebookAppID.ToString());
+            Console.WriteLine("Cooldown S : " + m_vStartupCooldownSeconds.ToString());
+            Console.WriteLine("CreateDate : " + m_vAccountCreatedDate);
+            Console.WriteLine("Google ID  : " + m_vGoogleID);
+            Console.WriteLine("CountryCod : " + m_vCountryCode);
+            // END DEBUG
+
             Encrypt8(pack.ToArray());
         }
         

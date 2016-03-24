@@ -26,8 +26,6 @@ namespace UCS.PacketProcessing
         {
             using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
             {
-               Console.WriteLine(Encoding.UTF8.GetString(GetRawData()));
-                
                 Unknown1 = reader.ReadInt32();
                 Unknown2 = reader.ReadInt32();
                 MajorVersion = reader.ReadInt32();
