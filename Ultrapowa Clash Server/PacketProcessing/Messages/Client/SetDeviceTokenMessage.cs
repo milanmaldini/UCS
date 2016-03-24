@@ -1,13 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace UCS.PacketProcessing
 {
-    class SetDeviceTokenMessage : Message
+    internal class SetDeviceTokenMessage : Message
     {
-        public static int PacketID = 10113;
+        private byte[] m_vPacket;
+
+        public SetDeviceTokenMessage(Client client, BinaryReader br) : base(client, br)
+        {
+            Decrypt8();
+            m_vPacket = GetData();
+        }
+
+        public override void Decode()
+        {
+            File.WriteAllBytes(Directory.GetCurrentDirectory() + "/packet10113.raw", m_vPacket);
+        }
     }
 }

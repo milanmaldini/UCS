@@ -32,7 +32,6 @@ namespace UCS.PacketProcessing
             br.ReadInt32WithEndian();
         }
 
-        //00 00 02 15 00 00 00 09 00 00 00 1C 00 00 00 11 1D CD 65 07 00 00 00 1D 00 00 00 11 1D CD 65 06 00 00 00 1B 00 00 00 11 1D CD 65 08 00 00 00 1E 00 00 00 11 1D CD 65 05 00 00 00 1A 00 00 00 11 1D CD 65 09 00 00 00 1F 00 00 00 11 1D CD 65 04 00 00 00 19 00 00 00 11 1D CD 65 0A 00 00 00 20 00 00 00 11 1D CD 65 03 00 00 00 18 00 00 00 11 1D CD 65 0B 00 00 12 FC
 
         public override void Execute(Level level)
         {

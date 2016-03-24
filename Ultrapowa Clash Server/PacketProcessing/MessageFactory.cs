@@ -15,6 +15,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(10100, typeof (SessionRequest));
             m_vMessages.Add(10101, typeof (LoginMessage));
             m_vMessages.Add(10108, typeof (KeepAliveMessage));
+            m_vMessages.Add(10113, typeof(SetDeviceTokenMessage));
             m_vMessages.Add(10212, typeof (ChangeAvatarNameMessage));
             m_vMessages.Add(14101, typeof (GoHomeMessage));
             m_vMessages.Add(14102, typeof (ExecuteCommandsMessage));
@@ -25,7 +26,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(14302, typeof (AskForAllianceDataMessage));
             m_vMessages.Add(14303, typeof (AskForJoinableAlliancesListMessage));
             m_vMessages.Add(14305, typeof (JoinAllianceMessage));
-            m_vMessages.Add(14306, typeof(PromoteAllianceMemberMessage));
+            m_vMessages.Add(14306, typeof (PromoteAllianceMemberMessage));
             m_vMessages.Add(14308, typeof (LeaveAllianceMessage));
             m_vMessages.Add(14315, typeof (ChatToAllianceStreamMessage));
             m_vMessages.Add(14324, typeof (SearchAlliancesMessage));

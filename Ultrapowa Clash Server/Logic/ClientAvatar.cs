@@ -41,7 +41,7 @@ namespace UCS.Logic
             m_vId = id;
             m_vCurrentHomeId = id;
             m_vIsAvatarNameSet = 0x00;
-            m_vAvatarLevel = 9;
+            m_vAvatarLevel = 1;
             m_vAllianceId = 0;
             m_vExperience = 115;
             EndShieldTime =

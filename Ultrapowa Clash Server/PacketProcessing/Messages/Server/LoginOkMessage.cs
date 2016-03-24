@@ -24,9 +24,9 @@ namespace UCS.PacketProcessing
         private string m_vServerEnvironment;
         private int m_vServerMajorVersion;
         private string m_vServerTime;
-        private int m_vSessionCount;
+        private int m_vSessionCount = 0;
         private int m_vStartupCooldownSeconds;
-        private int m_vFacebookAppID;
+        private string m_vFacebookAppID = "297484437009394";
         private int m_vLastUpdate;
         private int m_vGoogleID;
 
@@ -58,7 +58,7 @@ namespace UCS.PacketProcessing
             pack.AddInt32(m_vSessionCount);
             pack.AddInt32(m_vPlayTimeSeconds);
             pack.AddInt32(0);
-            pack.AddString(m_vFacebookAppID.ToString());
+            pack.AddString(m_vFacebookAppID);
             pack.AddString((m_vStartupCooldownSeconds.ToString()));
             pack.AddString(m_vAccountCreatedDate);
             pack.AddInt32(0);
@@ -72,6 +72,8 @@ namespace UCS.PacketProcessing
             Console.WriteLine("FacebookID : " + m_vFacebookId);
             Console.WriteLine("GameCenter : " + m_vGamecenterId);
             Console.WriteLine("MajorVers  : " + m_vServerMajorVersion);
+            Console.WriteLine("MinorVers  : " + m_vServerBuild);
+            Console.WriteLine("RevisionV  : " + m_vContentVersion);
             Console.WriteLine("LoginCount : " + m_vSessionCount);
             Console.WriteLine("PlayTime S : " + m_vPlayTimeSeconds);
             Console.WriteLine("FB APP ID  : " + m_vFacebookAppID.ToString());
@@ -79,6 +81,7 @@ namespace UCS.PacketProcessing
             Console.WriteLine("CreateDate : " + m_vAccountCreatedDate);
             Console.WriteLine("Google ID  : " + m_vGoogleID);
             Console.WriteLine("CountryCod : " + m_vCountryCode);
+            Console.WriteLine("Environne  : " + m_vServerEnvironment);
             // END DEBUG
 
             Encrypt8(pack.ToArray());
