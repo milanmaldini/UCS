@@ -109,7 +109,6 @@ namespace UCS.PacketProcessing
             {
                 var p = new LoginFailedMessage(Client);
                 p.SetErrorCode(10);
-                p.SetReason("UCS Developement Team");
                 PacketManager.ProcessOutgoingPacket(p);
                 return;
             }
@@ -122,7 +121,7 @@ namespace UCS.PacketProcessing
                 {
                     var p = new LoginFailedMessage(Client);
                     p.SetErrorCode(8);
-                    p.SetUpdateURL("market://details?id=com.supercell.clashofclans");
+                    p.SetUpdateURL(Convert.ToString(ConfigurationManager.AppSettings["UpdateUrl"]));
                     PacketManager.ProcessOutgoingPacket(p);
                     return;
                 }
@@ -162,7 +161,7 @@ namespace UCS.PacketProcessing
                     p.SetErrorCode(7);
                     p.SetResourceFingerprintData(ObjectManager.FingerPrint.SaveToJson());
                     p.SetContentURL(ConfigurationManager.AppSettings["patchingServer"]);
-                    p.SetUpdateURL("market://details?id=com.supercell.clashofclans");
+                    p.SetUpdateURL("market://details?id=com.supercell.clashofclans"); //<-- Should I also change this to the ConfigurationManager?
                     PacketManager.ProcessOutgoingPacket(p);
                     return;
                 }
