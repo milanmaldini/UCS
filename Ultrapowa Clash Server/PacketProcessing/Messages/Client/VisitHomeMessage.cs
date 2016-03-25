@@ -27,12 +27,20 @@ namespace UCS.PacketProcessing
 
         public override void Process(Level level)
         {
+            PacketManager.ProcessOutgoingPacket(new OwnHomeDataMessage(level.GetClient(), level));
+            var p = new GlobalChatLineMessage(level.GetClient());
+            p.SetChatMessage("Not implemented");
+            p.SetPlayerId(0);
+            p.SetPlayerName("Ultrapowa Clash Server");
+            PacketManager.ProcessOutgoingPacket(p);
+            /*
             var targetLevel = ResourcesManager.GetPlayer(AvatarId);
             targetLevel.Tick();
             //Clan clan;
             PacketManager.ProcessOutgoingPacket(new VisitedHomeDataMessage(Client, targetLevel, level));
             //if (clan != null)
             //    PacketHandler.ProcessOutgoingPacket(new ServerAllianceChatHistory(this.Client, clan));
+            */
         }
     }
 }
