@@ -22,7 +22,7 @@ namespace UCS.PacketProcessing
         public LoginFailedMessage(Client client) : base(client)
         {
             SetMessageType(20103);
-            SetReason("UCS Developement Team");
+            //SetReason("UCS Developement Team");
             // 8  : new game version available (removeupdateurl)
             // 10 : maintenance
             // 11 : banni temporairement
