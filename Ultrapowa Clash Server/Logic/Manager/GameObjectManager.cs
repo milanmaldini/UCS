@@ -109,7 +109,7 @@ namespace UCS.Logic
         public JObject Save()
         {
             var jsonData = new JObject();
-            jsonData.Add("android_client", true);
+            //jsonData.Add("android_client", true);
             jsonData.Add("active_layout",  0);
             jsonData.Add("layout_state", new JArray() { 0, 0, 0, 0, 0, 0 });
 
@@ -137,9 +137,6 @@ namespace UCS.Logic
             }
             jsonData.Add("traps", jsonTrapsArray);
 
-            // Obstacles
-            jsonData.Add("obstacles", new JArray() { });
-
             //Decos
             var jsonDecosArray = new JArray();
             foreach (var go in new List<GameObject>(m_vGameObjects[6]))
@@ -152,7 +149,7 @@ namespace UCS.Logic
             }
             jsonData.Add("decos", jsonDecosArray);
 
-            // respawnVars
+            /*
             var jsonRespawnObject = new JObject();
             jsonRespawnObject.Add("secondsFromLastRespawn", 195);
             jsonRespawnObject.Add("respawnSeed", -212853765);
@@ -162,7 +159,9 @@ namespace UCS.Logic
             jsonRespawnObject.Add("time_to_special_drop", 248205);
             jsonRespawnObject.Add("time_to_special_period", 97079);
             jsonData.Add("respawnVars", jsonRespawnObject);
+            */
 
+            /*
             var cooldowns = new JArray();
             jsonData.Add("cooldowns", cooldowns);
             var newShopBuildings = new JArray() { 1, 0, 1, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -171,9 +170,10 @@ namespace UCS.Logic
             jsonData.Add("newShopTraps", newShopTraps);
             var newShopDecos = new JArray() { 1, 4, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             jsonData.Add("newShopDecos", newShopDecos);
+            */
 
+            /*
             jsonData.Add("last_league_rank", 0);
-            jsonData.Add("last_alliance_level", 1);
             jsonData.Add("last_league_shuffle", 0);
             jsonData.Add("last_season_seen", -1);
             jsonData.Add("last_news_seen", 13);
@@ -182,8 +182,8 @@ namespace UCS.Logic
             jsonData.Add("war_base", false);
             jsonData.Add("help_opened", false);
             jsonData.Add("bool_layout_edit_shown_erase", false);
-
-            System.IO.File.WriteAllText(System.IO.Directory.GetCurrentDirectory() + "/base.json", jsonData.ToString());
+            */
+            
             return jsonData;
         }
 

@@ -38,8 +38,7 @@ namespace UCS.Logic
 
         public int GetAgeSeconds()
         {
-            return (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds -
-                   (int) m_vCreationTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+            return (int) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds - (int) m_vCreationTime.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         }
 
         public int GetId()

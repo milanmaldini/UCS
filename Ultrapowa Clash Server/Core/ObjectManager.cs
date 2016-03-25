@@ -44,7 +44,7 @@ namespace UCS.Core
             LoadNpcLevels();
 
             TimerCallback TimerDelegate = Save;
-            var TimerItem = new Timer(TimerDelegate, null, 60000, 60000);
+            var TimerItem = new Timer(TimerDelegate, null, 30000, 10000);
             TimerReference = TimerItem;
 
             Console.WriteLine("[UCS]    Database Sync started successfully");

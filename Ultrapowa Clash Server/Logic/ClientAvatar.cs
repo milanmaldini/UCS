@@ -26,6 +26,7 @@ namespace UCS.Logic
         public ClientAvatar()
         {
             Achievements = new List<DataSlot>();
+            AchievementsUnlocked = new List<DataSlot>();
             AllianceUnits = new List<DataSlot>();
             NpcStars = new List<DataSlot>();
             NpcLootedGold = new List<DataSlot>();
@@ -44,43 +45,28 @@ namespace UCS.Logic
             m_vAvatarLevel = 1;
             m_vAllianceId = 0;
             m_vExperience = 115;
-            EndShieldTime =
-                (int)
-                    (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds +
-                     Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
+            EndShieldTime = (int) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds +  Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
             m_vCurrentGems = Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]);
 
-            if (ConfigurationManager.AppSettings["startingTrophies"] == "random")
-                m_vScore = rnd.Next(500, 4000);
-            else
-                m_vScore = Convert.ToInt32(ConfigurationManager.AppSettings["startingTrophies"]);
+            if (ConfigurationManager.AppSettings["startingTrophies"] == "random") m_vScore = rnd.Next(1500, 4800);
+            else m_vScore = Convert.ToInt32(ConfigurationManager.AppSettings["startingTrophies"]);
 
             TutorialStepsCount = 0x0A;
             m_vAvatarName = "NoNameYet";
-            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gold"),
-                Convert.ToInt32(ConfigurationManager.AppSettings["startingGold"]));
-            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Elixir"),
-                Convert.ToInt32(ConfigurationManager.AppSettings["startingElixir"]));
-            SetResourceCount(ObjectManager.DataTables.GetResourceByName("DarkElixir"),
-                Convert.ToInt32(ConfigurationManager.AppSettings["startingDarkElixir"]));
-            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Diamonds"),
-                Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]));
+            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Gold"), Convert.ToInt32(ConfigurationManager.AppSettings["startingGold"]));
+            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Elixir"), Convert.ToInt32(ConfigurationManager.AppSettings["startingElixir"]));
+            SetResourceCount(ObjectManager.DataTables.GetResourceByName("DarkElixir"), Convert.ToInt32(ConfigurationManager.AppSettings["startingDarkElixir"]));
+            SetResourceCount(ObjectManager.DataTables.GetResourceByName("Diamonds"), Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]));
         }
 
         public List<DataSlot> Achievements { get; set; }
-
+        public List<DataSlot> AchievementsUnlocked { get; set; }
         public List<DataSlot> AllianceUnits { get; set; }
-
         public int EndShieldTime { get; set; }
-
         public int LastUpdate { get; set; }
-
         public string Login { get; set; }
-
         public List<DataSlot> NpcLootedElixir { get; set; }
-
         public List<DataSlot> NpcLootedGold { get; set; }
-
         public List<DataSlot> NpcStars { get; set; }
 
         public int RemainingShieldTime
@@ -403,15 +389,17 @@ namespace UCS.Logic
                 ds.Load(data);
                 AllianceUnits.Add(ds);
             }
-
             TutorialStepsCount = jsonObject["tutorial_step"].ToObject<uint>();
 
-            /*JArray jsonUnlockedAchievements = (JArray)jsonObject["unlocked_achievements"];
+            /*
+            JArray jsonUnlockedAchievements = (JArray)jsonObject["unlocked_achievements"];
             foreach (JObject data in jsonUnlockedAchievements)
             {
-                int globalId = data["global_id"].ToObject<int>();
-                Achievements.Add(globalId);
-            }*/
+                var ds = new DataSlot(null, 0);
+                ds.Load(data);
+                AchievementsUnlocked.Add(ds);
+            }
+            */
 
             var jsonAchievementsProgress = (JArray) jsonObject["achievements_progress"];
             foreach (JObject data in jsonAchievementsProgress)
@@ -525,14 +513,16 @@ namespace UCS.Logic
 
             jsonData.Add("tutorial_step", TutorialStepsCount);
 
-            /*JArray jsonAchievementsArray = new JArray();
+            /*
+            JArray jsonAchievementsArray = new JArray();
             foreach (var achievement in Achievements)
             {
                 JObject jsonObject = new JObject();
                 jsonObject.Add("global_id", achievement.Data.GetGlobalID());
                 jsonAchievementsArray.Add(jsonObject);
             }
-            jsonData.Add("unlocked_achievements", jsonAchievementsArray);*/
+            jsonData.Add("unlocked_achievements", jsonAchievementsArray);
+            */
 
             var jsonAchievementsProgressArray = new JArray();
             foreach (var achievement in Achievements)

@@ -1,13 +1,12 @@
-﻿namespace UCS.Logic
+﻿using UCS.Core;
+
+namespace UCS.Logic
 {
     internal class Achievement
     {
         private const int m_vType = 0x015EF3C0;
 
-        public Achievement()
-        {
-            //Deserialization
-        }
+        public Achievement() { }
 
         public Achievement(int index)
         {
