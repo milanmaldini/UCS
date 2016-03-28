@@ -9,8 +9,10 @@ namespace UCS.PacketProcessing
     {
         public UnlockBuildingCommand(BinaryReader br)
         {
+            /*
             BuildingId = br.ReadUInt32WithEndian(); //buildingId - 0x1DCD6500;
             Unknown1 = br.ReadUInt32WithEndian();
+            */
         }
 
         public uint BuildingId { get; set; }

@@ -143,6 +143,20 @@ namespace UCS.Core
             gameFiles.Add(new Tuple<string, string, int>("Traps", @"gamefiles/logic/traps.csv", 11));
             gameFiles.Add(new Tuple<string, string, int>("Resources", @"gamefiles/logic/resources.csv", 2));
 
+            gameFiles.Add(new Tuple<string, string, int>("Alliance Badge Layers", @"gamefiles/logic/alliance_badge_layers.csv", 30));
+            gameFiles.Add(new Tuple<string, string, int>("Alliance Badges", @"gamefiles/logic/alliance_badges.csv", 31));
+            gameFiles.Add(new Tuple<string, string, int>("Alliance Levels", @"gamefiles/logic/alliance_levels.csv", 32));
+            gameFiles.Add(new Tuple<string, string, int>("Alliance Portal", @"gamefiles/logic/alliance_portal.csv", 33));
+            gameFiles.Add(new Tuple<string, string, int>("Buildings Classes", @"gamefiles/logic/building_classes.csv", 34));
+            gameFiles.Add(new Tuple<string, string, int>("Effects", @"gamefiles/logic/effects.csv", 35));
+            gameFiles.Add(new Tuple<string, string, int>("Locales", @"gamefiles/logic/locales.csv", 36));
+            gameFiles.Add(new Tuple<string, string, int>("Missions", @"gamefiles/logic/missions.csv", 37));
+            gameFiles.Add(new Tuple<string, string, int>("Projectiles", @"gamefiles/logic/projectiles.csv", 38));
+            gameFiles.Add(new Tuple<string, string, int>("Regions", @"gamefiles/logic/regions.csv", 39));
+            gameFiles.Add(new Tuple<string, string, int>("Variables", @"gamefiles/logic/variables.csv", 40));
+            gameFiles.Add(new Tuple<string, string, int>("War", @"gamefiles/logic/war.csv", 28));
+
+
             Console.WriteLine("[UCS]    Loading server gamefiles & data...");
             foreach (var data in gameFiles)
             {

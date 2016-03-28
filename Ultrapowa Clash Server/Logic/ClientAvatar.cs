@@ -44,7 +44,7 @@ namespace UCS.Logic
             m_vIsAvatarNameSet = 0x00;
             m_vAvatarLevel = 1;
             m_vAllianceId = 0;
-            m_vExperience = 115;
+            m_vExperience = 0;
             EndShieldTime = (int) (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds +  Convert.ToInt32(ConfigurationManager.AppSettings["startingShieldTime"]));
             m_vCurrentGems = Convert.ToInt32(ConfigurationManager.AppSettings["startingGems"]);
 
@@ -119,8 +119,8 @@ namespace UCS.Logic
             data.AddInt32(1); //11
 
             // 8.X
-            data.AddInt32(0); //12
-            data.AddInt32(-1); //13
+            data.AddInt32(1); //12
+            data.AddInt32(0); //13
 
             data.AddInt32(m_vLeagueId);
 
@@ -138,7 +138,7 @@ namespace UCS.Logic
             data.AddInt32(60);
             data.AddInt32(m_vScore);
 
-            data.AddInt32(110); //Attack win
+            data.AddInt32(0); //Attack win
             data.AddInt32(0);
             data.AddInt32(0);
             data.AddInt32(0);
@@ -147,7 +147,7 @@ namespace UCS.Logic
             data.AddInt32(0);
             data.AddInt32(0);
             data.Add(1);
-            data.AddInt64(946720861000);
+            data.AddInt64(0);
 
             data.Add(m_vIsAvatarNameSet);
 

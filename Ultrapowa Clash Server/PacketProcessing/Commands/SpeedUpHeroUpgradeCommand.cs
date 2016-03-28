@@ -4,21 +4,21 @@ using UCS.Logic;
 
 namespace UCS.PacketProcessing
 {
-    //Commande 0x0210
     internal class SpeedUpHeroUpgradeCommand : Command
     {
-        private readonly int m_vBuildingId;
+        private int m_vBuildingId;
+        private int m_vUnknown1;
 
         public SpeedUpHeroUpgradeCommand(BinaryReader br)
         {
+            /*
             m_vBuildingId = br.ReadInt32WithEndian(); //buildingId - 0x1DCD6500;
-            br.ReadInt32WithEndian();
+            m_vUnknown1 = br.ReadInt32WithEndian();
+            */
         }
-
-        //00 00 02 10 1D CD 65 09 00 01 03 B7
-
         public override void Execute(Level level)
         {
+            /*
             var ca = level.GetPlayerAvatar();
             var go = level.GameObjectManager.GetGameObjectByID(m_vBuildingId);
 
@@ -29,6 +29,7 @@ namespace UCS.PacketProcessing
                 if (hbc != null)
                     hbc.SpeedUpUpgrade();
             }
+            */
         }
     }
 }

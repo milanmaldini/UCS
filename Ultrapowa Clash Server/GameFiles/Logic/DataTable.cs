@@ -35,73 +35,90 @@ namespace UCS.GameFiles
                 case 0:
                     d = new BuildingData(row, this);
                     break;
-
                 case 2:
                     d = new ResourceData(row, this);
                     break;
-
                 case 3:
                     d = new CharacterData(row, this);
                     break;
-
                 case 7:
                     d = new ObstacleData(row, this);
                     break;
-
                 case 10:
                     d = new ExperienceLevelData(row, this);
                     break;
-
                 case 11:
                     d = new TrapData(row, this);
                     break;
-
                 case 12:
                     d = new LeagueData(row, this);
                     break;
-
                 case 13:
                     d = new GlobalData(row, this);
                     break;
-
                 case 14:
                     d = new TownhallLevelData(row, this);
                     break;
-
                 case 16:
                     d = new NpcData(row, this);
                     break;
-
                 case 17:
                     d = new DecoData(row, this);
                     break;
-
                 case 19:
                     d = new ShieldData(row, this);
                     break;
-
                 case 22:
                     d = new AchievementData(row, this);
                     break;
-
                 case 23:
                     d = new Data(row, this);
                     break;
-
                 case 24:
                     d = new Data(row, this);
                     break;
-
                 case 25:
                     d = new SpellData(row, this);
                     break;
-
                 case 27:
                     d = new HeroData(row, this);
                     break;
-                /*case 28:
-                    d = new WarData(dic);
-                    break;*/
+                case 28:
+                    d = new WarData(row, this);
+                    break;
+                case 30:
+                    d = new AllianceBadgeLayersData(row, this);
+                    break;
+                case 31:
+                    d = new AllianceBadgesData(row, this);
+                    break;
+                case 32:
+                    d = new AllianceLevelsData(row, this);
+                    break;
+                case 33:
+                    d = new AlliancePortalData(row, this);
+                    break;
+                case 34:
+                    d = new BuildingClassesData(row, this);
+                    break;
+                case 35:
+                    d = new EffectsData(row, this);
+                    break;
+                case 36:
+                    d = new LocalesData(row, this);
+                    break;
+                case 37:
+                    d = new MissionsData(row, this);
+                    break;
+                case 38:
+                    d = new ProjectilesData(row, this);
+                    break;
+                case 39:
+                    d = new RegionsData(row, this);
+                    break;
+                case 40:
+                    d = new VariablesData(row, this);
+                    break;
                 default:
                     break;
             }

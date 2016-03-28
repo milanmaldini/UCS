@@ -43,8 +43,8 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-            pack.AddRange(Client.CRNonce);
-            pack.AddRange(Client.CPublicKey);
+            //pack.AddRange(Client.CRNonce);
+            //pack.AddRange(Client.CPublicKey);
             
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
@@ -66,7 +66,7 @@ namespace UCS.PacketProcessing
             pack.AddString(m_vCountryCode);
             pack.AddString("someid2");
 
-            // DEBUG INFO
+            /* // DEBUG INFO
             Console.WriteLine("Account ID : " + m_vAccountId);
             Console.WriteLine("User Token : " + m_vPassToken);
             Console.WriteLine("FacebookID : " + m_vFacebookId);
@@ -82,7 +82,7 @@ namespace UCS.PacketProcessing
             Console.WriteLine("Google ID  : " + m_vGoogleID);
             Console.WriteLine("CountryCod : " + m_vCountryCode);
             Console.WriteLine("Environne  : " + m_vServerEnvironment);
-            // END DEBUG
+            // END DEBUG */
 
             Encrypt8(pack.ToArray());
         }

@@ -38,13 +38,5 @@ namespace UCS.PacketProcessing
             m_vAlliance = alliance;
         }
 
-        //00
-        //5E 00 2C 5A
-        //4C 61 20 54 65 61 6D 20 54 44 41
-        //00 00 00 0B
-        //00 00 00 46 00 03 46 FE
-        //00 00 00 02
-        //00 00 00 01
-        //00 00 1C 35
     }
 }

@@ -10,8 +10,10 @@ namespace UCS.PacketProcessing
 
         public SpeedUpHeroHealthCommand(BinaryReader br)
         {
+            /*
             m_vBuildingId = br.ReadInt32WithEndian();
             br.ReadInt32WithEndian();
+            */
         }
     }
 }

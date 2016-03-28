@@ -25,8 +25,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>0.4.1.2</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.6.5.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -40,7 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>0</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -190,13 +190,24 @@
     </Compile>
     <Compile Include="GameFiles\CSV\CSVColumn.cs" />
     <Compile Include="GameFiles\CSV\CSVRow.cs" />
+    <Compile Include="GameFiles\Logic\AllianceBadgeLayersData.cs" />
+    <Compile Include="GameFiles\Logic\AllianceBadgesData.cs" />
+    <Compile Include="GameFiles\Logic\AllianceLevelsData.cs" />
+    <Compile Include="GameFiles\Logic\AlliancePortalData.cs" />
+    <Compile Include="GameFiles\Logic\BuildingClassesData.cs" />
     <Compile Include="GameFiles\Logic\ConstructionItemData.cs" />
     <Compile Include="GameFiles\Logic\CombatItemData.cs" />
     <Compile Include="GameFiles\Logic\Data.cs" />
     <Compile Include="GameFiles\CSV\CSVTable.cs" />
+    <Compile Include="GameFiles\Logic\EffectsData.cs" />
     <Compile Include="GameFiles\Logic\Globals.cs" />
     <Compile Include="GameFiles\Logic\DataTables.cs" />
+    <Compile Include="GameFiles\Logic\LocalesData.cs" />
+    <Compile Include="GameFiles\Logic\MissionsData.cs" />
+    <Compile Include="GameFiles\Logic\ProjectilesData.cs" />
+    <Compile Include="GameFiles\Logic\RegionsData.cs" />
     <Compile Include="GameFiles\Logic\ResourceData.cs" />
+    <Compile Include="GameFiles\Logic\VariablesData.cs" />
     <Compile Include="GameFiles\Logic\WarData.cs" />
     <Compile Include="GameFiles\Logic\TrapData.cs" />
     <Compile Include="GameFiles\Logic\TownhallLevelData.cs" />
@@ -309,11 +320,22 @@
     <Compile Include="PacketProcessing\Client.cs" />
     <Compile Include="PacketProcessing\CoCCypto.cs" />
     <Compile Include="PacketProcessing\CoCKeyPair.cs" />
+    <Compile Include="PacketProcessing\Commands\CancelShieldCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\ToggleHeroCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\CopyVillageLayoutCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\EditVillageLayoutCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\FilterChatCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\GetVillageLayoutsCommand.cs" />
     <Compile Include="PacketProcessing\Commands\KickAllianceMemberCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\RemainingBuildingsLayoutCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\RemoveMultiBuildingsCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\SaveVillageLayoutCommand.cs" />
     <Compile Include="PacketProcessing\Commands\SendAllianceMailCommand.cs" />
     <Compile Include="PacketProcessing\Commands\LeaveAllianceCommand.cs" />
     <Compile Include="PacketProcessing\Commands\JoinAllianceCommand.cs" />
     <Compile Include="PacketProcessing\Commands\SearchOpponentCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\SetActiveVillageLayoutCommand.cs" />
+    <Compile Include="PacketProcessing\Commands\ToggleHeroAttackModeCommand.cs" />
     <Compile Include="PacketProcessing\Crypto8.cs" />
     <Compile Include="PacketProcessing\GameOpCommandFactory.cs" />
     <Compile Include="PacketProcessing\Commands\CastSpellCommand.cs" />
@@ -334,6 +356,7 @@
     <Compile Include="PacketProcessing\MessageFactory.cs" />
     <Compile Include="PacketProcessing\CommandFactory.cs" />
     <Compile Include="PacketProcessing\MessageReader.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\AllianceInviteMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AllianceWarAttackAvatarMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AskForAllianceWarDataMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AskForAvatarProfileMessage.cs" />
@@ -342,11 +365,16 @@
     <Compile Include="PacketProcessing\Messages\Client\DonateAllianceUnitMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\EditClanSettingsMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\EndClientTurnMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\FacebookLinkMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\FetchWarBaseMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\ReportPlayerMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\SessionRequest.cs" />
     <Compile Include="PacketProcessing\Messages\Client\KeepAliveMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AttackNpcMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\GetDeviceTokenMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\TopGlobalAlliancesMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\TopGlobalPlayersMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\TopLocalPlayersMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\VisitHomeMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\GoHomeMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\LoginMessage.cs" />

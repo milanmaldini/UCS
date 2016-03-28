@@ -12,8 +12,6 @@ namespace UCS.PacketProcessing
             return new List<byte>().ToArray();
         }
 
-        public virtual void Execute(Level level)
-        {
-        }
+        public virtual void Execute(Level level) { }
     }
 }

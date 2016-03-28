@@ -4,6 +4,7 @@ using System.Text;
 using UCS.Core;
 using UCS.Helpers;
 using UCS.Logic;
+using Ionic.Zlib;
 
 namespace UCS.PacketProcessing
 {

@@ -63,17 +63,24 @@ namespace UCS.PacketProcessing
         {
             if (m_vType == 10101)
             {
-                byte[] cipherText = m_vData;
-                Client.CPublicKey = cipherText.Take(32).ToArray();
-                Client.CSharedKey = Client.CPublicKey;
-                Client.CRNonce = Crypto8.GenerateNonce();
-                byte[] nonce = GenericHash.Hash(Client.CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
-                cipherText = cipherText.Skip(32).ToArray();
-                var PlainText = PublicKeyBox.Open(cipherText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey);
-                Client.CSessionKey = PlainText.Take(24).ToArray();
-                Client.CSNonce = PlainText.Skip(24).Take(24).ToArray();
-                SetData(PlainText.Skip(24).Skip(24).ToArray());
-                Client.CState = 1;
+                try
+                {
+                    byte[] cipherText = m_vData;
+                    Client.CPublicKey = cipherText.Take(32).ToArray();
+                    Client.CSharedKey = Client.CPublicKey;
+                    Client.CRNonce = Crypto8.GenerateNonce();
+                    byte[] nonce = GenericHash.Hash(Client.CPublicKey.Concat(Crypto8.StandardKeyPair.PublicKey).ToArray(), null, 24);
+                    cipherText = cipherText.Skip(32).ToArray();
+                    var PlainText = PublicKeyBox.Open(cipherText, nonce, Crypto8.StandardKeyPair.PrivateKey, Client.CPublicKey);
+                    Client.CSessionKey = PlainText.Take(24).ToArray();
+                    Client.CSNonce = PlainText.Skip(24).Take(24).ToArray();
+                    SetData(PlainText.Skip(24).Skip(24).ToArray());
+                    Client.CState = 1;
+                }
+                catch (Exception)
+                {
+                    Client.CState = 0;
+                }
             }
             else
             {

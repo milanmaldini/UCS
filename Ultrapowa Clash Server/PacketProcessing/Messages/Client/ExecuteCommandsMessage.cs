@@ -32,7 +32,7 @@ namespace UCS.PacketProcessing
 
                 if (NumberOfCommands > 0)
                 {
-                    NestedCommands = br.ReadBytes(GetLength() - 12);
+                    NestedCommands = br.ReadBytes(GetLength());
                 }
             }
         }
@@ -52,7 +52,7 @@ namespace UCS.PacketProcessing
                             var obj = CommandFactory.Read(br);
                             if (obj != null)
                             {
-                                Debugger.WriteLine("\t" + obj.GetType().Name);
+                                Debugger.WriteLine("\t Processing " + obj.GetType().Name);
                                 ((Command) obj).Execute(level);
                             }
                             else

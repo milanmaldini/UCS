@@ -10,7 +10,7 @@ namespace UCS.GameFiles
         public DataTables()
         {
             m_vDataTables = new List<DataTable>();
-            for (var i = 0; i < 28; i++)
+            for (var i = 0; i < 41; i++)
                 m_vDataTables.Add(new DataTable());
         }
 

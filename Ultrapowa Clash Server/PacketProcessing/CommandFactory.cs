@@ -13,67 +13,70 @@ namespace UCS.PacketProcessing
         static CommandFactory()
         {
             m_vCommands = new Dictionary<uint, Type>();
-            m_vCommands.Add(0x0001, typeof (JoinAllianceCommand));
-            m_vCommands.Add(0x0002, typeof (LeaveAllianceCommand));
-            m_vCommands.Add(0x01F4, typeof (BuyBuildingCommand));
-            m_vCommands.Add(0x01F5, typeof (MoveBuildingCommand));
-            m_vCommands.Add(0x01F6, typeof (UpgradeBuildingCommand));
-            m_vCommands.Add(0x01F7, typeof (SellBuildingCommand));
-            m_vCommands.Add(0x01F8, typeof (SpeedUpConstructionCommand));
-            m_vCommands.Add(0x01F9, typeof (CancelConstructionCommand));
-            m_vCommands.Add(0x01FA, typeof (CollectResourcesCommand));
-            //m_vCommands.Add(0x01FB, typeof(ClearObstacle));
-            m_vCommands.Add(0x01FC, typeof (TrainUnitCommand));
-            m_vCommands.Add(0x01FD, typeof (CancelUnitProductionCommand));
-            m_vCommands.Add(0x01FE, typeof (BuyTrapCommand));
-            //m_vCommands.Add(0x01FF, typeof(RequestAllianceUnits));
-            m_vCommands.Add(0x0200, typeof (BuyDecoCommand));
-            m_vCommands.Add(0x0201, typeof (SpeedUpTrainingCommand));
-            m_vCommands.Add(0x0202, typeof (SpeedUpClearingCommand));
-            //m_vCommands.Add(0x0203, typeof(CancelUpgradeUnit));
-            m_vCommands.Add(0x0204, typeof (UpgradeUnitCommand));
-            m_vCommands.Add(0x0205, typeof (SpeedUpUpgradeUnitCommand));
-            m_vCommands.Add(0x0206, typeof (BuyResourcesCommand));
-            //m_vCommands.Add(0x0207, typeof(MissionProgress));
-            //m_vCommands.Add(0x0208, typeof(UnlockBuilding));
-            m_vCommands.Add(0x0209, typeof (FreeWorkerCommand));
-            //m_vCommands.Add(0x020A, typeof(BuyShield));
-            //m_vCommands.Add(0x020B, typeof(ClaimAchievementReward));
-            //m_vCommands.Add(0x020C, typeof(ToggleAttackMode));
-            m_vCommands.Add(0x020D, typeof (LoadTurretCommand));
-            //m_vCommands.Add(0x020E, typeof(BoostBuilding));
-            m_vCommands.Add(0x020F, typeof (UpgradeHeroCommand));
-            m_vCommands.Add(0x0210, typeof (SpeedUpHeroUpgradeCommand));
-            //m_vCommands.Add(0x0211, typeof(ToggleHeroSleep));
-            //m_vCommands.Add(0x0212, typeof(SpeedUpHeroHealth));
-            m_vCommands.Add(0x0213, typeof (CancelHeroUpgradeCommand));
-            //m_vCommands.Add(0x0214, typeof(NewShopItemsSeen));
-            m_vCommands.Add(0x0215, typeof (MoveMultipleBuildingsCommand));
-            m_vCommands.Add(0x0219, typeof (SendAllianceMailCommand));
-            m_vCommands.Add(0x021B, typeof (Unknown539Command));
-            m_vCommands.Add(0x021F, typeof (KickAllianceMemberCommand));
-            m_vCommands.Add(0x0225, typeof (UpgradeMultipleBuildingsCommand));
-            m_vCommands.Add(0x0226, typeof (RemoveUnitsCommand));
-            m_vCommands.Add(0x0258, typeof (PlaceAttackerCommand));
-            m_vCommands.Add(0x025C, typeof (CastSpellCommand));
-            m_vCommands.Add(0x02BC, typeof (SearchOpponentCommand));
+            //m_vCommands.Add(1, typeof (JoinAllianceCommand));
+            //m_vCommands.Add(2, typeof (LeaveAllianceCommand));
+            m_vCommands.Add(20, typeof (RemainingBuildingsLayoutCommand));
+            m_vCommands.Add(500, typeof (BuyBuildingCommand));
+            m_vCommands.Add(501, typeof (MoveBuildingCommand));
+            m_vCommands.Add(502, typeof (UpgradeBuildingCommand));
+            m_vCommands.Add(503, typeof (SellBuildingCommand));
+            m_vCommands.Add(504, typeof (SpeedUpConstructionCommand));
+            m_vCommands.Add(505, typeof (CancelConstructionCommand));
+            m_vCommands.Add(506, typeof (CollectResourcesCommand));
+            m_vCommands.Add(507, typeof (ClearObstacleCommand));
+            m_vCommands.Add(508, typeof (TrainUnitCommand));
+            m_vCommands.Add(509, typeof (CancelUnitProductionCommand));
+            m_vCommands.Add(510, typeof (BuyTrapCommand));
+            m_vCommands.Add(511, typeof (RequestAllianceUnitsCommand));
+            m_vCommands.Add(512, typeof (BuyDecoCommand));
+            m_vCommands.Add(513, typeof (SpeedUpTrainingCommand));
+            m_vCommands.Add(514, typeof (SpeedUpClearingCommand));
+            m_vCommands.Add(515, typeof (CancelUpgradeUnitCommand));
+            m_vCommands.Add(516, typeof (UpgradeUnitCommand));
+            m_vCommands.Add(517, typeof (SpeedUpUpgradeUnitCommand));
+            m_vCommands.Add(518, typeof (BuyResourcesCommand));
+            m_vCommands.Add(519, typeof (MissionProgressCommand));
+            m_vCommands.Add(520, typeof (UnlockBuildingCommand));
+            m_vCommands.Add(521, typeof (FreeWorkerCommand));
+            m_vCommands.Add(522, typeof (BuyShieldCommand));
+            m_vCommands.Add(523, typeof (ClaimAchievementRewardCommand));
+            m_vCommands.Add(524, typeof (ToggleAttackModeCommand));
+            m_vCommands.Add(525, typeof (LoadTurretCommand));
+            m_vCommands.Add(526, typeof (BoostBuildingCommand));
+            m_vCommands.Add(527, typeof (UpgradeHeroCommand));
+            m_vCommands.Add(528, typeof (SpeedUpHeroUpgradeCommand));
+            m_vCommands.Add(529, typeof (ToggleHeroSleepCommand));
+            m_vCommands.Add(530, typeof (SpeedUpHeroHealthCommand));
+            m_vCommands.Add(531, typeof (CancelHeroUpgradeCommand));
+            m_vCommands.Add(532, typeof (NewShopItemsSeenCommand));
+            m_vCommands.Add(533, typeof (MoveMultipleBuildingsCommand));
+            m_vCommands.Add(534, typeof (CancelShieldCommand));
+            m_vCommands.Add(537, typeof (SendAllianceMailCommand));
+            m_vCommands.Add(539, typeof (Unknown539Command));
+            m_vCommands.Add(543, typeof (KickAllianceMemberCommand));
+            m_vCommands.Add(544, typeof (GetVillageLayoutsCommand));
+            m_vCommands.Add(546, typeof (EditVillageLayoutCommand));
+            m_vCommands.Add(549, typeof (UpgradeMultipleBuildingsCommand));
+            m_vCommands.Add(550, typeof (RemoveUnitsCommand));
+            m_vCommands.Add(552, typeof (SaveVillageLayoutCommand));
+            m_vCommands.Add(567, typeof (SetActiveVillageLayoutCommand));
+            m_vCommands.Add(568, typeof (CopyVillageLayoutCommand));
+            m_vCommands.Add(571, typeof (FilterChatCommand));
+            m_vCommands.Add(572, typeof (ToggleHeroAttackModeCommand));
+            m_vCommands.Add(600, typeof (PlaceAttackerCommand));
+            m_vCommands.Add(604, typeof (CastSpellCommand));
+            m_vCommands.Add(700, typeof (SearchOpponentCommand));
+            m_vCommands.Add(500000004, typeof (ToggleHeroCommand));
+            m_vCommands.Add(4294967295, typeof (RemoveMultiBuildingsCommand));
         }
 
         public static object Read(BinaryReader br)
         {
             var cm = br.ReadUInt32WithEndian();
             if (m_vCommands.ContainsKey(cm))
-            {
                 return Activator.CreateInstance(m_vCommands[cm], br);
-            }
-            Console.Write("\t");
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.Write("Unhandled");
-            Console.ResetColor();
-            Console.WriteLine(" Command " + cm + " (ignored)");
+            Console.WriteLine("\t The command '" + cm + "' has been ignored");
             return null;
         }
     }
 }
-
-//Last Edit: 16.01.2016 - iSwuerfel

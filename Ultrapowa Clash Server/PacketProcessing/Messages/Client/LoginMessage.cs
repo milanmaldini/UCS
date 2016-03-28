@@ -53,7 +53,8 @@ namespace UCS.PacketProcessing
 
         public override void Decode()
         {
-            try {
+            if (Client.CState != 0)
+            {
                 using (var reader = new CoCSharpPacketReader(new MemoryStream(GetData())))
                 {
                     UserID = reader.ReadInt64();
@@ -83,12 +84,10 @@ namespace UCS.PacketProcessing
                     ClientVersion = reader.ReadString();
                     Client.CState = 1;
                 }
-                ShowData();
+                //ShowData();
             }
-            catch (Exception)
-            {
-                Client.CState = 0;
-            }
+            else
+                return;
         }
 
         public void ShowData()

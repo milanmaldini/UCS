@@ -233,7 +233,7 @@ namespace UCS.PacketProcessing
             return result;
         }
 
-        public unsafe void UpdateKey(byte[] sessionKey)
+        public void UpdateKey(byte[] sessionKey)
         {/*
             TransformSessionKey((int) ClientSeed, sessionKey);
 

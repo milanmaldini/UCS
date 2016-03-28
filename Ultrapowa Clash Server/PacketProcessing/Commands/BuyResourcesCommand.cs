@@ -51,9 +51,9 @@ namespace UCS.PacketProcessing
                                 avatar.CommodityCountChangeHelper(0, rd, m_vResourceCount);
                                 if (m_vIsCommandEmbedded)
                                     Depth++;
-                                Debugger.WriteLine("Depth: " + Depth);
 
-                                if (Depth >= MaxEmbeddedDepth)
+
+                                if (Depth >= MaxEmbeddedDepth || Depth <= 0)
                                     throw new ArgumentException("A command contained embedded command depth was greater than max embedded commands.");
 
                                 ((Command) m_vCommand).Execute(level);

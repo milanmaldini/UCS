@@ -54,7 +54,7 @@ namespace UCS.Core
                     catch (Exception ex)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Debugger.WriteLine("An exception occured during processing of message " + p.GetType().Name + player, ex);
+                        Debugger.WriteLine("[UCS][" + p.GetMessageType() + "] An exception occured during processing of message " + p.GetType().Name + player, ex);
                         Console.ResetColor();
                     }
                 }
