@@ -43,9 +43,7 @@ namespace UCS.PacketProcessing
         public override void Encode()
         {
             var pack = new List<byte>();
-            //pack.AddRange(Client.CRNonce);
-            //pack.AddRange(Client.CPublicKey);
-            
+			
             pack.AddInt64(m_vAccountId);
             pack.AddInt64(m_vAccountId);
             pack.AddString(m_vPassToken);
