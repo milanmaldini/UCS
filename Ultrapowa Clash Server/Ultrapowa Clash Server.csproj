@@ -346,7 +346,7 @@
     <Compile Include="PacketProcessing\Messages\Client\SessionRequest.cs" />
     <Compile Include="PacketProcessing\Messages\Client\KeepAliveMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\AttackNpcMessage.cs" />
-    <Compile Include="PacketProcessing\Messages\Client\SetDeviceTokenMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Client\GetDeviceTokenMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\VisitHomeMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\GoHomeMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Client\LoginMessage.cs" />
@@ -418,6 +418,7 @@
     <Compile Include="PacketProcessing\Messages\Server\SessionSuccess.cs" />
     <Compile Include="PacketProcessing\Messages\Server\HomeBattleReplayDataMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\OutOfSyncMessage.cs" />
+    <Compile Include="PacketProcessing\Messages\Server\SetDeviceTokenMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\ShutdownStartedMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\ServerErrorMessage.cs" />
     <Compile Include="PacketProcessing\Messages\Server\EnemyHomeDataMessage.cs" />

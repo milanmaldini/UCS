@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text;
 using UCS.Helpers;
 using UCS.Logic;
 
@@ -7,8 +9,10 @@ namespace UCS.PacketProcessing
     //Commande 0x21B
     internal class Unknown539Command : Command
     {
+        public byte[] packet;
         public Unknown539Command(BinaryReader br)
         {
+            //packet = br.ReadAllBytes();
             Unknown1 = br.ReadUInt32WithEndian();
             Unknown2 = br.ReadUInt32WithEndian();
         }
@@ -20,6 +24,7 @@ namespace UCS.PacketProcessing
 
         public override void Execute(Level level)
         {
+
         }
     }
 }

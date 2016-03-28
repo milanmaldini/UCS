@@ -15,7 +15,7 @@ namespace UCS.PacketProcessing
             m_vMessages.Add(10100, typeof (SessionRequest));
             m_vMessages.Add(10101, typeof (LoginMessage));
             m_vMessages.Add(10108, typeof (KeepAliveMessage));
-            m_vMessages.Add(10113, typeof (SetDeviceTokenMessage));
+            m_vMessages.Add(10113, typeof (GetDeviceTokenMessage));
             m_vMessages.Add(10212, typeof (ChangeAvatarNameMessage));
             m_vMessages.Add(14101, typeof (GoHomeMessage));                 //<-- Wasn't able to test because visiting does not work
             m_vMessages.Add(14102, typeof (ExecuteCommandsMessage));
