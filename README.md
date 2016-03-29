@@ -4,13 +4,13 @@ This repository contains the Development build of Ultrapowa Clash Server, a C# s
 Keep in mind that this is the version written by the official Developer Team containing.
 
 Ultrapowa									
-Berkan																							
-iSwürfel																			
+Berkan																					
+iSwürfel																
 ADeltaX								
 thecheater887										
 
-UCS is NOT affiliated with Supercell.
-Help and Support: http://ultrapowa.com/forum/
+UCS is NOT affiliated with Supercell, or any other company.
+Help and Support: http://www.ultrapowa.com/forum/
 
 # License
 
